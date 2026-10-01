@@ -208,6 +208,7 @@ class _State extends ConsumerState<CreateChoreStepTwoScreen> {
             // ─── Scrollable content ────────────────────────────
             Expanded(
               child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
                 padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,

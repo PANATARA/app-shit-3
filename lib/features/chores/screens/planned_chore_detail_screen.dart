@@ -185,6 +185,7 @@ class _State extends ConsumerState<PlannedChoreDetailScreen> {
             // ─── Scrollable content ───────────────────────────────
             Expanded(
               child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
                 padding: const EdgeInsets.fromLTRB(14, 0, 14, 8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,

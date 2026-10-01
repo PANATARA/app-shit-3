@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../../core/theme/app_colors.dart';
 
 class WeekCalendar extends StatefulWidget {
@@ -71,6 +72,7 @@ class _WeekCalendarState extends State<WeekCalendar> {
           height: 68,
           child: PageView.builder(
             controller: _pageController,
+            physics: const BouncingScrollPhysics(),
             itemCount: _weeks.length,
             onPageChanged: (index) {
               setState(() => _currentWeekIndex = index);
@@ -129,7 +131,7 @@ class _WeekCalendarState extends State<WeekCalendar> {
   }
 }
 
-class _DayButton extends StatelessWidget {
+class _DayButton extends StatefulWidget {
   final String weekday;
   final String dayNumber;
   final bool isSelected;
@@ -145,12 +147,19 @@ class _DayButton extends StatelessWidget {
   });
 
   @override
+  State<_DayButton> createState() => _DayButtonState();
+}
+
+class _DayButtonState extends State<_DayButton> {
+  bool _isPressed = false;
+
+  @override
   Widget build(BuildContext context) {
     BoxDecoration decoration;
     Color weekdayColor;
     Color dayNumberColor;
 
-    if (isSelected) {
+    if (widget.isSelected) {
       decoration = BoxDecoration(
         color: AppColors.primary,
         gradient: LinearGradient(
@@ -169,7 +178,7 @@ class _DayButton extends StatelessWidget {
       );
       weekdayColor = Colors.white.withValues(alpha: 0.88);
       dayNumberColor = Colors.white;
-    } else if (isToday) {
+    } else if (widget.isToday) {
       decoration = BoxDecoration(
         color: AppColors.primarySoft,
         borderRadius: BorderRadius.circular(18),
@@ -187,41 +196,52 @@ class _DayButton extends StatelessWidget {
       dayNumberColor = AppColors.textPrimary;
     }
 
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(18),
-        splashColor: AppColors.primary.withValues(alpha: 0.1),
-        highlightColor: AppColors.primary.withValues(alpha: 0.05),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 160),
-          decoration: decoration,
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          alignment: Alignment.center,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                weekday,
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: -0.1,
-                  color: weekdayColor,
+    return AnimatedScale(
+      scale: _isPressed ? 0.93 : 1.0,
+      duration: const Duration(milliseconds: 100),
+      curve: Curves.easeOutCubic,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTapDown: (_) => setState(() => _isPressed = true),
+          onTapUp: (_) => setState(() => _isPressed = false),
+          onTapCancel: () => setState(() => _isPressed = false),
+          onTap: () {
+            HapticFeedback.selectionClick();
+            widget.onTap();
+          },
+          borderRadius: BorderRadius.circular(18),
+          splashColor: AppColors.primary.withValues(alpha: 0.1),
+          highlightColor: AppColors.primary.withValues(alpha: 0.05),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 160),
+            decoration: decoration,
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            alignment: Alignment.center,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  widget.weekday,
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: -0.1,
+                    color: weekdayColor,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 2),
-              Text(
-                dayNumber,
-                style: TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: -0.3,
-                  color: dayNumberColor,
+                const SizedBox(height: 2),
+                Text(
+                  widget.dayNumber,
+                  style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: -0.3,
+                    color: dayNumberColor,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

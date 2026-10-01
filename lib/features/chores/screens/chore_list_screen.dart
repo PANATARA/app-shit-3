@@ -87,7 +87,7 @@ class _ChoreListScreenState extends ConsumerState<ChoreListScreen> {
                   await ref.read(familyChoresSwr.notifier).revalidate();
                 },
                 child: ListView(
-                  physics: const AlwaysScrollableScrollPhysics(),
+                  physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                   padding: const EdgeInsets.only(bottom: 32),
                   children: [
                     // Search box

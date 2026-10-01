@@ -95,6 +95,7 @@ class _CreateChoreStepOneScreenState extends ConsumerState<CreateChoreStepOneScr
     }
 
     return ListView(
+      physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       padding: const EdgeInsets.only(bottom: 32),
       children: [
         // Quick task — only when no search

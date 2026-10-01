@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'app_colors.dart';
@@ -39,29 +40,78 @@ class AppTheme {
               error: AppColors.error,
               onError: Colors.white,
             ),
+      splashColor: palette.accent.withValues(alpha: 0.08),
+      highlightColor: palette.accent.withValues(alpha: 0.04),
+      pageTransitionsTheme: const PageTransitionsTheme(
+        builders: {
+          TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+          TargetPlatform.macOS: CupertinoPageTransitionsBuilder(),
+          TargetPlatform.linux: CupertinoPageTransitionsBuilder(),
+          TargetPlatform.windows: CupertinoPageTransitionsBuilder(),
+        },
+      ),
+      bottomSheetTheme: BottomSheetThemeData(
+        backgroundColor: palette.surface,
+        surfaceTintColor: Colors.transparent,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
+        ),
+        clipBehavior: Clip.antiAlias,
+        showDragHandle: true,
+        dragHandleColor: palette.borderSubtle.withValues(alpha: 0.85),
+        dragHandleSize: const Size(36, 5),
+      ),
+      dividerTheme: DividerThemeData(
+        color: palette.borderSubtle,
+        thickness: 0.5,
+        space: 0.5,
+      ),
       textTheme: baseTextTheme.copyWith(
+        displayLarge: baseTextTheme.displayLarge?.copyWith(
+          color: palette.textPrimary,
+          fontWeight: FontWeight.w800,
+          letterSpacing: -0.6,
+        ),
         titleLarge: baseTextTheme.titleLarge?.copyWith(
           color: palette.textPrimary,
           fontWeight: FontWeight.w700,
           fontSize: 22,
+          letterSpacing: -0.4,
         ),
         titleMedium: baseTextTheme.titleMedium?.copyWith(
           color: palette.textPrimary,
           fontWeight: FontWeight.w600,
           fontSize: 18,
+          letterSpacing: -0.3,
+        ),
+        titleSmall: baseTextTheme.titleSmall?.copyWith(
+          color: palette.textPrimary,
+          fontWeight: FontWeight.w600,
+          fontSize: 15,
+          letterSpacing: -0.2,
         ),
         bodyLarge: baseTextTheme.bodyLarge?.copyWith(
           color: palette.textPrimary,
           fontSize: 16,
+          letterSpacing: -0.15,
         ),
         bodyMedium: baseTextTheme.bodyMedium?.copyWith(
           color: palette.textSecondary,
           fontSize: 14,
+          letterSpacing: -0.1,
         ),
         labelLarge: baseTextTheme.labelLarge?.copyWith(
           color: palette.textPrimary,
           fontWeight: FontWeight.w600,
           fontSize: 14,
+          letterSpacing: 0.1,
+        ),
+        labelSmall: baseTextTheme.labelSmall?.copyWith(
+          color: palette.textMuted,
+          fontWeight: FontWeight.w600,
+          fontSize: 11,
+          letterSpacing: 0.8,
         ),
       ),
       cardTheme: CardThemeData(
@@ -69,7 +119,7 @@ class AppTheme {
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(22),
-          side: BorderSide(color: palette.borderSubtle, width: 1),
+          side: BorderSide(color: palette.borderSubtle, width: 0.5),
         ),
         margin: EdgeInsets.zero,
       ),

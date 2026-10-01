@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/swr/swr.dart';
 import '../../../core/theme/app_colors.dart';
@@ -67,8 +68,8 @@ class _MealsScreenState extends ConsumerState<MealsScreen>
                 onRevalidate();
               },
               child: ListView(
-                padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
-                physics: const AlwaysScrollableScrollPhysics(),
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 100),
+                physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                 children: [
                   // ─── Header ───────────────────────────────────────────
                   Row(
@@ -103,6 +104,7 @@ class _MealsScreenState extends ConsumerState<MealsScreen>
                       GestureDetector(
                         behavior: HitTestBehavior.opaque,
                         onTap: () {
+                          HapticFeedback.lightImpact();
                           GroceryListSheet.show(context);
                         },
                         child: Container(
@@ -268,7 +270,10 @@ class _MealsScreenState extends ConsumerState<MealsScreen>
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: () => setState(() => _activeSegment = index),
+      onTap: () {
+        HapticFeedback.selectionClick();
+        setState(() => _activeSegment = index);
+      },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 180),
         curve: Curves.easeInOut,

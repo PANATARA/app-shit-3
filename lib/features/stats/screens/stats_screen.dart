@@ -42,8 +42,8 @@ class _StatsScreenState extends ConsumerState<StatsScreen>
           backgroundColor: AppColors.surface,
           onRefresh: () => ref.read(homeNotifierProvider.notifier).refresh(),
           child: ListView(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
-            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 100),
+            physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             children: [
               // ─── Header ──────────────────────────────────────────────
               _buildHeader(homeState.isRevalidating),

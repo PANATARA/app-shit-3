@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/swr/swr.dart';
 import '../../../core/theme/app_colors.dart';
@@ -71,7 +72,7 @@ class _BoardScreenState extends ConsumerState<BoardScreen>
               onRefresh: () => boardNotifier.refresh(),
               child: ListView(
                 controller: _scrollController,
-                physics: const AlwaysScrollableScrollPhysics(),
+                physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                 padding: const EdgeInsets.fromLTRB(16, 175, 16, 110),
                 children: [
                   if (boardState.isLoading) ...[
@@ -425,11 +426,14 @@ class _BoardScreenState extends ConsumerState<BoardScreen>
                 onTapDown: (_) => setState(() => _isFabPressed = true),
                 onTapUp: (_) => setState(() => _isFabPressed = false),
                 onTapCancel: () => setState(() => _isFabPressed = false),
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => CreateChoreStepOneScreen(selectedDate: selectedDate),
-                  ),
-                ),
+                onTap: () {
+                  HapticFeedback.lightImpact();
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => CreateChoreStepOneScreen(selectedDate: selectedDate),
+                    ),
+                  );
+                },
                 borderRadius: BorderRadius.circular(999),
                 splashColor: Colors.white.withValues(alpha: 0.15),
                 highlightColor: Colors.transparent,

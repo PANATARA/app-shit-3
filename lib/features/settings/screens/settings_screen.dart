@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/api/api_client.dart';
 import '../../../core/theme/app_colors.dart';
@@ -195,7 +196,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             ]);
           },
           child: ListView(
-            padding: const EdgeInsets.fromLTRB(14, 12, 14, 32),
+            padding: const EdgeInsets.fromLTRB(14, 12, 14, 100),
+            physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             children: [
               // ─── Header ──────────────────────────────────────────────
               _buildHeader(),
@@ -866,7 +868,12 @@ class _SettingsRow extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         GestureDetector(
-          onTap: onTap,
+          onTap: onTap != null
+              ? () {
+                  HapticFeedback.lightImpact();
+                  onTap!();
+                }
+              : null,
           behavior: HitTestBehavior.opaque,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
