@@ -73,7 +73,7 @@ class _BoardScreenState extends ConsumerState<BoardScreen>
               child: ListView(
                 controller: _scrollController,
                 physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-                padding: const EdgeInsets.fromLTRB(16, 175, 16, 110),
+                padding: const EdgeInsets.fromLTRB(16, 175, 16, 150),
                 children: [
                   if (boardState.isLoading) ...[
                     const CardPlannedChoreSkeleton(count: 3),
@@ -275,7 +275,7 @@ class _BoardScreenState extends ConsumerState<BoardScreen>
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 24),
+              padding: const EdgeInsets.only(bottom: 80),
               child: _buildFab(selectedDate),
             ),
           ),
