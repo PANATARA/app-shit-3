@@ -1,11 +1,8 @@
-import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:household/core/theme/app_theme.dart';
-import 'package:household/widgets/app_scaffold.dart';
 import 'package:household/features/chores/widgets/week_calendar.dart';
-import 'package:go_router/go_router.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
