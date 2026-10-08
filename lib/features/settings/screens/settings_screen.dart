@@ -197,7 +197,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           },
           child: ListView(
             padding: const EdgeInsets.fromLTRB(14, 12, 14, 100),
-            physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+            physics: const ClampingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             children: [
               // ─── Header ──────────────────────────────────────────────
               _buildHeader(),
@@ -804,7 +804,7 @@ class _SettingsBlock extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 12,
+            blurRadius: 6,
             offset: const Offset(0, 3),
           ),
         ],

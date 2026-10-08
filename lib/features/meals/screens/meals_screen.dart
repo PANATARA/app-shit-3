@@ -69,7 +69,7 @@ class _MealsScreenState extends ConsumerState<MealsScreen>
               },
               child: ListView(
                 padding: const EdgeInsets.fromLTRB(16, 12, 16, 100),
-                physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                physics: const ClampingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                 children: [
                   // ─── Header ───────────────────────────────────────────
                   Row(

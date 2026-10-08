@@ -43,9 +43,10 @@ class LangModalSheet extends StatefulWidget {
   static Future<String?> show(BuildContext context, {String currentCode = 'ru'}) {
     return showModalBottomSheet<String>(
       context: context,
+      useRootNavigator: true,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => LangModalSheet(currentCode: currentCode),
+      builder: (_) => RepaintBoundary(child: LangModalSheet(currentCode: currentCode)),
     );
   }
 

@@ -103,40 +103,41 @@ class _CardPlannedChoreState extends State<CardPlannedChore>
   Widget build(BuildContext context) {
     final isDone = widget.item.isDone || widget.isCompleting || _localCompleted;
 
-    return GestureDetector(
-      onTapDown: (_) => setState(() => _isPressed = true),
-      onTapUp: (_) => setState(() => _isPressed = false),
-      onTapCancel: () => setState(() => _isPressed = false),
-      onTap: () => widget.onClick?.call(widget.item),
-      child: AnimatedScale(
-        scale: _isPressed ? 0.98 : 1.0,
-        duration: const Duration(milliseconds: 140),
-        curve: Curves.easeOutCubic,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 220),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
-          decoration: BoxDecoration(
-            color: isDone ? AppColors.surfaceAlt : AppColors.surface,
-            borderRadius: BorderRadius.circular(18),
-            border: Border.all(
-              color: isDone ? Colors.transparent : AppColors.borderSubtle,
-              width: 0.5,
+    return RepaintBoundary(
+      child: GestureDetector(
+        onTapDown: (_) => setState(() => _isPressed = true),
+        onTapUp: (_) => setState(() => _isPressed = false),
+        onTapCancel: () => setState(() => _isPressed = false),
+        onTap: () => widget.onClick?.call(widget.item),
+        child: AnimatedScale(
+          scale: _isPressed ? 0.98 : 1.0,
+          duration: const Duration(milliseconds: 140),
+          curve: Curves.easeOutCubic,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 220),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+            decoration: BoxDecoration(
+              color: isDone ? AppColors.surfaceAlt : AppColors.surface,
+              borderRadius: BorderRadius.circular(18),
+              border: Border.all(
+                color: isDone ? Colors.transparent : AppColors.borderSubtle,
+                width: 0.5,
+              ),
+              boxShadow: isDone
+                  ? null
+                  : [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.03),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.02),
+                        blurRadius: 2,
+                        offset: const Offset(0, 1),
+                      ),
+                    ],
             ),
-            boxShadow: isDone
-                ? null
-                : [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.04),
-                      blurRadius: 16,
-                      offset: const Offset(0, 4),
-                    ),
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.02),
-                      blurRadius: 4,
-                      offset: const Offset(0, 1),
-                    ),
-                  ],
-          ),
           child: AnimatedOpacity(
             opacity: isDone ? 0.6 : 1.0,
             duration: const Duration(milliseconds: 220),
@@ -337,7 +338,8 @@ class _CardPlannedChoreState extends State<CardPlannedChore>
           ),
         ),
       ),
-    );
+    ),
+  );
   }
 }
 

@@ -14,9 +14,10 @@ class EventDetailSheet extends ConsumerStatefulWidget {
   static Future<void> show(BuildContext context, FamilyEventModel event) {
     return showModalBottomSheet(
       context: context,
+      useRootNavigator: true,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => EventDetailSheet(event: event),
+      builder: (_) => RepaintBoundary(child: EventDetailSheet(event: event)),
     );
   }
 

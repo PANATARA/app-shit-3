@@ -74,9 +74,10 @@ class ThemeModalSheet extends StatefulWidget {
   static Future<String?> show(BuildContext context, {String currentThemeId = 'warm'}) {
     return showModalBottomSheet<String>(
       context: context,
+      useRootNavigator: true,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => ThemeModalSheet(currentThemeId: currentThemeId),
+      builder: (_) => RepaintBoundary(child: ThemeModalSheet(currentThemeId: currentThemeId)),
     );
   }
 

@@ -15,9 +15,10 @@ class UserProfileModalSheet extends ConsumerStatefulWidget {
   static Future<void> show(BuildContext context, String userId) {
     return showModalBottomSheet(
       context: context,
+      useRootNavigator: true,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => UserProfileModalSheet(userId: userId),
+      builder: (_) => RepaintBoundary(child: UserProfileModalSheet(userId: userId)),
     );
   }
 

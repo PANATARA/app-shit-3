@@ -143,7 +143,7 @@ class _FamilyRecipeBoxViewState extends ConsumerState<FamilyRecipeBoxView> {
                   boxShadow: [
                     BoxShadow(
                       color: AppColors.primary.withValues(alpha: 0.25),
-                      blurRadius: 8,
+                      blurRadius: 4,
                       offset: const Offset(0, 3),
                     ),
                   ],
@@ -179,8 +179,7 @@ class _FamilyRecipeBoxViewState extends ConsumerState<FamilyRecipeBoxView> {
                 child: InkWell(
                   onTap: () => setState(() => _activeFilter = f['id'] as String),
                   borderRadius: BorderRadius.circular(999),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 150),
+                  child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
                     decoration: BoxDecoration(
                       color: isSelected ? AppColors.primary : AppColors.surface,
@@ -245,7 +244,7 @@ class _FamilyRecipeBoxViewState extends ConsumerState<FamilyRecipeBoxView> {
             itemBuilder: (context, index) {
               final recipe = filteredRecipes[index];
               final isPlanned = weeklyMeals.any((m) => m.recipeId == recipe.id);
-              return _buildRecipeCard(recipe, isPlanned);
+              return RepaintBoundary(child: _buildRecipeCard(recipe, isPlanned));
             },
           ),
       ],

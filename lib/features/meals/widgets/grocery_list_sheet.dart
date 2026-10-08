@@ -13,7 +13,7 @@ class GroceryListSheet extends ConsumerStatefulWidget {
       useRootNavigator: true,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => const GroceryListSheet(),
+      builder: (_) => const RepaintBoundary(child: GroceryListSheet()),
     );
   }
 

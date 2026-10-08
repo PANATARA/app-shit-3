@@ -21,26 +21,26 @@ class UiCard extends StatelessWidget {
       width: double.infinity,
       padding: padding,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Color.alphaBlend(AppColors.primary.withValues(alpha: 0.06), AppColors.surface),
-            AppColors.surface,
-          ],
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(
+          color: AppColors.currentPalette.isDark
+              ? Colors.white.withValues(alpha: 0.08)
+              : Colors.black.withValues(alpha: 0.04),
+          width: 0.5,
         ),
-        border: Border.all(color: AppColors.borderSubtle, width: 0.5),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 20,
+            color: Colors.black.withValues(alpha: 0.035),
+            blurRadius: 16,
+            spreadRadius: -2,
             offset: const Offset(0, 4),
           ),
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.02),
-            blurRadius: 6,
-            offset: const Offset(0, 2),
+            color: Colors.black.withValues(alpha: 0.015),
+            blurRadius: 4,
+            spreadRadius: -1,
+            offset: const Offset(0, 1),
           ),
         ],
       ),
@@ -57,10 +57,10 @@ class UiCard extends StatelessWidget {
                   Text(
                     title!,
                     style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: -0.1,
-                      color: AppColors.textSecondary,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 0.4,
+                      color: AppColors.textMuted,
                     ),
                   )
                 else

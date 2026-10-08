@@ -32,10 +32,12 @@ class RecipeDetailSheet extends ConsumerStatefulWidget {
       useRootNavigator: true,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => RecipeDetailSheet(
-        recipe: recipe,
-        onToast: onToast,
-        onScheduled: onScheduled,
+      builder: (_) => RepaintBoundary(
+        child: RecipeDetailSheet(
+          recipe: recipe,
+          onToast: onToast,
+          onScheduled: onScheduled,
+        ),
       ),
     );
   }

@@ -29,39 +29,41 @@ class LeadersCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return UiCard(
-      title: 'ЛИДЕРЫ НЕДЕЛИ',
-      action: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-        decoration: BoxDecoration(
-          color: AppColors.surfaceAlt,
-          borderRadius: BorderRadius.circular(999),
-          border: Border.all(color: AppColors.borderSubtle, width: 0.5),
+    return RepaintBoundary(
+      child: UiCard(
+        title: 'ЛИДЕРЫ НЕДЕЛИ',
+        action: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+          decoration: BoxDecoration(
+            color: AppColors.surfaceAlt,
+            borderRadius: BorderRadius.circular(999),
+            border: Border.all(color: AppColors.borderSubtle, width: 0.5),
+          ),
+          child: Text(
+            _getCurrentWeekRange(),
+            style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.textMuted),
+          ),
         ),
-        child: Text(
-          _getCurrentWeekRange(),
-          style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.textMuted),
-        ),
-      ),
-      child: isLoading
-          ? Column(
-              children: List.generate(
-                3,
-                (i) => Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: Container(
-                    height: 56,
-                    decoration: BoxDecoration(
-                      color: AppColors.surfaceAlt,
-                      borderRadius: BorderRadius.circular(18),
+        child: isLoading
+            ? Column(
+                children: List.generate(
+                  3,
+                  (i) => Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Container(
+                      height: 56,
+                      decoration: BoxDecoration(
+                        color: AppColors.surfaceAlt,
+                        borderRadius: BorderRadius.circular(18),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            )
-          : leaders.isEmpty
-              ? _buildEmptyState()
-              : _buildLeadersList(),
+              )
+            : leaders.isEmpty
+                ? _buildEmptyState()
+                : _buildLeadersList(),
+      ),
     );
   }
 
@@ -122,21 +124,15 @@ class _LeaderRow extends StatelessWidget {
     BoxDecoration rowDecor;
     if (rank == 1) {
       rowDecor = BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            AppColors.primarySoft,
-            AppColors.surfaceAlt,
-          ],
-        ),
+        color: AppColors.primarySoft,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: AppColors.primary.withValues(alpha: 0.28), width: 0.8),
+        border: Border.all(color: AppColors.primary.withValues(alpha: 0.22), width: 0.5),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primary.withValues(alpha: 0.08),
-            blurRadius: 16,
-            offset: const Offset(0, 4),
+            color: AppColors.primary.withValues(alpha: 0.07),
+            blurRadius: 10,
+            spreadRadius: -2,
+            offset: const Offset(0, 3),
           ),
         ],
       );
@@ -144,13 +140,18 @@ class _LeaderRow extends StatelessWidget {
       rowDecor = BoxDecoration(
         color: AppColors.primarySoft,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: AppColors.primary.withValues(alpha: 0.35), width: 0.8),
+        border: Border.all(color: AppColors.primary.withValues(alpha: 0.25), width: 0.5),
       );
     } else {
       rowDecor = BoxDecoration(
         color: AppColors.surfaceAlt,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: AppColors.borderSubtle, width: 0.5),
+        border: Border.all(
+          color: AppColors.currentPalette.isDark
+              ? Colors.white.withValues(alpha: 0.08)
+              : Colors.black.withValues(alpha: 0.04),
+          width: 0.5,
+        ),
       );
     }
 
@@ -168,7 +169,7 @@ class _LeaderRow extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: Color(0x59FFBE32),
-            blurRadius: 10,
+            blurRadius: 6,
             offset: Offset(0, 3),
           ),
         ],

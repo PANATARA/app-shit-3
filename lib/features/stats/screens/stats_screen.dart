@@ -45,8 +45,11 @@ class _StatsScreenState extends ConsumerState<StatsScreen>
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 100),
             physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             children: [
-              // ─── Header ──────────────────────────────────────────────
-              _buildHeader(homeState.isRevalidating),
+              // ─── Greeting Header ─────────────────────────────────────
+              _GreetingHeader(
+                userName: effectiveProfile?.displayName,
+                isRevalidating: homeState.isRevalidating,
+              ),
               const SizedBox(height: 16),
 
               // ─── Content or Skeletons ────────────────────────────────
@@ -88,52 +91,70 @@ class _StatsScreenState extends ConsumerState<StatsScreen>
       ),
     );
   }
+}
 
-  Widget _buildHeader(bool isRevalidating) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Главная',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: -0.4,
-                    color: AppColors.textPrimary,
-                    height: 1.15,
-                  ),
-                ),
-                SizedBox(height: 3),
-                Text(
-                  'Семейный очаг, дела и события',
-                  style: TextStyle(
-                    fontSize: 13.5,
-                    color: AppColors.textSecondary,
-                    fontWeight: FontWeight.w400,
-                    letterSpacing: -0.1,
-                  ),
-                ),
-              ],
-            ),
-            if (isRevalidating)
-              SizedBox(
-                width: 18,
-                height: 18,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  color: AppColors.primary,
-                ),
+class _GreetingHeader extends StatelessWidget {
+  final String? userName;
+  final bool isRevalidating;
+
+  const _GreetingHeader({
+    this.userName,
+    required this.isRevalidating,
+  });
+
+  String _getGreeting() {
+    final hour = DateTime.now().hour;
+    if (hour >= 5 && hour < 12) return 'Доброе утро';
+    if (hour >= 12 && hour < 17) return 'Добрый день';
+    if (hour >= 17 && hour < 22) return 'Добрый вечер';
+    return 'Доброй ночи';
+  }
+
+  String? _extractFirstName(String? fullName) {
+    if (fullName == null || fullName.trim().isEmpty) return null;
+    return fullName.trim().split(' ').first;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final greeting = _getGreeting();
+    final firstName = _extractFirstName(userName);
+    final fullGreeting = firstName != null && firstName.isNotEmpty
+        ? '$greeting, $firstName'
+        : greeting;
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 8, bottom: 4),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Text(
+              fullGreeting,
+              style: TextStyle(
+                fontSize: 34,
+                fontWeight: FontWeight.w800,
+                letterSpacing: -0.8,
+                height: 1.15,
+                color: AppColors.textPrimary,
               ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          if (isRevalidating) ...[
+            const SizedBox(width: 12),
+            SizedBox(
+              width: 14,
+              height: 14,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                color: AppColors.primary,
+              ),
+            ),
           ],
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

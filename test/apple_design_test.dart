@@ -21,8 +21,7 @@ void main() {
       expect(theme.textTheme.labelSmall?.letterSpacing, greaterThan(0.5));
 
       // Apple Modal Sheet Theme
-      expect(theme.bottomSheetTheme.showDragHandle, isTrue);
-      expect(theme.bottomSheetTheme.dragHandleSize, const Size(36, 5));
+      expect(theme.bottomSheetTheme.clipBehavior, Clip.none);
     });
 
     testWidgets('WeekCalendar DayButton responds with AnimatedScale', (tester) async {
@@ -39,11 +38,11 @@ void main() {
         ),
       );
 
-      // Verify PageView uses BouncingScrollPhysics
+      // Verify PageView uses ClampingScrollPhysics (optimized for Android budget devices)
       final pageViewFinder = find.byType(PageView);
       expect(pageViewFinder, findsOneWidget);
       final pageView = tester.widget<PageView>(pageViewFinder);
-      expect(pageView.physics, isA<BouncingScrollPhysics>());
+      expect(pageView.physics, isA<ClampingScrollPhysics>());
 
       // Find first day button and press down
       final inkWellFinder = find.byType(InkWell).first;

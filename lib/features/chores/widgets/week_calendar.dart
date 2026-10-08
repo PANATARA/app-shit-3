@@ -72,7 +72,7 @@ class _WeekCalendarState extends State<WeekCalendar> {
           height: 68,
           child: PageView.builder(
             controller: _pageController,
-            physics: const BouncingScrollPhysics(),
+            physics: const ClampingScrollPhysics(),
             itemCount: _weeks.length,
             onPageChanged: (index) {
               setState(() => _currentWeekIndex = index);
@@ -162,16 +162,11 @@ class _DayButtonState extends State<_DayButton> {
     if (widget.isSelected) {
       decoration = BoxDecoration(
         color: AppColors.primary,
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [AppColors.primaryLight, AppColors.primary],
-        ),
         borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primary.withValues(alpha: 0.35),
-            blurRadius: 8,
+            color: AppColors.primary.withValues(alpha: 0.30),
+            blurRadius: 6,
             offset: const Offset(0, 3),
           ),
         ],
@@ -198,7 +193,7 @@ class _DayButtonState extends State<_DayButton> {
 
     return AnimatedScale(
       scale: _isPressed ? 0.93 : 1.0,
-      duration: const Duration(milliseconds: 100),
+      duration: const Duration(milliseconds: 80),
       curve: Curves.easeOutCubic,
       child: Material(
         color: Colors.transparent,
@@ -214,7 +209,7 @@ class _DayButtonState extends State<_DayButton> {
           splashColor: AppColors.primary.withValues(alpha: 0.1),
           highlightColor: AppColors.primary.withValues(alpha: 0.05),
           child: AnimatedContainer(
-            duration: const Duration(milliseconds: 160),
+            duration: const Duration(milliseconds: 120),
             decoration: decoration,
             padding: const EdgeInsets.symmetric(vertical: 8),
             alignment: Alignment.center,

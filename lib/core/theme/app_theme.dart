@@ -57,10 +57,8 @@ class AppTheme {
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
         ),
-        clipBehavior: Clip.antiAlias,
-        showDragHandle: true,
-        dragHandleColor: palette.borderSubtle.withValues(alpha: 0.85),
-        dragHandleSize: const Size(36, 5),
+        clipBehavior: Clip.none,
+        showDragHandle: false,
       ),
       dividerTheme: DividerThemeData(
         color: palette.borderSubtle,

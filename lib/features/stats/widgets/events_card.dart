@@ -23,17 +23,32 @@ class EventsCard extends StatelessWidget {
       title: 'БЛИЖАЙШИЕ СОБЫТИЯ',
       action: InkWell(
         onTap: () => EventCreateSheet.show(context),
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(999),
         child: Container(
-          width: 36,
-          height: 36,
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
-            color: AppColors.surfaceAlt,
-            shape: BoxShape.circle,
-            border: Border.all(color: AppColors.borderSubtle, width: 0.5),
+            color: AppColors.primarySoft,
+            borderRadius: BorderRadius.circular(999),
+            border: Border.all(
+              color: AppColors.primary.withValues(alpha: 0.20),
+              width: 1,
+            ),
           ),
-          alignment: Alignment.center,
-          child: Icon(Icons.add_rounded, size: 20, color: AppColors.textSecondary),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.add_rounded, size: 14, color: AppColors.primary),
+              const SizedBox(width: 4),
+              Text(
+                'Добавить',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.primary,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
       child: isLoading
@@ -72,7 +87,7 @@ class EventsCard extends StatelessWidget {
           alignment: Alignment.center,
           child: Icon(
             Icons.celebration_outlined,
-            size: 32,
+            size: 30,
             color: AppColors.primary,
           ),
         ),
@@ -102,24 +117,29 @@ class EventsCard extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
+                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
                 elevation: 0,
               ),
               onPressed: () => EventCreateSheet.show(context),
-              icon: const Icon(Icons.add_rounded, size: 18),
-              label: const Text('Добавить событие', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+              icon: const Icon(Icons.add_rounded, size: 16),
+              label: const Text('Добавить', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
             ),
             const SizedBox(width: 8),
             OutlinedButton(
               style: OutlinedButton.styleFrom(
                 foregroundColor: AppColors.textSecondary,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                side: BorderSide(color: AppColors.borderSubtle),
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
+                side: BorderSide(
+                  color: AppColors.currentPalette.isDark
+                      ? Colors.white.withValues(alpha: 0.12)
+                      : Colors.black.withValues(alpha: 0.10),
+                  width: 1,
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               ),
               onPressed: () => EventsListSheet.show(context),
-              child: const Text('Все события', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+              child: const Text('Все', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
             ),
           ],
         ),
@@ -143,14 +163,17 @@ class EventsCard extends StatelessWidget {
         const SizedBox(height: 4),
         InkWell(
           onTap: () => EventsListSheet.show(context),
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(999),
           child: Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(vertical: 11),
             decoration: BoxDecoration(
-              color: AppColors.surfaceAlt,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: AppColors.borderSubtle, width: 0.5),
+              color: AppColors.primarySoft,
+              borderRadius: BorderRadius.circular(999),
+              border: Border.all(
+                color: AppColors.primary.withValues(alpha: 0.18),
+                width: 1,
+              ),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -164,7 +187,7 @@ class EventsCard extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: 6),
-                Icon(Icons.arrow_forward_rounded, size: 16, color: AppColors.primary),
+                Icon(Icons.arrow_forward_rounded, size: 15, color: AppColors.primary),
               ],
             ),
           ),
@@ -207,13 +230,18 @@ class _EventRow extends StatelessWidget {
 
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(18),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         decoration: BoxDecoration(
           color: AppColors.surfaceAlt,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.borderSubtle, width: 0.5),
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(
+            color: AppColors.currentPalette.isDark
+                ? Colors.white.withValues(alpha: 0.08)
+                : Colors.black.withValues(alpha: 0.04),
+            width: 0.5,
+          ),
         ),
         child: Row(
           children: [

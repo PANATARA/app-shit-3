@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,6 +20,7 @@ class BoardScreen extends ConsumerStatefulWidget {
 class _BoardScreenState extends ConsumerState<BoardScreen>
     with WidgetsBindingObserver, RouteAware, SwrScreenMixin {
   final ScrollController _scrollController = ScrollController();
+  final _isCollapsed = ValueNotifier<bool>(false);
   bool _isFabPressed = false;
 
   @override
@@ -32,8 +32,21 @@ class _BoardScreenState extends ConsumerState<BoardScreen>
   }
 
   @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    final collapsed = _scrollController.hasClients && _scrollController.offset > 60;
+    if (_isCollapsed.value != collapsed) _isCollapsed.value = collapsed;
+  }
+
+  @override
   void dispose() {
+    _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
+    _isCollapsed.dispose();
     super.dispose();
   }
 
@@ -65,16 +78,17 @@ class _BoardScreenState extends ConsumerState<BoardScreen>
         children: [
           // Scrollable List Area
           Positioned.fill(
-            child: RefreshIndicator(
-              color: AppColors.primary,
-              backgroundColor: AppColors.surface,
-              edgeOffset: 160,
-              onRefresh: () => boardNotifier.refresh(),
-              child: ListView(
-                controller: _scrollController,
-                physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-                padding: const EdgeInsets.fromLTRB(16, 175, 16, 200),
-                children: [
+            child: RepaintBoundary(
+              child: RefreshIndicator(
+                color: AppColors.primary,
+                backgroundColor: AppColors.surface,
+                edgeOffset: 160,
+                onRefresh: () => boardNotifier.refresh(),
+                child: ListView(
+                  controller: _scrollController,
+                  physics: const ClampingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                  padding: const EdgeInsets.fromLTRB(16, 175, 16, 200),
+                  children: [
                   if (boardState.isLoading) ...[
                     const CardPlannedChoreSkeleton(count: 3),
                   ] else if (boardState.totalCount == 0) ...[
@@ -159,128 +173,85 @@ class _BoardScreenState extends ConsumerState<BoardScreen>
               ),
             ),
           ),
+        ),
 
-          // Translucent Apple Calendar Header Card
-          // Translucent Apple Calendar Header Card (collapsible on scroll)
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: AnimatedBuilder(
-              animation: _scrollController,
-              builder: (context, _) {
-                final offset = _scrollController.hasClients ? _scrollController.offset : 0.0;
-                final progress = (offset / 70.0).clamp(0.0, 1.0);
-                final topPadding = lerpDouble(10.0, 4.0, progress)!;
-                final bottomPadding = lerpDouble(12.0, 8.0, progress)!;
-                final cornerRadius = lerpDouble(26.0, 20.0, progress)!;
-
-                return ClipRRect(
-                  borderRadius: BorderRadius.vertical(bottom: Radius.circular(cornerRadius)),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: AppColors.surface.withValues(alpha: 0.88),
-                        borderRadius: BorderRadius.vertical(bottom: Radius.circular(cornerRadius)),
-                        border: Border(
-                          bottom: BorderSide(color: AppColors.borderSubtle, width: 0.5),
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.04),
-                            blurRadius: 20,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
+        // Apple Calendar Header Card (collapsible on scroll)
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          child: ValueListenableBuilder<bool>(
+            valueListenable: _isCollapsed,
+            builder: (context, isCollapsed, _) {
+              return RepaintBoundary(
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 220),
+                  curve: Curves.easeOutCubic,
+                  decoration: BoxDecoration(
+                    color: AppColors.surface,
+                    borderRadius: BorderRadius.vertical(bottom: Radius.circular(isCollapsed ? 20 : 26)),
+                    border: Border(bottom: BorderSide(color: AppColors.borderSubtle, width: 0.5)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.04),
+                        blurRadius: 6,
+                        offset: const Offset(0, 3),
                       ),
-                      child: SafeArea(
-                        bottom: false,
-                        child: Padding(
-                          padding: EdgeInsets.fromLTRB(16, topPadding, 16, bottomPadding),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              // Hub Title & Subtitle (collapses vertically on scroll)
-                              ClipRect(
-                                child: Align(
-                                  alignment: Alignment.topCenter,
-                                  heightFactor: 1.0 - progress,
-                                  child: Opacity(
-                                    opacity: (1.0 - progress * 1.5).clamp(0.0, 1.0),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Text(
-                                          'Доска',
-                                          style: TextStyle(
-                                            fontSize: 28,
-                                            fontWeight: FontWeight.w800,
-                                            letterSpacing: -0.4,
-                                            height: 1.15,
-                                            color: AppColors.textPrimary,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 2),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              'Расписание и задачи семьи',
-                                              style: TextStyle(
-                                                fontSize: 13,
-                                                fontWeight: FontWeight.w500,
-                                                letterSpacing: -0.1,
-                                                color: AppColors.textMuted,
-                                              ),
-                                            ),
-                                            if (boardState.isRevalidating) ...[
-                                              const SizedBox(width: 8),
-                                              SizedBox(
-                                                width: 10,
-                                                height: 10,
-                                                child: CircularProgressIndicator(
-                                                  strokeWidth: 1.5,
-                                                  color: AppColors.primary,
-                                                ),
-                                              ),
-                                            ],
+                    ],
+                  ),
+                  child: SafeArea(
+                    bottom: false,
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(16, isCollapsed ? 4 : 10, 16, isCollapsed ? 8 : 12),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          AnimatedSize(
+                            duration: const Duration(milliseconds: 220),
+                            curve: Curves.easeOutCubic,
+                            child: isCollapsed
+                                ? const SizedBox.shrink()
+                                : Column(
+                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text('Доска', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800, letterSpacing: -0.4, height: 1.15, color: AppColors.textPrimary)),
+                                      const SizedBox(height: 2),
+                                      Row(
+                                        children: [
+                                          Text('Расписание и задачи семьи', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, letterSpacing: -0.1, color: AppColors.textMuted)),
+                                          if (boardState.isRevalidating) ...[
+                                            const SizedBox(width: 8),
+                                            SizedBox(width: 10, height: 10, child: CircularProgressIndicator(strokeWidth: 1.5, color: AppColors.primary)),
                                           ],
-                                        ),
-                                        const SizedBox(height: 10),
-                                      ],
-                                    ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 10),
+                                    ],
                                   ),
-                                ),
-                              ),
-
-                              // Swipeable Week Calendar (always visible)
-                              WeekCalendar(
-                                selectedDate: selectedDate,
-                                onDateChanged: _onDateChanged,
-                              ),
-                            ],
                           ),
-                        ),
+                          WeekCalendar(selectedDate: selectedDate, onDateChanged: _onDateChanged),
+                        ],
                       ),
                     ),
                   ),
-                );
-              },
-            ),
+                ),
+              );
+            },
           ),
+        ),
 
-          // Floating Action Button (Apple Thumb Zone)
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 128),
-              child: _buildFab(selectedDate),
-            ),
+        // Floating Action Button (Apple Thumb Zone)
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 128),
+            child: _buildFab(selectedDate),
           ),
-        ],
-      ),
+        ),
+      ],
+    ),
     );
   }
 
@@ -388,12 +359,9 @@ class _BoardScreenState extends ConsumerState<BoardScreen>
   }
 
   Widget _buildFab(DateTime selectedDate) {
-    return AnimatedBuilder(
-      animation: _scrollController,
-      builder: (context, _) {
-        final offset = _scrollController.hasClients ? _scrollController.offset : 0.0;
-        final progress = (offset / 70.0).clamp(0.0, 1.0);
-
+    return ValueListenableBuilder<bool>(
+      valueListenable: _isCollapsed,
+      builder: (context, isCollapsed, _) {
         return AnimatedScale(
           scale: _isFabPressed ? 0.94 : 1.0,
           duration: const Duration(milliseconds: 120),
@@ -401,22 +369,13 @@ class _BoardScreenState extends ConsumerState<BoardScreen>
           child: Container(
             height: 52,
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [AppColors.primaryLight, AppColors.primary],
-              ),
+              color: AppColors.primary,
               borderRadius: BorderRadius.circular(999),
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.primary.withValues(alpha: 0.38),
-                  blurRadius: 18,
-                  offset: const Offset(0, 6),
-                ),
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.08),
-                  blurRadius: 6,
-                  offset: const Offset(0, 2),
+                  color: AppColors.primary.withValues(alpha: 0.25),
+                  blurRadius: 8,
+                  offset: const Offset(0, 4),
                 ),
               ],
             ),
@@ -452,28 +411,25 @@ class _BoardScreenState extends ConsumerState<BoardScreen>
                         ),
                       ),
                     ),
-                    ClipRect(
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        widthFactor: 1.0 - progress,
-                        child: Opacity(
-                          opacity: (1.0 - progress * 1.5).clamp(0.0, 1.0),
-                          child: const Padding(
-                            padding: EdgeInsets.only(right: 20),
-                            child: Text(
-                              'Запланировать',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: -0.2,
-                                color: Colors.white,
+                    AnimatedSize(
+                      duration: const Duration(milliseconds: 200),
+                      curve: Curves.easeOutCubic,
+                      child: isCollapsed
+                          ? const SizedBox.shrink()
+                          : const Padding(
+                              padding: EdgeInsets.only(right: 20),
+                              child: Text(
+                                'Запланировать',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: -0.2,
+                                  color: Colors.white,
+                                ),
+                                maxLines: 1,
+                                softWrap: false,
                               ),
-                              maxLines: 1,
-                              softWrap: false,
                             ),
-                          ),
-                        ),
-                      ),
                     ),
                   ],
                 ),

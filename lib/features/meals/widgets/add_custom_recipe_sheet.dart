@@ -13,7 +13,7 @@ class AddCustomRecipeSheet extends ConsumerStatefulWidget {
       useRootNavigator: true,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => const AddCustomRecipeSheet(),
+      builder: (_) => const RepaintBoundary(child: AddCustomRecipeSheet()),
     );
   }
 

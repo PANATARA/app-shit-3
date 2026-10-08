@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
@@ -54,31 +53,31 @@ class _AppScaffoldState extends State<AppScaffold> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
-      body: widget.navigationShell,
-      bottomNavigationBar: ClipRRect(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(24),
-          topRight: Radius.circular(24),
-        ),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
-          child: Container(
-            decoration: BoxDecoration(
-              color: AppColors.navBackground.withValues(alpha: 0.85),
-              border: Border(
-                top: BorderSide(
-                  color: AppColors.borderSubtle.withValues(alpha: 0.7),
-                  width: 0.5,
-                ),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.06),
-                  blurRadius: 20,
-                  offset: const Offset(0, -4),
-                ),
-              ],
+      body: RepaintBoundary(
+        child: widget.navigationShell,
+      ),
+      bottomNavigationBar: RepaintBoundary(
+        child: Container(
+          decoration: BoxDecoration(
+            color: AppColors.navBackground,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(24),
+              topRight: Radius.circular(24),
             ),
+            border: Border(
+              top: BorderSide(
+                color: AppColors.borderSubtle.withValues(alpha: 0.7),
+                width: 0.5,
+              ),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.05),
+                blurRadius: 10,
+                offset: const Offset(0, -3),
+              ),
+            ],
+          ),
             child: SafeArea(
               top: false,
               child: Padding(
@@ -116,8 +115,7 @@ class _AppScaffoldState extends State<AppScaffold> {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 }
 

@@ -32,9 +32,11 @@ class AddMealSheet extends ConsumerStatefulWidget {
       useRootNavigator: true,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => AddMealSheet(
-        targetDate: targetDate,
-        defaultSlot: defaultSlot,
+      builder: (_) => RepaintBoundary(
+        child: AddMealSheet(
+          targetDate: targetDate,
+          defaultSlot: defaultSlot,
+        ),
       ),
     );
   }
