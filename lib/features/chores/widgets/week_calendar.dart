@@ -163,13 +163,6 @@ class _DayButtonState extends State<_DayButton> {
       decoration = BoxDecoration(
         color: AppColors.primary,
         borderRadius: BorderRadius.circular(18),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.primary.withValues(alpha: 0.30),
-            blurRadius: 6,
-            offset: const Offset(0, 3),
-          ),
-        ],
       );
       weekdayColor = Colors.white.withValues(alpha: 0.88);
       dayNumberColor = Colors.white;

@@ -38,7 +38,8 @@ class _BoardScreenState extends ConsumerState<BoardScreen>
   }
 
   void _onScroll() {
-    final collapsed = _scrollController.hasClients && _scrollController.offset > 60;
+    final collapsed =
+        _scrollController.hasClients && _scrollController.offset > 60;
     if (_isCollapsed.value != collapsed) _isCollapsed.value = collapsed;
   }
 
@@ -52,7 +53,8 @@ class _BoardScreenState extends ConsumerState<BoardScreen>
 
   void _onDateChanged(DateTime date) {
     final currentDate = ref.read(selectedDateProvider);
-    final isSameDate = currentDate.year == date.year &&
+    final isSameDate =
+        currentDate.year == date.year &&
         currentDate.month == date.month &&
         currentDate.day == date.day;
 
@@ -86,172 +88,221 @@ class _BoardScreenState extends ConsumerState<BoardScreen>
                 onRefresh: () => boardNotifier.refresh(),
                 child: ListView(
                   controller: _scrollController,
-                  physics: const ClampingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-                  padding: const EdgeInsets.fromLTRB(16, 175, 16, 200),
+                  physics: const ClampingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics(),
+                  ),
+                  padding: const EdgeInsets.fromLTRB(16, 210, 16, 200),
                   children: [
-                  if (boardState.isLoading) ...[
-                    const CardPlannedChoreSkeleton(count: 3),
-                  ] else if (boardState.totalCount == 0) ...[
-                    // Absolute Zero Empty State
-                    _buildEmptyCard(
-                      iconEmoji: '🏕️',
-                      title: 'Планы отсутствуют',
-                      description:
-                          'На этот день пока не запланировано никаких домашних дел. Добавьте задачу с помощью кнопки ниже!',
-                      isLarge: true,
-                    ),
-                  ] else ...[
-                    // Active Chores Section
-                    _buildSectionHeader(
-                      title: 'АКТИВНЫЕ',
-                      count: boardState.activeChores.length,
-                      isCompleted: false,
-                    ),
-                    const SizedBox(height: 8),
-
-                    if (boardState.activeChores.isEmpty) ...[
-                      // All Done Empty State
+                    if (boardState.isLoading) ...[
+                      const CardPlannedChoreSkeleton(count: 3),
+                    ] else if (boardState.totalCount == 0) ...[
+                      // Absolute Zero Empty State
                       _buildEmptyCard(
-                        iconEmoji: '🎉',
-                        title: 'Все дела сделаны!',
+                        iconEmoji: '🏕️',
+                        title: 'Планы отсутствуют',
                         description:
-                            'Отличная работа! Все запланированные задачи на сегодня успешно завершены.',
-                        isLarge: false,
+                            'На этот день пока не запланировано никаких домашних дел. Добавьте задачу с помощью кнопки ниже!',
+                        isLarge: true,
                       ),
                     ] else ...[
-                      ...boardState.activeChores.map((chore) {
-                        return Padding(
-                          key: ValueKey(chore.id),
-                          padding: const EdgeInsets.only(bottom: 8),
-                          child: CardPlannedChore(
-                            item: chore,
-                            isCompleting: boardState.completingIds.contains(chore.id),
-                            onToggle: (item) => boardNotifier.toggleChore(item),
-                            onUpdateMessage: (item, msg) =>
-                                boardNotifier.updateSubtasks(item, msg),
-                            onClick: (item) => Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => PlannedChoreDetailScreen(chore: item),
-                              ),
-                            ),
-                          ),
-                        );
-                      }),
-                    ],
-
-                    // Completed Chores Section
-                    if (boardState.completedChores.isNotEmpty) ...[
-                      const SizedBox(height: 16),
+                      // Active Chores Section
                       _buildSectionHeader(
-                        title: 'ВЫПОЛНЕНО',
-                        count: boardState.completedChores.length,
-                        isCompleted: true,
+                        title: 'АКТИВНЫЕ',
+                        count: boardState.activeChores.length,
+                        isCompleted: false,
                       ),
                       const SizedBox(height: 8),
 
-                      ...boardState.completedChores.map((chore) {
-                        return Padding(
-                          key: ValueKey(chore.id),
-                          padding: const EdgeInsets.only(bottom: 8),
-                          child: CardPlannedChore(
-                            item: chore,
-                            isCompleting: false,
-                            onToggle: (item) => boardNotifier.toggleChore(item),
-                            onUpdateMessage: (item, msg) =>
-                                boardNotifier.updateSubtasks(item, msg),
-                            onClick: (item) => Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => PlannedChoreDetailScreen(chore: item),
+                      if (boardState.activeChores.isEmpty) ...[
+                        // All Done Empty State
+                        _buildEmptyCard(
+                          iconEmoji: '🎉',
+                          title: 'Все дела сделаны!',
+                          description:
+                              'Отличная работа! Все запланированные задачи на сегодня успешно завершены.',
+                          isLarge: false,
+                        ),
+                      ] else ...[
+                        ...boardState.activeChores.map((chore) {
+                          return Padding(
+                            key: ValueKey(chore.id),
+                            padding: const EdgeInsets.only(bottom: 8),
+                            child: CardPlannedChore(
+                              item: chore,
+                              isCompleting: boardState.completingIds.contains(
+                                chore.id,
+                              ),
+                              onToggle: (item) =>
+                                  boardNotifier.toggleChore(item),
+                              onUpdateMessage: (item, msg) =>
+                                  boardNotifier.updateSubtasks(item, msg),
+                              onClick: (item) => Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) =>
+                                      PlannedChoreDetailScreen(chore: item),
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      }),
+                          );
+                        }),
+                      ],
+
+                      // Completed Chores Section
+                      if (boardState.completedChores.isNotEmpty) ...[
+                        const SizedBox(height: 16),
+                        _buildSectionHeader(
+                          title: 'ВЫПОЛНЕНО',
+                          count: boardState.completedChores.length,
+                          isCompleted: true,
+                        ),
+                        const SizedBox(height: 8),
+
+                        ...boardState.completedChores.map((chore) {
+                          return Padding(
+                            key: ValueKey(chore.id),
+                            padding: const EdgeInsets.only(bottom: 8),
+                            child: CardPlannedChore(
+                              item: chore,
+                              isCompleting: false,
+                              onToggle: (item) =>
+                                  boardNotifier.toggleChore(item),
+                              onUpdateMessage: (item, msg) =>
+                                  boardNotifier.updateSubtasks(item, msg),
+                              onClick: (item) => Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) =>
+                                      PlannedChoreDetailScreen(chore: item),
+                                ),
+                              ),
+                            ),
+                          );
+                        }),
+                      ],
                     ],
                   ],
-                ],
+                ),
               ),
             ),
           ),
-        ),
 
-        // Apple Calendar Header Card (collapsible on scroll)
-        Positioned(
-          top: 0,
-          left: 0,
-          right: 0,
-          child: ValueListenableBuilder<bool>(
-            valueListenable: _isCollapsed,
-            builder: (context, isCollapsed, _) {
-              return RepaintBoundary(
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 220),
-                  curve: Curves.easeOutCubic,
-                  decoration: BoxDecoration(
-                    color: AppColors.surface,
-                    borderRadius: BorderRadius.vertical(bottom: Radius.circular(isCollapsed ? 20 : 26)),
-                    border: Border(bottom: BorderSide(color: AppColors.borderSubtle, width: 0.5)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.04),
-                        blurRadius: 6,
-                        offset: const Offset(0, 3),
+          // Apple Calendar Header Card (collapsible on scroll)
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: ValueListenableBuilder<bool>(
+              valueListenable: _isCollapsed,
+              builder: (context, isCollapsed, _) {
+                return RepaintBoundary(
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 220),
+                    curve: Curves.easeOutCubic,
+                    decoration: BoxDecoration(
+                      color: AppColors.surface,
+                      borderRadius: BorderRadius.vertical(
+                        bottom: Radius.circular(isCollapsed ? 20 : 26),
                       ),
-                    ],
-                  ),
-                  child: SafeArea(
-                    bottom: false,
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(16, isCollapsed ? 4 : 10, 16, isCollapsed ? 8 : 12),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          AnimatedSize(
-                            duration: const Duration(milliseconds: 220),
-                            curve: Curves.easeOutCubic,
-                            child: isCollapsed
-                                ? const SizedBox.shrink()
-                                : Column(
-                                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text('Доска', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800, letterSpacing: -0.4, height: 1.15, color: AppColors.textPrimary)),
-                                      const SizedBox(height: 2),
-                                      Row(
-                                        children: [
-                                          Text('Расписание и задачи семьи', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, letterSpacing: -0.1, color: AppColors.textMuted)),
-                                          if (boardState.isRevalidating) ...[
-                                            const SizedBox(width: 8),
-                                            SizedBox(width: 10, height: 10, child: CircularProgressIndicator(strokeWidth: 1.5, color: AppColors.primary)),
+                      border: Border(
+                        bottom: BorderSide(
+                          color: AppColors.borderSubtle,
+                          width: 0.5,
+                        ),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.04),
+                          blurRadius: 6,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: SafeArea(
+                      bottom: false,
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(
+                          16,
+                          isCollapsed ? 4 : 10,
+                          16,
+                          isCollapsed ? 8 : 12,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            AnimatedSize(
+                              duration: const Duration(milliseconds: 220),
+                              curve: Curves.easeOutCubic,
+                              child: isCollapsed
+                                  ? const SizedBox.shrink()
+                                  : Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          'Доска',
+                                          style: TextStyle(
+                                            fontSize: 28,
+                                            fontWeight: FontWeight.w800,
+                                            letterSpacing: -0.4,
+                                            height: 1.15,
+                                            color: AppColors.textPrimary,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 2),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'Расписание и задачи семьи',
+                                              style: TextStyle(
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.w500,
+                                                letterSpacing: -0.1,
+                                                color: AppColors.textMuted,
+                                              ),
+                                            ),
+                                            if (boardState.isRevalidating) ...[
+                                              const SizedBox(width: 8),
+                                              SizedBox(
+                                                width: 10,
+                                                height: 10,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                      strokeWidth: 1.5,
+                                                      color: AppColors.primary,
+                                                    ),
+                                              ),
+                                            ],
                                           ],
-                                        ],
-                                      ),
-                                      const SizedBox(height: 10),
-                                    ],
-                                  ),
-                          ),
-                          WeekCalendar(selectedDate: selectedDate, onDateChanged: _onDateChanged),
-                        ],
+                                        ),
+                                        const SizedBox(height: 10),
+                                      ],
+                                    ),
+                            ),
+                            WeekCalendar(
+                              selectedDate: selectedDate,
+                              onDateChanged: _onDateChanged,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
-        ),
 
-        // Floating Action Button (Apple Thumb Zone)
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 128),
-            child: _buildFab(selectedDate),
+          // Floating Action Button (Apple Thumb Zone)
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 128),
+              child: _buildFab(selectedDate),
+            ),
           ),
-        ),
-      ],
-    ),
+        ],
+      ),
     );
   }
 
@@ -328,10 +379,7 @@ class _BoardScreenState extends ConsumerState<BoardScreen>
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            iconEmoji,
-            style: TextStyle(fontSize: isLarge ? 42 : 32),
-          ),
+          Text(iconEmoji, style: TextStyle(fontSize: isLarge ? 42 : 32)),
           SizedBox(height: isLarge ? 10 : 8),
           Text(
             title,
@@ -389,7 +437,8 @@ class _BoardScreenState extends ConsumerState<BoardScreen>
                   HapticFeedback.lightImpact();
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (_) => CreateChoreStepOneScreen(selectedDate: selectedDate),
+                      builder: (_) =>
+                          CreateChoreStepOneScreen(selectedDate: selectedDate),
                     ),
                   );
                 },

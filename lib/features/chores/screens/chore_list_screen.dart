@@ -45,28 +45,6 @@ class _ChoreListScreenState extends ConsumerState<ChoreListScreen> {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  Positioned(
-                    left: 4,
-                    child: TextButton.icon(
-                      onPressed: () => Navigator.of(context).pop(),
-                      icon: Icon(
-                        Icons.arrow_back_ios_rounded,
-                        size: 16,
-                        color: AppColors.primary,
-                      ),
-                      label: Text(
-                        'Назад',
-                        style: TextStyle(
-                          color: AppColors.primary,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      style: TextButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      ),
-                    ),
-                  ),
                   Text(
                     'Мои обязанности',
                     style: TextStyle(
@@ -87,12 +65,17 @@ class _ChoreListScreenState extends ConsumerState<ChoreListScreen> {
                   await ref.read(familyChoresSwr.notifier).revalidate();
                 },
                 child: ListView(
-                  physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                  physics: const BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics(),
+                  ),
                   padding: const EdgeInsets.only(bottom: 32),
                   children: [
                     // Search box
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
                       child: Container(
                         decoration: BoxDecoration(
                           color: AppColors.surfaceAlt,
@@ -100,7 +83,8 @@ class _ChoreListScreenState extends ConsumerState<ChoreListScreen> {
                         ),
                         child: TextField(
                           controller: _searchCtrl,
-                          onChanged: (val) => setState(() => _searchQuery = val),
+                          onChanged: (val) =>
+                              setState(() => _searchQuery = val),
                           style: TextStyle(
                             fontSize: 15,
                             color: AppColors.textPrimary,
@@ -130,7 +114,10 @@ class _ChoreListScreenState extends ConsumerState<ChoreListScreen> {
                                   )
                                 : null,
                             border: InputBorder.none,
-                            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 12,
+                            ),
                           ),
                         ),
                       ),
@@ -138,7 +125,10 @@ class _ChoreListScreenState extends ConsumerState<ChoreListScreen> {
 
                     // Add button
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 6,
+                      ),
                       child: Material(
                         color: Colors.transparent,
                         child: InkWell(
@@ -155,11 +145,16 @@ class _ChoreListScreenState extends ConsumerState<ChoreListScreen> {
                               color: AppColors.primary.withValues(alpha: 0.12),
                               borderRadius: BorderRadius.circular(999),
                               border: Border.all(
-                                color: AppColors.primary.withValues(alpha: 0.26),
+                                color: AppColors.primary.withValues(
+                                  alpha: 0.26,
+                                ),
                                 width: 1,
                               ),
                             ),
-                            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 18,
+                              vertical: 12,
+                            ),
                             child: Row(
                               children: [
                                 SizedBox(
@@ -237,7 +232,10 @@ class _ChoreListScreenState extends ConsumerState<ChoreListScreen> {
                       )
                     else ...[
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 6,
+                        ),
                         child: Text(
                           'ОБЯЗАННОСТИ СЕМЬИ',
                           style: TextStyle(
@@ -262,17 +260,24 @@ class _ChoreListScreenState extends ConsumerState<ChoreListScreen> {
                               onTap: () {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (_) => ChoreEditScreen(chore: chore),
+                                    builder: (_) =>
+                                        ChoreEditScreen(chore: chore),
                                   ),
                                 );
                               },
                               borderRadius: BorderRadius.circular(20),
                               child: Ink(
-                                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 14,
+                                  vertical: 12,
+                                ),
                                 decoration: BoxDecoration(
                                   color: AppColors.surface,
                                   borderRadius: BorderRadius.circular(20),
-                                  border: Border.all(color: AppColors.borderSubtle, width: 1),
+                                  border: Border.all(
+                                    color: AppColors.borderSubtle,
+                                    width: 1,
+                                  ),
                                 ),
                                 child: Row(
                                   children: [
@@ -285,7 +290,8 @@ class _ChoreListScreenState extends ConsumerState<ChoreListScreen> {
                                     const SizedBox(width: 12),
                                     Expanded(
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             chore.name,
@@ -298,7 +304,9 @@ class _ChoreListScreenState extends ConsumerState<ChoreListScreen> {
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                           if (chore.description != null &&
-                                              chore.description!.trim().isNotEmpty) ...[
+                                              chore.description!
+                                                  .trim()
+                                                  .isNotEmpty) ...[
                                             const SizedBox(height: 2),
                                             Text(
                                               chore.description!,
@@ -317,7 +325,9 @@ class _ChoreListScreenState extends ConsumerState<ChoreListScreen> {
                                     Icon(
                                       Icons.arrow_forward_ios_rounded,
                                       size: 14,
-                                      color: AppColors.textMuted.withValues(alpha: 0.6),
+                                      color: AppColors.textMuted.withValues(
+                                        alpha: 0.6,
+                                      ),
                                     ),
                                   ],
                                 ),
