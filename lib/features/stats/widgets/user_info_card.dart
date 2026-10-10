@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../auth/models/user_model.dart';
 import '../../chores/models/user_short_model.dart';
 import '../../chores/widgets/user_avatar_widget.dart';
@@ -20,6 +21,7 @@ class UserInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final userShort = user != null
         ? UserShort(
             id: user!.id,
@@ -103,7 +105,7 @@ class UserInfoCard extends StatelessWidget {
                     icon: Icons.check_rounded,
                     watermarkIcon: Icons.check_circle_rounded,
                     value: (user?.totalCompleted ?? 0).toString(),
-                    label: 'Всего выполнено',
+                    label: l10n?.statsTotalCompleted ?? 'Всего выполнено',
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -114,7 +116,7 @@ class UserInfoCard extends StatelessWidget {
                     icon: Icons.bolt_rounded,
                     watermarkIcon: Icons.bolt_rounded,
                     value: (user?.weekCompleted ?? 0).toString(),
-                    label: 'На этой неделе',
+                    label: l10n?.statsThisWeek ?? 'На этой неделе',
                   ),
                 ),
               ],

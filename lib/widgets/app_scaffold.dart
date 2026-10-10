@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../core/swr/swr.dart';
 import '../core/theme/app_colors.dart';
 import '../core/theme/theme_provider.dart';
+import '../l10n/app_localizations.dart';
 
 class AppScaffold extends ConsumerStatefulWidget {
   final StatefulNavigationShell navigationShell;
@@ -54,6 +55,7 @@ class _AppScaffoldState extends ConsumerState<AppScaffold> {
   @override
   Widget build(BuildContext context) {
     ref.watch(appThemeProvider);
+    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
       extendBody: true,
@@ -91,25 +93,25 @@ class _AppScaffoldState extends ConsumerState<AppScaffold> {
                   children: [
                     _NavBarItem(
                       icon: Icons.bar_chart_rounded,
-                      label: 'Главная',
+                      label: l10n?.navHome ?? 'Главная',
                       isActive: widget.navigationShell.currentIndex == 0,
                       onTap: () => _onItemTapped(0),
                     ),
                     _NavBarItem(
                       icon: Icons.checklist_rounded,
-                      label: 'Доска',
+                      label: l10n?.navBoard ?? 'Доска',
                       isActive: widget.navigationShell.currentIndex == 1,
                       onTap: () => _onItemTapped(1),
                     ),
                     _NavBarItem(
                       icon: Icons.restaurant_rounded,
-                      label: 'Меню',
+                      label: l10n?.navMeals ?? 'Меню',
                       isActive: widget.navigationShell.currentIndex == 2,
                       onTap: () => _onItemTapped(2),
                     ),
                     _NavBarItem(
                       icon: Icons.settings_rounded,
-                      label: 'Профиль',
+                      label: l10n?.navProfile ?? 'Профиль',
                       isActive: widget.navigationShell.currentIndex == 3,
                       onTap: () => _onItemTapped(3),
                     ),

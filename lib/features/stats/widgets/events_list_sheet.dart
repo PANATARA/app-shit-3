@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../chores/widgets/chore_icon_widget.dart';
 import '../models/family_event_model.dart';
 import '../repositories/stats_repository.dart';
@@ -46,6 +47,8 @@ class _EventsListSheetState extends ConsumerState<EventsListSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final locale = Localizations.localeOf(context).languageCode;
     final safeBottom = MediaQuery.of(context).padding.bottom;
     final height = MediaQuery.of(context).size.height * 0.82;
 
@@ -70,7 +73,7 @@ class _EventsListSheetState extends ConsumerState<EventsListSheet> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Все события', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.textPrimary)),
+                Text(l10n?.eventsAllTitle ?? 'Все события', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.textPrimary)),
                 IconButton(
                   icon: Icon(Icons.add_rounded, color: AppColors.primary, size: 26),
                   onPressed: () async {
@@ -86,16 +89,16 @@ class _EventsListSheetState extends ConsumerState<EventsListSheet> {
             child: _loading
                 ? Center(child: CircularProgressIndicator(color: AppColors.primary))
                 : _error != null
-                    ? Center(child: Text('Ошибка загрузки: $_error', style: const TextStyle(color: AppColors.error)))
+                    ? Center(child: Text('Ошибка: $_error', style: const TextStyle(color: AppColors.error)))
                     : _events.isEmpty
-                        ? Center(child: Text('Событий пока нет', style: TextStyle(color: AppColors.textMuted)))
+                        ? Center(child: Text(l10n?.statsNoEvents ?? 'Событий пока нет', style: TextStyle(color: AppColors.textMuted)))
                         : ListView.separated(
                             padding: EdgeInsets.fromLTRB(16, 12, 16, safeBottom + 16),
                             itemCount: _events.length,
                             separatorBuilder: (_, _) => const SizedBox(height: 8),
                             itemBuilder: (context, index) {
                               final event = _events[index];
-                              final meta = event.getDateMeta();
+                              final meta = event.getDateMeta(locale);
                               return _EventTile(
                                 event: event,
                                 meta: meta,

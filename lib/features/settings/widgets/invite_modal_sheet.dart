@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../l10n/app_localizations.dart';
 import '../repositories/settings_repository.dart';
 
 class InviteModalSheet extends ConsumerStatefulWidget {
@@ -64,9 +65,13 @@ class _InviteModalSheetState extends ConsumerState<InviteModalSheet> {
     return raw;
   }
 
-  String _formatExpiry(int seconds) {
+  String _formatExpiry(int seconds, [String? locale]) {
     final h = seconds ~/ 3600;
     final m = (seconds % 3600) ~/ 60;
+    if (locale == 'en') {
+      if (h > 0) return '$h h $m min';
+      return '$m min';
+    }
     if (h > 0) return '$h ч $m мин';
     return '$m мин';
   }
@@ -83,6 +88,9 @@ class _InviteModalSheetState extends ConsumerState<InviteModalSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final locale = Localizations.localeOf(context).languageCode;
+
     return Container(
       decoration: BoxDecoration(
         color: AppColors.surface,
@@ -115,7 +123,7 @@ class _InviteModalSheetState extends ConsumerState<InviteModalSheet> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Пригласить участника',
+                l10n?.settingsInviteTitle ?? 'Пригласить участника',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
@@ -149,7 +157,7 @@ class _InviteModalSheetState extends ConsumerState<InviteModalSheet> {
               child: Column(
                 children: [
                   Text(
-                    'Не удалось получить код',
+                    l10n?.settingsFailedToGetCode ?? 'Не удалось получить код',
                     style: TextStyle(fontSize: 15, color: AppColors.textSecondary),
                   ),
                   const SizedBox(height: 12),
@@ -160,7 +168,7 @@ class _InviteModalSheetState extends ConsumerState<InviteModalSheet> {
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                     ),
-                    child: const Text('Повторить'),
+                    child: Text(l10n?.commonRetry ?? 'Повторить'),
                   ),
                 ],
               ),
@@ -203,7 +211,7 @@ class _InviteModalSheetState extends ConsumerState<InviteModalSheet> {
 
             // Hint
             Text(
-              'Отправьте этот код человеку, которого хотите пригласить в семью. Код действует ограниченное время.',
+              l10n?.settingsInviteDesc ?? 'Отправьте этот код человеку, которого хотите пригласить в семью. Код действует ограниченное время.',
               style: TextStyle(fontSize: 14, color: AppColors.textMuted, height: 1.4),
               textAlign: TextAlign.center,
             ),
@@ -238,7 +246,7 @@ class _InviteModalSheetState extends ConsumerState<InviteModalSheet> {
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      _copied ? '✓ Код скопирован' : 'Нажмите, чтобы скопировать',
+                      _copied ? (l10n?.settingsInviteCopied ?? '✓ Код скопирован') : (l10n?.settingsInviteTapToCopy ?? 'Нажмите, чтобы скопировать'),
                       style: TextStyle(
                         fontSize: 12.5,
                         fontWeight: FontWeight.w600,
@@ -258,7 +266,7 @@ class _InviteModalSheetState extends ConsumerState<InviteModalSheet> {
                 Icon(Icons.timer_outlined, size: 16, color: AppColors.textMuted),
                 const SizedBox(width: 6),
                 Text(
-                  'Код истекает через ${_formatExpiry(_expiresIn)}',
+                  l10n?.settingsInviteExpiresIn(_formatExpiry(_expiresIn, locale)) ?? 'Код истекает через ${_formatExpiry(_expiresIn, locale)}',
                   style: TextStyle(fontSize: 12.5, color: AppColors.textMuted),
                 ),
               ],

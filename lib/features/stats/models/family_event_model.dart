@@ -65,7 +65,8 @@ class FamilyEventModel {
     }
   }
 
-  EventDateMeta getDateMeta() {
+  EventDateMeta getDateMeta([String? locale]) {
+    final lang = locale == 'en' ? 'en' : 'ru';
     final parsed = dateTime;
     if (parsed == null) {
       return const EventDateMeta(
@@ -83,13 +84,13 @@ class FamilyEventModel {
 
     final isCurrentYear = parsed.year == now.year;
     final formattedDate = isCurrentYear
-        ? DateFormat('d MMM', 'ru').format(parsed).replaceAll('.', '')
-        : DateFormat('d MMM y', 'ru').format(parsed).replaceAll('.', '');
+        ? DateFormat('d MMM', lang).format(parsed).replaceAll('.', '')
+        : DateFormat('d MMM y', lang).format(parsed).replaceAll('.', '');
 
     if (diff == 0) {
       return EventDateMeta(
         formattedDate: formattedDate,
-        badgeText: 'Сегодня',
+        badgeText: lang == 'en' ? 'Today' : 'Сегодня',
         badgeType: EventDateBadgeType.today,
         daysDiff: diff,
       );
@@ -97,7 +98,7 @@ class FamilyEventModel {
     if (diff == 1) {
       return EventDateMeta(
         formattedDate: formattedDate,
-        badgeText: 'Завтра',
+        badgeText: lang == 'en' ? 'Tomorrow' : 'Завтра',
         badgeType: EventDateBadgeType.soon,
         daysDiff: diff,
       );
@@ -105,7 +106,7 @@ class FamilyEventModel {
     if (diff == 2) {
       return EventDateMeta(
         formattedDate: formattedDate,
-        badgeText: 'Послезавтра',
+        badgeText: lang == 'en' ? 'In 2 days' : 'Послезавтра',
         badgeType: EventDateBadgeType.soon,
         daysDiff: diff,
       );
@@ -113,7 +114,7 @@ class FamilyEventModel {
     if (diff > 2) {
       return EventDateMeta(
         formattedDate: formattedDate,
-        badgeText: 'через $diff дн.',
+        badgeText: lang == 'en' ? 'in $diff d.' : 'через $diff дн.',
         badgeType: EventDateBadgeType.upcoming,
         daysDiff: diff,
       );
@@ -121,7 +122,7 @@ class FamilyEventModel {
     if (diff == -1) {
       return EventDateMeta(
         formattedDate: formattedDate,
-        badgeText: 'Вчера',
+        badgeText: lang == 'en' ? 'Yesterday' : 'Вчера',
         badgeType: EventDateBadgeType.past,
         daysDiff: diff,
       );
@@ -130,7 +131,7 @@ class FamilyEventModel {
     final absDiff = diff.abs();
     return EventDateMeta(
       formattedDate: formattedDate,
-      badgeText: '$absDiff дн. назад',
+      badgeText: lang == 'en' ? '$absDiff d. ago' : '$absDiff дн. назад',
       badgeType: EventDateBadgeType.past,
       daysDiff: diff,
     );

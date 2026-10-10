@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../chores/widgets/chore_icon_widget.dart';
 import '../models/family_event_model.dart';
 import '../providers/stats_provider.dart';
@@ -36,27 +37,28 @@ class _EventDetailSheetState extends ConsumerState<EventDetailSheet> {
     _newDate = widget.event.dateTime ?? DateTime.now();
   }
 
-  String _formatFullDate(DateTime? d) {
+  String _formatFullDate(DateTime? d, [String? locale]) {
     if (d == null) return '—';
-    return DateFormat('EEEE, d MMMM', 'ru').format(d);
+    return DateFormat('EEEE, d MMMM', locale ?? 'ru').format(d);
   }
 
   Future<void> _handleDelete() async {
+    final l10n = AppLocalizations.of(context);
     final confirmed = await showDialog<bool>(
           context: context,
           builder: (ctx) => AlertDialog(
             backgroundColor: AppColors.surface,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            title: const Text('Удалить событие?', style: TextStyle(fontWeight: FontWeight.w700)),
-            content: const Text('Это действие нельзя отменить.'),
+            title: Text(l10n?.eventsDeleteTitle ?? 'Удалить событие?', style: const TextStyle(fontWeight: FontWeight.w700)),
+            content: Text(l10n?.eventsDeleteConfirmDesc ?? 'Это действие нельзя отменить.'),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(ctx).pop(false),
-                child: Text('Отмена', style: TextStyle(color: AppColors.textMuted)),
+                child: Text(l10n?.commonCancel ?? 'Отмена', style: TextStyle(color: AppColors.textMuted)),
               ),
               TextButton(
                 onPressed: () => Navigator.of(ctx).pop(true),
-                child: const Text('Удалить', style: TextStyle(color: AppColors.error, fontWeight: FontWeight.w700)),
+                child: Text(l10n?.commonDelete ?? 'Удалить', style: const TextStyle(color: AppColors.error, fontWeight: FontWeight.w700)),
               ),
             ],
           ),
@@ -126,7 +128,9 @@ class _EventDetailSheetState extends ConsumerState<EventDetailSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final meta = widget.event.getDateMeta();
+    final l10n = AppLocalizations.of(context);
+    final locale = Localizations.localeOf(context).languageCode;
+    final meta = widget.event.getDateMeta(locale);
     final safeBottom = MediaQuery.of(context).padding.bottom;
 
     return Container(
@@ -178,7 +182,7 @@ class _EventDetailSheetState extends ConsumerState<EventDetailSheet> {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      _formatFullDate(widget.event.dateTime),
+                      _formatFullDate(widget.event.dateTime, locale),
                       style: TextStyle(
                         fontSize: 13,
                         color: AppColors.textMuted,
@@ -208,7 +212,7 @@ class _EventDetailSheetState extends ConsumerState<EventDetailSheet> {
                   children: [
                     Icon(Icons.schedule_rounded, size: 18, color: AppColors.primary),
                     const SizedBox(width: 8),
-                    Text('Когда', style: TextStyle(fontSize: 12, color: AppColors.textMuted, fontWeight: FontWeight.w500)),
+                    Text(l10n?.eventsWhen ?? 'Когда', style: TextStyle(fontSize: 12, color: AppColors.textMuted, fontWeight: FontWeight.w500)),
                     const Spacer(),
                     Text(
                       meta.badgeText,
@@ -227,7 +231,7 @@ class _EventDetailSheetState extends ConsumerState<EventDetailSheet> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Описание', style: TextStyle(fontSize: 12, color: AppColors.textMuted, fontWeight: FontWeight.w500)),
+                            Text(l10n?.eventsDescription ?? 'Описание', style: TextStyle(fontSize: 12, color: AppColors.textMuted, fontWeight: FontWeight.w500)),
                             const SizedBox(height: 4),
                             Text(
                               widget.event.description!,
@@ -257,7 +261,7 @@ class _EventDetailSheetState extends ConsumerState<EventDetailSheet> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text('Новая дата', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.textMuted)),
+                  Text(l10n?.eventsNewDate ?? 'Новая дата', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.textMuted)),
                   const SizedBox(height: 8),
                   InkWell(
                     onTap: _pickDate,
@@ -274,7 +278,7 @@ class _EventDetailSheetState extends ConsumerState<EventDetailSheet> {
                           Icon(Icons.calendar_today_rounded, size: 16, color: AppColors.textMuted),
                           const SizedBox(width: 8),
                           Text(
-                            DateFormat('d MMMM yyyy', 'ru').format(_newDate ?? DateTime.now()),
+                            DateFormat('d MMMM yyyy', locale).format(_newDate ?? DateTime.now()),
                             style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.textPrimary),
                           ),
                           const Spacer(),
@@ -295,7 +299,7 @@ class _EventDetailSheetState extends ConsumerState<EventDetailSheet> {
                             elevation: 0,
                           ),
                           onPressed: _loading ? null : _handleReschedule,
-                          child: const Text('Сохранить', style: TextStyle(fontWeight: FontWeight.w700)),
+                          child: Text(l10n?.commonSave ?? 'Сохранить', style: const TextStyle(fontWeight: FontWeight.w700)),
                         ),
                       ),
                       const SizedBox(width: 8),
@@ -309,7 +313,7 @@ class _EventDetailSheetState extends ConsumerState<EventDetailSheet> {
                             _rescheduleMode = false;
                             _newDate = widget.event.dateTime;
                           }),
-                          child: const Text('Отмена'),
+                          child: Text(l10n?.commonCancel ?? 'Отмена'),
                         ),
                       ),
                     ],
@@ -328,7 +332,7 @@ class _EventDetailSheetState extends ConsumerState<EventDetailSheet> {
                 ),
                 onPressed: () => setState(() => _rescheduleMode = true),
                 icon: const Icon(Icons.calendar_month_rounded, size: 18),
-                label: const Text('Перенести дату', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                label: Text(l10n?.eventsRescheduleDate ?? 'Перенести дату', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
               ),
             ),
             const SizedBox(height: 8),
@@ -342,7 +346,7 @@ class _EventDetailSheetState extends ConsumerState<EventDetailSheet> {
                 ),
                 onPressed: _loading ? null : _handleDelete,
                 icon: const Icon(Icons.delete_outline_rounded, size: 18),
-                label: const Text('Удалить событие', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                label: Text(l10n?.eventsDeleteBtn ?? 'Удалить событие', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
               ),
             ),
           ],

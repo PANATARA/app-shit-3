@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/api/api_client.dart';
 import '../../../core/constants/api_endpoints.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../l10n/app_localizations.dart';
 import '../providers/auth_provider.dart';
 
 class AuthScreen extends ConsumerStatefulWidget {
@@ -32,9 +33,10 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     final username = _usernameController.text.trim();
     final password = _passwordController.text.trim();
     final name = _nameController.text.trim();
+    final l10n = AppLocalizations.of(context);
 
     if (username.isEmpty || password.isEmpty) {
-      setState(() => _errorText = 'Заполните логин и пароль');
+      setState(() => _errorText = l10n?.authFillRequired ?? 'Заполните логин и пароль');
       return;
     }
 
@@ -198,6 +200,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
     final currentBaseUrl = ref.watch(baseUrlProvider);
+    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
       body: SafeArea(
@@ -235,7 +238,9 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  _isRegister ? 'Создание семейного аккаунта' : 'Добро пожаловать домой',
+                  _isRegister
+                      ? (l10n?.authRegisterSubtitle ?? 'Создание семейного аккаунта')
+                      : (l10n?.authLoginSubtitle ?? 'Добро пожаловать домой'),
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
@@ -263,9 +268,9 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                 if (_isRegister) ...[
                   TextField(
                     controller: _nameController,
-                    decoration: const InputDecoration(
-                      hintText: 'Ваше имя',
-                      prefixIcon: Icon(Icons.badge_outlined, size: 20),
+                    decoration: InputDecoration(
+                      hintText: l10n?.authNamePlaceholder ?? 'Ваше имя',
+                      prefixIcon: const Icon(Icons.badge_outlined, size: 20),
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -273,18 +278,18 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                 TextField(
                   controller: _usernameController,
                   autocorrect: false,
-                  decoration: const InputDecoration(
-                    hintText: 'Логин',
-                    prefixIcon: Icon(Icons.person_outline_rounded, size: 20),
+                  decoration: InputDecoration(
+                    hintText: l10n?.authUsernamePlaceholder ?? 'Логин',
+                    prefixIcon: const Icon(Icons.person_outline_rounded, size: 20),
                   ),
                 ),
                 const SizedBox(height: 12),
                 TextField(
                   controller: _passwordController,
                   obscureText: true,
-                  decoration: const InputDecoration(
-                    hintText: 'Пароль',
-                    prefixIcon: Icon(Icons.lock_outline_rounded, size: 20),
+                  decoration: InputDecoration(
+                    hintText: l10n?.authPasswordPlaceholder ?? 'Пароль',
+                    prefixIcon: const Icon(Icons.lock_outline_rounded, size: 20),
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -301,7 +306,9 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                             color: Colors.white,
                           ),
                         )
-                      : Text(_isRegister ? 'Зарегистрироваться' : 'Войти'),
+                      : Text(_isRegister
+                          ? (l10n?.authSignUpBtn ?? 'Зарегистрироваться')
+                          : (l10n?.authSignInBtn ?? 'Войти')),
                 ),
                 const SizedBox(height: 12),
 
@@ -315,8 +322,8 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                   },
                   child: Text(
                     _isRegister
-                        ? 'Уже есть аккаунт? Войти'
-                        : 'Нет аккаунта? Зарегистрироваться',
+                        ? (l10n?.authHaveAccount ?? 'Уже есть аккаунт? Войти')
+                        : (l10n?.authNoAccount ?? 'Нет аккаунта? Зарегистрироваться'),
                     style: TextStyle(color: AppColors.primary),
                   ),
                 ),

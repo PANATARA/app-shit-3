@@ -1,0 +1,390 @@
+{
+  "@@locale": "ru",
+  "appTitle": "Household",
+
+  "commonBack": "Назад",
+  "commonCancel": "Отмена",
+  "commonSave": "Сохранить",
+  "commonEdit": "Изменить",
+  "commonCreate": "Создать",
+  "commonDelete": "Удалить",
+  "commonLoading": "Загрузка...",
+  "commonConfirm": "Подтвердить",
+  "commonDone": "Готово",
+  "commonClose": "Закрыть",
+  "commonSearch": "Поиск...",
+  "commonApply": "Применить",
+  "commonRetry": "Повторить",
+  "commonEmpty": "Ничего нет",
+  "commonError": "Произошла ошибка",
+  "commonYou": "(Вы)",
+  "commonNone": "Никому",
+  "commonXp": "XP",
+
+  "dateToday": "Сегодня",
+  "dateTomorrow": "Завтра",
+  "dateDayAfterTomorrow": "Послезавтра",
+  "dateYesterday": "Вчера",
+  "dateInDays": "через {count} дн.",
+  "@dateInDays": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "dateDaysAgo": "{count} дн. назад",
+  "@dateDaysAgo": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+
+  "navHome": "Главная",
+  "navBoard": "Доска",
+  "navMeals": "Меню",
+  "navProfile": "Профиль",
+
+  "authLoginTitle": "Вход в аккаунт",
+  "authLoginSubtitle": "Введите логин и пароль для входа",
+  "authRegisterTitle": "Регистрация",
+  "authRegisterSubtitle": "Создайте аккаунт для начала работы",
+  "authUsernameLabel": "Логин",
+  "authUsernamePlaceholder": "Введите ваш логин",
+  "authPasswordLabel": "Пароль",
+  "authPasswordPlaceholder": "Введите пароль (от 6 символов)",
+  "authNameLabel": "Ваше имя",
+  "authNamePlaceholder": "Как вас зовут? (например, Анна)",
+  "authSignInBtn": "Войти",
+  "authSignUpBtn": "Зарегистрироваться",
+  "authNoAccount": "Нет аккаунта? Зарегистрироваться",
+  "authHaveAccount": "Уже есть аккаунт? Войти",
+  "authFillRequired": "Заполните логин и пароль",
+  "authPasswordTooShort": "Пароль должен быть не менее 6 символов",
+  "authServerSettings": "Адрес сервера",
+  "authServerPrompt": "Укажите URL бэкенда:",
+  "authTestConnection": "Проверить связь",
+  "authConnectionSuccess": "Связь успешна",
+  "authConnectionFail": "Ошибка подключения",
+
+  "onboardingFamilyCircle": "Семейный круг",
+  "onboardingChooseTitle": "Как начнём?",
+  "onboardingChooseSubtitle": "Создайте новое семейное пространство или присоединитесь к уже существующему.",
+  "onboardingNewFamily": "Новая семья",
+  "onboardingCreateFamily": "Создать семью",
+  "onboardingCreateFamilyDesc": "Создайте пространство для семьи и пригласите близких.",
+  "onboardingStartCreating": "Начать создание",
+  "onboardingAlreadyHaveFamily": "Уже есть семья?",
+  "onboardingJoinFamily": "Присоединиться",
+  "onboardingJoinFamilyDesc": "Войдите по коду-приглашению от администратора вашей семьи.",
+  "onboardingEnterCode": "Ввести код",
+  "onboardingStep1Of2": "Шаг 1 из 2",
+  "onboardingStep2Of2": "Шаг 2 из 2",
+  "onboardingStep1Title": "Название семьи",
+  "onboardingStep1Subtitle": "Придумайте название для вашего семейного круга",
+  "onboardingFamilyNameLabel": "Название семьи",
+  "onboardingFamilyPlaceholder": "Например: Семья Смирновых",
+  "onboardingFamilyNameRequired": "Пожалуйста, введите название семьи",
+  "onboardingSuggestions": "Варианты:",
+  "onboardingChooseAvatar": "Иконка и цвет семьи",
+  "onboardingCreateFamilyBtn": "Создать семейный круг",
+  "onboardingCreatingFamily": "Создаём семью...",
+  "onboardingFamilyCreatedTitle": "Семья создана!",
+  "onboardingAddInitialChoresTitle": "Добавьте первые задачи",
+  "onboardingAddInitialChoresSubtitle": "Выберите типовые домашние дела, чтобы сразу начать пользоваться",
+  "onboardingSelectedCount": "Выбрано: {selected} из {total}",
+  "@onboardingSelectedCount": {
+    "placeholders": {
+      "selected": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "onboardingSelectAll": "Выбрать все",
+  "onboardingDeselectAll": "Снять все",
+  "onboardingAddSelectedChores": "Добавить задачи ({count}) и войти",
+  "@onboardingAddSelectedChores": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "onboardingSkipChores": "Пропустить и войти",
+  "onboardingJoinTitle": "Вступить в семью",
+  "onboardingJoinSubtitle": "Введите 6-значный код приглашения вашей семьи",
+  "onboardingCodePlaceholder": "ABC-123",
+  "onboardingPasteCode": "Вставить",
+  "onboardingJoinBtn": "Присоединиться",
+  "onboardingJoining": "Проверяем код...",
+  "onboardingEnterFullCodeError": "Введите полный 6-значный код (например, ABC-123)",
+  "onboardingFamilyNotFoundError": "Семья с таким кодом не найдена",
+  "onboardingJoinSuccessTitle": "Вы успешно вступили в семью!",
+  "onboardingEnterFamily": "Войти в семейный круг",
+  "onboardingLogout": "Выйти из аккаунта",
+
+  "statsGreetingMorning": "Доброе утро",
+  "statsGreetingDay": "Добрый день",
+  "statsGreetingEvening": "Добрый вечер",
+  "statsGreetingNight": "Доброй ночи",
+  "statsTotalCompleted": "Всего выполнено",
+  "statsThisWeek": "На этой неделе",
+  "statsTodayMeals": "ПЛАН ПИТАНИЯ НА СЕГОДНЯ",
+  "statsAllMenu": "Всё меню",
+  "statsTodayGrocery": "СПИСОК ПОКУПОК",
+  "statsGroceryAdd": "Добавить",
+  "statsGroceryEmpty": "Список покупок пуст",
+  "statsGroceryEmptyHint": "Нажмите «Добавить», чтобы составить список продуктов",
+  "statsMoreGroceries": "И ещё {count} {count, plural, one{покупка} few{покупки} other{покупок}}",
+  "@statsMoreGroceries": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "statsUpcomingEvents": "БЛИЖАЙШИЕ СОБЫТИЯ",
+  "statsAllEvents": "Все события",
+  "statsAddEvent": "Добавить",
+  "statsNoEvents": "Событий пока нет",
+  "statsNoEventsHint": "Нажмите «Добавить», чтобы запланировать праздник или поездку",
+  "statsMoreEvents": "И ещё {count} {count, plural, one{событие} few{события} other{событий}}",
+  "@statsMoreEvents": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "statsWeeklyLeaders": "ЛИДЕРЫ НЕДЕЛИ",
+  "statsTasksCount": "{count, plural, one{{count} задача} few{{count} задачи} other{{count} задач}}",
+  "@statsTasksCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+
+  "eventsAllTitle": "Все события",
+  "eventsCreateTitle": "Новое событие",
+  "eventsDeleteTitle": "Удалить событие?",
+  "eventsDeleteConfirm": "Вы уверены, что хотите удалить это событие?",
+  "eventsDeleteConfirmDesc": "Это действие нельзя отменить.",
+  "eventsWhen": "Когда",
+  "eventsDescription": "Описание",
+  "eventsDescriptionOptional": "ОПИСАНИЕ (НЕОБЯЗАТЕЛЬНО)",
+  "eventsRescheduleDate": "Перенести дату",
+  "eventsNewDate": "Новая дата",
+  "eventsNameLabel": "НАЗВАНИЕ",
+  "eventsDateLabel": "ДАТА",
+  "eventsNamePlaceholder": "Поездка, день рождения, праздник...",
+  "eventsDescPlaceholder": "Дополнительные детали или заметки...",
+  "eventsEnterNameError": "Введите название события",
+  "eventsCreateError": "Не удалось создать событие: {error}",
+  "@eventsCreateError": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "eventsDeleteBtn": "Удалить событие",
+
+  "slotBreakfast": "Завтрак",
+  "slotLunch": "Обед",
+  "slotDinner": "Ужин",
+  "slotSnack": "Перекус",
+
+  "boardTitle": "Доска",
+  "boardSubtitle": "Расписание и задачи семьи",
+  "boardPlanChore": "Запланировать",
+  "boardNoChores": "Нет задач на этот день",
+  "boardNoChoresHint": "Нажмите кнопку ниже, чтобы запланировать задачу",
+  "boardFilterAll": "Все",
+  "boardFilterMine": "Мои",
+  "boardFilterDone": "Выполненные",
+  "boardFilterPending": "В процессе",
+
+  "chorePlanTitle": "Запланировать задачу",
+  "choreQuickTask": "Быстрая задача",
+  "choreOrFromTemplates": "или выберите из шаблонов",
+  "choreCreateCustom": "Создать «{name}»",
+  "@choreCreateCustom": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "choreNothingFound": "Ничего не найдено",
+  "choreSectionName": "НАЗВАНИЕ",
+  "choreSectionAssignee": "КОМУ НАЗНАЧИТЬ",
+  "choreSectionDetails": "ДЕТАЛИ",
+  "choreSectionRepeat": "ПОВТОРЕНИЕ",
+  "choreNamePlaceholder": "Что нужно сделать?",
+  "choreNotePlaceholder": "Добавить заметку или чек-лист...",
+  "choreDateLabel": "Дата",
+  "choreAssignedLabel": "Назначено",
+  "choreCompletedLabel": "Выполнено",
+  "choreNotDoneYet": "Ещё нет",
+  "choreUnassigned": "Никто",
+  "choreSubtasksNotes": "Подзадачи и заметки",
+  "choreSubtasksHint": "Чек-лист: - [ ] пункт\nЗаметка: просто текст",
+  "choreSubtasksEmpty": "Нет заметок. Нажмите «Изменить» чтобы добавить чек-лист или комментарий.",
+  "choreMarkCompleted": "Отметить выполненным",
+  "choreCancelCompleted": "Отменить выполнение",
+  "choreRescheduleTo": "Перенести на {date}",
+  "@choreRescheduleTo": {
+    "placeholders": {
+      "date": { "type": "String" }
+    }
+  },
+  "choreDeleteTask": "Удалить задачу",
+  "choreConfirmDeleteTitle": "Удалить задачу?",
+  "choreConfirmDeleteDesc": "Это действие нельзя отменить.",
+
+  "mealsTitle": "План питания",
+  "mealsSubtitle": "Планируйте меню и продукты для всей семьи",
+  "mealsTabPlanner": "Расписание",
+  "mealsTabRecipes": "Книга рецептов",
+  "mealsTabGroceries": "Список покупок",
+  "mealsAddDish": "Добавить блюдо",
+  "mealsAddRecipe": "Свой рецепт",
+  "mealsSearchRecipes": "Поиск по рецептам...",
+  "mealsPrepTime": "{minutes} мин",
+  "@mealsPrepTime": {
+    "placeholders": {
+      "minutes": { "type": "int" }
+    }
+  },
+  "mealsServings": "{servings, plural, one{{servings} порция} few{{servings} порции} other{{servings} порций}}",
+  "@mealsServings": {
+    "placeholders": {
+      "servings": { "type": "int" }
+    }
+  },
+  "mealsClearBought": "Очистить купленные",
+  "mealsAddProduct": "Добавить продукт",
+  "groceryRemainingToBuy": "Осталось купить: ",
+  "groceryPlaceholder": "Что нужно купить?...",
+  "mealsSectionTime": "ВРЕМЯ (МИН)",
+  "mealsSectionServings": "ПОРЦИИ",
+  "mealsSectionCook": "КТО ГОТОВИТ?",
+  "mealsSectionDishName": "НАЗВАНИЕ БЛЮДА",
+  "mealsSectionChooseRecipe": "ВЫБЕРИТЕ РЕЦЕПТ",
+  "mealsSectionMealSlot": "ПРИЕМ ПИЩИ",
+  "mealsTabRecipe": "Из рецептов",
+  "mealsTabManual": "Быстрая запись",
+  "mealsAddToMenu": "Добавить в меню",
+  "mealsDishPlaceholder": "Название блюда, например: Борщ",
+  "mealsCookTimeFormat": "Время приготовления: {minutes} мин",
+  "@mealsCookTimeFormat": {
+    "placeholders": {
+      "minutes": { "type": "int" }
+    }
+  },
+  "mealsNoMealsPlanned": "Меню не запланировано",
+  "mealsPlannedCount": "Запланировано блюд: {count}",
+  "@mealsPlannedCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "mealsRecipeBookEmpty": "Книга рецептов пуста",
+  "mealsRecipeBookEmptyDesc": "Добавьте любимые семейные блюда, чтобы планировать меню в один клик",
+  "mealsAddFirstRecipe": "Добавить первый рецепт",
+  "mealsFilterAll": "Все блюда",
+  "mealsFilterQuick": "Быстрые",
+  "mealsFilterFavorites": "Избранное",
+  "mealsFilterKids": "Детям",
+  "mealsFilterDinner": "Ужин",
+  "mealsFilterDesserts": "Десерты",
+  "mealsInMenu": "В меню",
+  "mealsSearchPlaceholder": "Поиск блюда или ингредиента...",
+  "mealsTryChangeSearch": "Попробуйте изменить запрос или сбросить фильтры",
+  "mealsScheduleWeekly": "Запланировать в меню недели",
+  "mealsDayOfWeek": "ДЕНЬ НЕДЕЛИ",
+  "mealsServingsTitle": "Порции",
+  "mealsIngredientsTitle": "Ингредиенты",
+  "mealsToList": "В список",
+  "mealsAddMissingToGroceries": "Добавить недостающее в список покупок",
+  "mealsInstructionsTitle": "Приготовление",
+  "mealsTapToPlan": "Нажмите, чтобы запланировать {slot}",
+  "@mealsTapToPlan": {
+    "placeholders": {
+      "slot": { "type": "String" }
+    }
+  },
+  "mealsRecipeBadge": "Рецепт",
+  "mealsDishAddedToast": "Блюдо добавлено в меню",
+
+  "settingsTitle": "Профиль и семья",
+  "settingsProfileSection": "МОЙ АККАУНТ",
+  "settingsEditProfile": "Редактировать профиль",
+  "settingsFamilySection": "СЕМЕЙНЫЙ КРУГ",
+  "settingsFamilyMembers": "Участники семьи",
+  "settingsInviteCode": "Код приглашения",
+  "settingsCopyCode": "Скопировать",
+  "settingsCodeCopied": "Код скопирован в буфер обмена",
+  "settingsAdminBadge": "Админ",
+  "settingsChangeAdmin": "Сделать админом",
+  "settingsKickMember": "Удалить из семьи",
+  "settingsLeaveFamily": "Покинуть семью",
+  "settingsConfirmLeaveFamily": "Вы уверены, что хотите выйти из семьи?",
+  "settingsAppearanceSection": "ИНТЕРФЕЙС И ОФОРМЛЕНИЕ",
+  "settingsTheme": "Тема оформления",
+  "settingsThemeLight": "Светлая",
+  "settingsThemeDark": "Тёмная",
+  "settingsThemeSystem": "Системная",
+  "settingsLanguage": "Язык приложения",
+  "settingsLanguageRu": "Русский",
+  "settingsLanguageEn": "English",
+  "settingsServerSection": "ПОДКЛЮЧЕНИЕ",
+  "settingsServerUrl": "Адрес сервера",
+  "settingsLogout": "Выйти из аккаунта",
+  "settingsConfirmLogout": "Вы уверены, что хотите выйти из аккаунта?",
+  "settingsInviteTitle": "Пригласить участника",
+  "settingsInviteDesc": "Отправьте этот код человеку, которого хотите пригласить в семью. Код действует ограниченное время.",
+  "settingsInviteTapToCopy": "Нажмите, чтобы скопировать",
+  "settingsInviteCopied": "✓ Код скопирован",
+  "settingsInviteExpiresIn": "Код истекает через {time}",
+  "@settingsInviteExpiresIn": {
+    "placeholders": {
+      "time": { "type": "String" }
+    }
+  },
+  "settingsKickConfirmTitle": "Исключить из семьи?",
+  "settingsKickConfirmContent": "Вы действительно хотите исключить {name} из семьи?",
+  "@settingsKickConfirmContent": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "settingsTransferAdminTitle": "Передать права администратора?",
+  "settingsTransferAdminContent": "Сделать {name} администратором семьи?",
+  "@settingsTransferAdminContent": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "settingsThemeSelectTitle": "Выбор темы оформления",
+  "settingsLangSelectTitle": "Выбор языка",
+  "settingsLangSelectSubtitle": "Выберите удобный язык для работы с приложением",
+  "settingsTransferAdminBtn": "Сделать администратором",
+  "settingsKickMemberBtn": "Исключить из семьи",
+  "settingsTransferAdminAction": "Передать",
+  "settingsKickAction": "Исключить",
+  "settingsFailedToGetCode": "Не удалось получить код",
+  "settingsChoresSection": "ОБЯЗАННОСТИ",
+  "settingsManageChores": "Управление обязанностями",
+  "settingsSubtitle": "Семья, профиль и настройки",
+  "commonYou": "ты",
+  "themeWarmTitle": "Тёплая",
+  "themeWarmName": "Тёплый семейный уют",
+  "themeWarmDesc": "Светлая, тёплая и домашняя атмосфера",
+  "themeSoftTitle": "Нежность",
+  "themeSoftName": "Нежность и забота",
+  "themeSoftDesc": "Пастельные пудровые оттенки и гармония",
+  "themeNightTitle": "Вечер",
+  "themeNightName": "Уютный вечер дома",
+  "themeNightDesc": "Мягкая тёмная тема для вечернего комфорта",
+  "themeRoyalTitle": "Свежесть",
+  "themeRoyalName": "Свежесть и гармония",
+  "themeRoyalDesc": "Чистая прохладная лазурная гамма",
+  "themeSageTitle": "Лесной",
+  "themeSageName": "Лесной оазис",
+  "themeSageDesc": "Успокаивающие шалфейные и травяные тона",
+  "themeMidnightTitle": "Северный",
+  "themeMidnightName": "Северное сияние",
+  "themeMidnightDesc": "Глубокая ночная гамма с акцентом индиго",
+  "themeAmberTitle": "Медовый",
+  "themeAmberName": "Медовый полдень",
+  "themeAmberDesc": "Солнечная золотисто-янтарная гамма и тепло",
+  "settingsVersion": "Версия"
+}

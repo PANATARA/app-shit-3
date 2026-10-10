@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../l10n/app_localizations.dart';
 
 class LanguageOption {
   final String code;
@@ -97,7 +98,7 @@ class _LangModalSheetState extends State<LangModalSheet> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Выбор языка',
+                AppLocalizations.of(context)?.settingsLangSelectTitle ?? 'Выбор языка',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
@@ -117,7 +118,7 @@ class _LangModalSheetState extends State<LangModalSheet> {
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              'Выберите удобный язык для работы с приложением',
+              AppLocalizations.of(context)?.settingsLangSelectSubtitle ?? 'Выберите удобный язык для работы с приложением',
               style: TextStyle(fontSize: 13.5, color: AppColors.textMuted),
             ),
           ),

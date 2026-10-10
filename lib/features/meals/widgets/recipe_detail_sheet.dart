@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../chores/models/user_short_model.dart';
 import '../../chores/utils/color_helper.dart';
 import '../models/planned_meal_model.dart';
@@ -72,16 +73,20 @@ class _RecipeDetailSheetState extends ConsumerState<RecipeDetailSheet> {
     return scaled.toStringAsFixed(1).replaceAll('.0', '');
   }
 
-  List<Map<String, String>> _getUpcomingDays() {
+  List<Map<String, String>> _getUpcomingDays([String? locale, AppLocalizations? l10n]) {
     final days = <Map<String, String>>[];
     final now = DateTime.now();
     final formatter = DateFormat('yyyy-MM-dd');
-    final shortFormatter = DateFormat('E, d MMM', 'ru');
+    final shortFormatter = DateFormat('E, d MMM', locale ?? 'ru');
 
     for (int i = 0; i < 7; i++) {
       final d = now.add(Duration(days: i));
       final key = formatter.format(d);
-      final label = i == 0 ? 'Сегодня' : i == 1 ? 'Завтра' : shortFormatter.format(d);
+      final label = i == 0
+          ? (l10n?.dateToday ?? 'Сегодня')
+          : i == 1
+              ? (l10n?.dateTomorrow ?? 'Завтра')
+              : shortFormatter.format(d);
       days.add({'key': key, 'label': label});
     }
     return days;
@@ -177,6 +182,7 @@ class _RecipeDetailSheetState extends ConsumerState<RecipeDetailSheet> {
       _selectedCook = familyMembers.first;
     }
 
+    final l10n = AppLocalizations.of(context);
     final safeBottom = MediaQuery.of(context).padding.bottom;
     final height = MediaQuery.of(context).size.height * 0.90;
 
@@ -242,12 +248,12 @@ class _RecipeDetailSheetState extends ConsumerState<RecipeDetailSheet> {
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Icon(Icons.event_available_rounded, size: 20),
-                        SizedBox(width: 8),
+                      children: [
+                        const Icon(Icons.event_available_rounded, size: 20),
+                        const SizedBox(width: 8),
                         Text(
-                          'Запланировать в меню недели',
-                          style: TextStyle(
+                          l10n?.mealsScheduleWeekly ?? 'Запланировать в меню недели',
+                          style: const TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w700,
                           ),
@@ -391,6 +397,7 @@ class _RecipeDetailSheetState extends ConsumerState<RecipeDetailSheet> {
   }
 
   Widget _buildServingsBar() {
+    final l10n = AppLocalizations.of(context);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
@@ -404,9 +411,9 @@ class _RecipeDetailSheetState extends ConsumerState<RecipeDetailSheet> {
           Row(
             children: [
               Icon(Icons.group_rounded, color: AppColors.primary, size: 20),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               Text(
-                'Порции',
+                l10n?.mealsServingsTitle ?? 'Порции',
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
@@ -484,6 +491,7 @@ class _RecipeDetailSheetState extends ConsumerState<RecipeDetailSheet> {
   }
 
   Widget _buildIngredientsSection(RecipeModel recipe) {
+    final l10n = AppLocalizations.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -493,9 +501,9 @@ class _RecipeDetailSheetState extends ConsumerState<RecipeDetailSheet> {
             Row(
               children: [
                 Icon(Icons.format_list_bulleted_rounded, color: AppColors.primary, size: 20),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 Text(
-                  'Ингредиенты',
+                  l10n?.mealsIngredientsTitle ?? 'Ингредиенты',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
@@ -516,9 +524,9 @@ class _RecipeDetailSheetState extends ConsumerState<RecipeDetailSheet> {
                 child: Row(
                   children: [
                     Icon(Icons.add_shopping_cart_rounded, size: 14, color: AppColors.primary),
-                    SizedBox(width: 4),
+                    const SizedBox(width: 4),
                     Text(
-                      'В список',
+                      l10n?.mealsToList ?? 'В список',
                       style: TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w700,
@@ -615,12 +623,12 @@ class _RecipeDetailSheetState extends ConsumerState<RecipeDetailSheet> {
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Icon(Icons.shopping_basket_rounded, size: 18),
-              SizedBox(width: 8),
+            children: [
+              const Icon(Icons.shopping_basket_rounded, size: 18),
+              const SizedBox(width: 8),
               Text(
-                'Добавить недостающее в список покупок',
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+                l10n?.mealsAddMissingToGroceries ?? 'Добавить недостающее в список покупок',
+                style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
               ),
             ],
           ),
@@ -630,15 +638,16 @@ class _RecipeDetailSheetState extends ConsumerState<RecipeDetailSheet> {
   }
 
   Widget _buildStepsSection(RecipeModel recipe) {
+    final l10n = AppLocalizations.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
             Icon(Icons.soup_kitchen_rounded, color: AppColors.primary, size: 20),
-            SizedBox(width: 8),
+            const SizedBox(width: 8),
             Text(
-              'Приготовление',
+              l10n?.mealsInstructionsTitle ?? 'Приготовление',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
@@ -699,7 +708,9 @@ class _RecipeDetailSheetState extends ConsumerState<RecipeDetailSheet> {
   }
 
   Widget _buildSchedulePanel(List<UserShort> familyMembers) {
-    final upcomingDays = _getUpcomingDays();
+    final l10n = AppLocalizations.of(context);
+    final locale = Localizations.localeOf(context).languageCode;
+    final upcomingDays = _getUpcomingDays(locale, l10n);
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -712,7 +723,7 @@ class _RecipeDetailSheetState extends ConsumerState<RecipeDetailSheet> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Запланировать в меню недели',
+            l10n?.mealsScheduleWeekly ?? 'Запланировать в меню недели',
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w800,
@@ -723,7 +734,7 @@ class _RecipeDetailSheetState extends ConsumerState<RecipeDetailSheet> {
 
           // Day Selector
           Text(
-            'ДЕНЬ НЕДЕЛИ',
+            l10n?.mealsDayOfWeek ?? 'ДЕНЬ НЕДЕЛИ',
             style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: AppColors.textSecondary),
           ),
           const SizedBox(height: 6),
@@ -765,7 +776,7 @@ class _RecipeDetailSheetState extends ConsumerState<RecipeDetailSheet> {
 
           // Slot Selector
           Text(
-            'ПРИЕМ ПИЩИ',
+            l10n?.mealsSectionMealSlot ?? 'ПРИЕМ ПИЩИ',
             style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: AppColors.textSecondary),
           ),
           const SizedBox(height: 6),
@@ -800,7 +811,7 @@ class _RecipeDetailSheetState extends ConsumerState<RecipeDetailSheet> {
                       ),
                       const SizedBox(width: 6),
                       Text(
-                        slotDef.name,
+                        slotDef.getLocalizedName(l10n),
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
@@ -819,7 +830,7 @@ class _RecipeDetailSheetState extends ConsumerState<RecipeDetailSheet> {
           // Cook Selector
           if (familyMembers.isNotEmpty) ...[
             Text(
-              'КТО ГОТОВИТ?',
+              l10n?.mealsSectionCook ?? 'КТО ГОТОВИТ?',
               style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: AppColors.textSecondary),
             ),
             const SizedBox(height: 6),
@@ -890,10 +901,10 @@ class _RecipeDetailSheetState extends ConsumerState<RecipeDetailSheet> {
                   )
                 : Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(Icons.check_rounded, size: 20),
-                      SizedBox(width: 6),
-                      Text('Подтвердить', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+                    children: [
+                      const Icon(Icons.check_rounded, size: 20),
+                      const SizedBox(width: 6),
+                      Text(l10n?.commonConfirm ?? 'Подтвердить', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
                     ],
                   ),
           ),
@@ -901,7 +912,7 @@ class _RecipeDetailSheetState extends ConsumerState<RecipeDetailSheet> {
           Center(
             child: TextButton(
               onPressed: () => setState(() => _isScheduling = false),
-              child: Text('Отмена', style: TextStyle(color: AppColors.textMuted)),
+              child: Text(l10n?.commonCancel ?? 'Отмена', style: TextStyle(color: AppColors.textMuted)),
             ),
           ),
         ],

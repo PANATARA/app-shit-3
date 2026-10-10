@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../chores/models/user_short_model.dart';
 
 class MealSlotDefinition {
@@ -15,6 +16,22 @@ class MealSlotDefinition {
     required this.color,
     required this.bg,
   });
+
+  String getLocalizedName([AppLocalizations? l10n]) {
+    if (l10n == null) return name;
+    switch (id) {
+      case 'breakfast':
+        return l10n.slotBreakfast;
+      case 'lunch':
+        return l10n.slotLunch;
+      case 'dinner':
+        return l10n.slotDinner;
+      case 'snack':
+        return l10n.slotSnack;
+      default:
+        return name;
+    }
+  }
 
   static const List<MealSlotDefinition> all = [
     MealSlotDefinition(

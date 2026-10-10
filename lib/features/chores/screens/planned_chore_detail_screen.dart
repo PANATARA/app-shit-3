@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../l10n/app_localizations.dart';
 import '../models/planned_chore_model.dart';
 import '../models/user_short_model.dart';
 import '../providers/board_provider.dart';
@@ -47,7 +48,7 @@ class _State extends ConsumerState<PlannedChoreDetailScreen> {
     try { return DateTime.parse(s); } catch (_) { return null; }
   }
 
-  String _fmt(DateTime? d) => d == null ? '—' : DateFormat('d MMMM yyyy', 'ru').format(d);
+  String _fmt(DateTime? d, [String? locale]) => d == null ? '—' : DateFormat('d MMMM yyyy', locale ?? 'ru').format(d);
 
   bool get _dateChanged {
     if (_newDate == null) return false;
@@ -134,16 +135,17 @@ class _State extends ConsumerState<PlannedChoreDetailScreen> {
   }
 
   Future<bool> _confirm() async {
+    final l10n = AppLocalizations.of(context);
     return await showDialog<bool>(
           context: context,
           builder: (ctx) => AlertDialog(
             backgroundColor: AppColors.surface,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            title: const Text('Удалить задачу?', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700)),
-            content: Text('Это действие нельзя отменить.', style: TextStyle(color: AppColors.textSecondary)),
+            title: Text(l10n?.choreConfirmDeleteTitle ?? 'Удалить задачу?', style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w700)),
+            content: Text(l10n?.choreConfirmDeleteDesc ?? 'Это действие нельзя отменить.', style: TextStyle(color: AppColors.textSecondary)),
             actions: [
-              TextButton(onPressed: () => Navigator.of(ctx).pop(false), child: Text('Отмена', style: TextStyle(color: AppColors.textMuted))),
-              TextButton(onPressed: () => Navigator.of(ctx).pop(true), child: const Text('Удалить', style: TextStyle(color: AppColors.error, fontWeight: FontWeight.w700))),
+              TextButton(onPressed: () => Navigator.of(ctx).pop(false), child: Text(l10n?.commonCancel ?? 'Отмена', style: TextStyle(color: AppColors.textMuted))),
+              TextButton(onPressed: () => Navigator.of(ctx).pop(true), child: Text(l10n?.commonDelete ?? 'Удалить', style: const TextStyle(color: AppColors.error, fontWeight: FontWeight.w700))),
             ],
           ),
         ) ??
@@ -172,6 +174,8 @@ class _State extends ConsumerState<PlannedChoreDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final locale = Localizations.localeOf(context).languageCode;
     final safeBottom = MediaQuery.of(context).padding.bottom;
 
     return Scaffold(
@@ -192,9 +196,9 @@ class _State extends ConsumerState<PlannedChoreDetailScreen> {
                   children: [
                     _buildIcon(),
                     const SizedBox(height: 10),
-                    _buildSubtasksCard(),
+                    _buildSubtasksCard(l10n),
                     const SizedBox(height: 10),
-                    _buildDetailsCard(),
+                    _buildDetailsCard(l10n, locale),
                     const SizedBox(height: 8),
                   ],
                 ),
@@ -225,7 +229,9 @@ class _State extends ConsumerState<PlannedChoreDetailScreen> {
                       onPressed: _loading ? null : _toggleDone,
                       icon: Icon(_chore.isDone ? Icons.undo_rounded : Icons.check_rounded, size: 18),
                       label: Text(
-                        _chore.isDone ? 'Отменить выполнение' : 'Отметить выполненным',
+                        _chore.isDone
+                            ? (l10n?.choreCancelCompleted ?? 'Отменить выполнение')
+                            : (l10n?.choreMarkCompleted ?? 'Отметить выполненным'),
                         style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
                       ),
                     ),
@@ -246,7 +252,10 @@ class _State extends ConsumerState<PlannedChoreDetailScreen> {
                         ),
                         onPressed: _loading ? null : _reschedule,
                         icon: const Icon(Icons.calendar_month_rounded, size: 18),
-                        label: Text('Перенести на ${_fmt(_newDate)}', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                        label: Text(
+                          l10n?.choreRescheduleTo(_fmt(_newDate, locale)) ?? 'Перенести на ${_fmt(_newDate, locale)}',
+                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                        ),
                       ),
                     ),
                   ],
@@ -265,7 +274,7 @@ class _State extends ConsumerState<PlannedChoreDetailScreen> {
                       ),
                       onPressed: _loading ? null : _delete,
                       icon: const Icon(Icons.delete_outline_rounded, size: 18),
-                      label: const Text('Удалить задачу', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+                      label: Text(l10n?.choreDeleteTask ?? 'Удалить задачу', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
                     ),
                   ),
                 ],
@@ -306,7 +315,9 @@ class _State extends ConsumerState<PlannedChoreDetailScreen> {
 
   // ─── Subtasks card ─────────────────────────────────────────────────────────
 
-  Widget _buildSubtasksCard() {
+  // ─── Subtasks card ─────────────────────────────────────────────────────────
+
+  Widget _buildSubtasksCard(AppLocalizations? l10n) {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.surface,
@@ -324,7 +335,7 @@ class _State extends ConsumerState<PlannedChoreDetailScreen> {
                 Icon(Icons.checklist_rounded, size: 18, color: AppColors.textMuted),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: Text('Подзадачи и заметки', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
+                  child: Text(l10n?.choreSubtasksNotes ?? 'Подзадачи и заметки', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
                 ),
                 TextButton.icon(
                   style: TextButton.styleFrom(
@@ -335,7 +346,7 @@ class _State extends ConsumerState<PlannedChoreDetailScreen> {
                   ),
                   icon: Icon(_editingSubtasks ? Icons.check_rounded : Icons.edit_rounded, size: 14),
                   label: Text(
-                    _editingSubtasks ? 'Сохранить' : 'Изменить',
+                    _editingSubtasks ? (l10n?.commonSave ?? 'Сохранить') : (l10n?.commonEdit ?? 'Изменить'),
                     style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
                   ),
                   onPressed: _editingSubtasks ? _saveSubtasks : () => setState(() => _editingSubtasks = true),
@@ -356,7 +367,7 @@ class _State extends ConsumerState<PlannedChoreDetailScreen> {
                         maxLines: 6,
                         style: TextStyle(fontSize: 14, color: AppColors.textPrimary),
                         decoration: InputDecoration(
-                          hintText: 'Чек-лист: - [ ] пункт\nЗаметка: просто текст',
+                          hintText: l10n?.choreSubtasksHint ?? 'Чек-лист: - [ ] пункт\nЗаметка: просто текст',
                           hintStyle: TextStyle(color: AppColors.textMuted, fontSize: 13),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
@@ -378,7 +389,7 @@ class _State extends ConsumerState<PlannedChoreDetailScreen> {
                 : _chore.message.isNotEmpty
                     ? PlannedChoreSubtasksWidget(message: _chore.message, isChoreDone: _chore.isDone, onSubtaskToggled: (_) {})
                     : Text(
-                        'Нет заметок. Нажмите «Изменить» чтобы добавить чек-лист или комментарий.',
+                        l10n?.choreSubtasksEmpty ?? 'Нет заметок. Нажмите «Изменить» чтобы добавить чек-лист или комментарий.',
                         style: TextStyle(fontSize: 13, color: AppColors.textMuted, height: 1.4),
                       ),
           ),
@@ -389,7 +400,7 @@ class _State extends ConsumerState<PlannedChoreDetailScreen> {
 
   // ─── Details card ──────────────────────────────────────────────────────────
 
-  Widget _buildDetailsCard() {
+  Widget _buildDetailsCard(AppLocalizations? l10n, String locale) {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.surface,
@@ -412,9 +423,9 @@ class _State extends ConsumerState<PlannedChoreDetailScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Дата', style: TextStyle(fontSize: 11, color: AppColors.textMuted, fontWeight: FontWeight.w500)),
+                        Text(l10n?.choreDateLabel ?? 'Дата', style: TextStyle(fontSize: 11, color: AppColors.textMuted, fontWeight: FontWeight.w500)),
                         Text(
-                          _fmt(_newDate),
+                          _fmt(_newDate, locale),
                           style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: _dateChanged ? AppColors.primary : AppColors.textPrimary),
                         ),
                       ],
@@ -439,14 +450,14 @@ class _State extends ConsumerState<PlannedChoreDetailScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Назначено', style: TextStyle(fontSize: 11, color: AppColors.textMuted, fontWeight: FontWeight.w500)),
+                      Text(l10n?.choreAssignedLabel ?? 'Назначено', style: TextStyle(fontSize: 11, color: AppColors.textMuted, fontWeight: FontWeight.w500)),
                       _chore.assignedTo != null
                           ? Row(children: [
                               UserAvatarWidget(user: _chore.assignedTo, size: 22),
                               const SizedBox(width: 6),
                               Text(_chore.assignedTo!.name, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
                             ])
-                          : Text('Никто', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: AppColors.textMuted)),
+                          : Text(l10n?.choreUnassigned ?? 'Никто', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: AppColors.textMuted)),
                     ],
                   ),
                 ),
@@ -467,14 +478,14 @@ class _State extends ConsumerState<PlannedChoreDetailScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Выполнено', style: TextStyle(fontSize: 11, color: AppColors.textMuted, fontWeight: FontWeight.w500)),
+                      Text(l10n?.choreCompletedLabel ?? 'Выполнено', style: TextStyle(fontSize: 11, color: AppColors.textMuted, fontWeight: FontWeight.w500)),
                       _chore.completedBy != null
                           ? Row(children: [
                               UserAvatarWidget(user: _chore.completedBy, size: 22),
                               const SizedBox(width: 6),
                               Text(_chore.completedBy!.name, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: AppColors.success)),
                             ])
-                          : Text('Ещё нет', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: AppColors.textMuted)),
+                          : Text(l10n?.choreNotDoneYet ?? 'Ещё нет', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: AppColors.textMuted)),
                     ],
                   ),
                 ),

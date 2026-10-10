@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../meals/models/planned_meal_model.dart';
 import '../../meals/models/recipe_model.dart';
 import '../../meals/providers/meals_provider.dart';
@@ -47,6 +48,7 @@ class TodayMealsCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final todayStr = DateFormat('yyyy-MM-dd').format(DateTime.now());
     final mealsState = ref.watch(dailyPlannedMealsSwr(todayStr));
     final recipesState = ref.watch(familyRecipesSwr);
@@ -55,7 +57,7 @@ class TodayMealsCard extends ConsumerWidget {
     final recipes = recipesState.data ?? const [];
 
     return UiCard(
-      title: 'ПЛАН ПИТАНИЯ НА СЕГОДНЯ',
+      title: l10n?.statsTodayMeals ?? 'ПЛАН ПИТАНИЯ НА СЕГОДНЯ',
       action: InkWell(
         onTap: () {
           HapticFeedback.lightImpact();
@@ -72,7 +74,7 @@ class TodayMealsCard extends ConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'Всё меню',
+                l10n?.statsAllMenu ?? 'Всё меню',
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
@@ -154,6 +156,21 @@ class _SlotConfig {
     required this.lightBgColors,
     required this.darkBgColors,
   });
+
+  String getLocalizedName(AppLocalizations? l10n) {
+    switch (id) {
+      case 'breakfast':
+        return l10n?.slotBreakfast ?? name;
+      case 'lunch':
+        return l10n?.slotLunch ?? name;
+      case 'dinner':
+        return l10n?.slotDinner ?? name;
+      case 'snack':
+        return l10n?.slotSnack ?? name;
+      default:
+        return name;
+    }
+  }
 }
 
 class _SlotItem extends ConsumerWidget {
@@ -319,6 +336,7 @@ class _SlotItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final bgColors = isDark ? config.darkBgColors : config.lightBgColors;
 
@@ -467,7 +485,7 @@ class _SlotItem extends ConsumerWidget {
 
         // Slot Label
         Text(
-          config.name,
+          config.getLocalizedName(l10n),
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w700,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../auth/models/user_model.dart';
 import '../../auth/providers/auth_provider.dart';
 import '../../stats/widgets/user_info_card.dart';
@@ -53,17 +54,19 @@ class _UserProfileModalSheetState extends ConsumerState<UserProfileModalSheet> {
   }
 
   Future<void> _handleKickMember() async {
+    final l10n = AppLocalizations.of(context);
+    final userName = _user?.displayName ?? 'пользователя';
     final confirm = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Исключить из семьи?'),
-        content: Text('Вы действительно хотите исключить ${_user?.displayName ?? "пользователя"} из семьи?'),
+        title: Text(l10n?.settingsKickConfirmTitle ?? 'Исключить из семьи?'),
+        content: Text(l10n?.settingsKickConfirmContent(userName) ?? 'Вы действительно хотите исключить $userName из семьи?'),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Отмена')),
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(l10n?.commonCancel ?? 'Отмена')),
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: AppColors.error, foregroundColor: Colors.white),
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Исключить'),
+            child: Text(l10n?.settingsKickAction ?? 'Исключить'),
           ),
         ],
       ),
@@ -84,17 +87,19 @@ class _UserProfileModalSheetState extends ConsumerState<UserProfileModalSheet> {
   }
 
   Future<void> _handleChangeAdmin() async {
+    final l10n = AppLocalizations.of(context);
+    final userName = _user?.displayName ?? 'пользователя';
     final confirm = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Передать права администратора?'),
-        content: Text('Сделать ${_user?.displayName ?? "пользователя"} администратором семьи?'),
+        title: Text(l10n?.settingsTransferAdminTitle ?? 'Передать права администратора?'),
+        content: Text(l10n?.settingsTransferAdminContent(userName) ?? 'Сделать $userName администратором семьи?'),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Отмена')),
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(l10n?.commonCancel ?? 'Отмена')),
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white),
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Передать'),
+            child: Text(l10n?.settingsTransferAdminAction ?? 'Передать'),
           ),
         ],
       ),
@@ -188,9 +193,9 @@ class _UserProfileModalSheetState extends ConsumerState<UserProfileModalSheet> {
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                       elevation: 0,
                     ),
-                    child: const Text(
-                      'Сделать администратором',
-                      style: TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700),
+                    child: Text(
+                      AppLocalizations.of(context)?.settingsTransferAdminBtn ?? 'Сделать администратором',
+                      style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700),
                     ),
                   ),
                 ),
@@ -207,9 +212,9 @@ class _UserProfileModalSheetState extends ConsumerState<UserProfileModalSheet> {
                       side: BorderSide(color: AppColors.error.withValues(alpha: 0.4)),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                     ),
-                    child: const Text(
-                      'Исключить из семьи',
-                      style: TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700),
+                    child: Text(
+                      AppLocalizations.of(context)?.settingsKickMemberBtn ?? 'Исключить из семьи',
+                      style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700),
                     ),
                   ),
                 ),

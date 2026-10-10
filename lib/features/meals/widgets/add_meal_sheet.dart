@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../chores/models/user_short_model.dart';
 import '../../chores/repositories/chores_repository.dart';
 import '../../chores/utils/color_helper.dart';
@@ -115,6 +116,7 @@ class _AddMealSheetState extends ConsumerState<AddMealSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final recipesState = ref.watch(familyRecipesSwr);
     final recipes = recipesState.data ?? [];
     final membersAsync = ref.watch(familyMembersListProvider);
@@ -161,7 +163,7 @@ class _AddMealSheetState extends ConsumerState<AddMealSheet> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Запланировать блюдо',
+                  l10n?.mealsAddDish ?? 'Запланировать блюдо',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w800,
@@ -208,14 +210,14 @@ class _AddMealSheetState extends ConsumerState<AddMealSheet> {
                       Expanded(
                         child: _buildModeTab(
                           id: 'recipe',
-                          label: 'Из рецептов (${recipes.length})',
+                          label: '${l10n?.mealsTabRecipe ?? "Из рецептов"} (${recipes.length})',
                           icon: Icons.menu_book_rounded,
                         ),
                       ),
                       Expanded(
                         child: _buildModeTab(
                           id: 'manual',
-                          label: 'Быстрая запись',
+                          label: l10n?.mealsTabManual ?? 'Быстрая запись',
                           icon: Icons.edit_note_rounded,
                         ),
                       ),
@@ -226,7 +228,7 @@ class _AddMealSheetState extends ConsumerState<AddMealSheet> {
                 const SizedBox(height: 16),
 
                 // Meal Slot Selector (2x2 Grid)
-                _buildSectionLabel('ПРИЕМ ПИЩИ'),
+                _buildSectionLabel(l10n?.mealsSectionMealSlot ?? 'ПРИЕМ ПИЩИ'),
                 const SizedBox(height: 8),
                 GridView.count(
                   shrinkWrap: true,
@@ -237,6 +239,15 @@ class _AddMealSheetState extends ConsumerState<AddMealSheet> {
                   mainAxisSpacing: 8,
                   children: MealSlotDefinition.all.map((slotDef) {
                     final isSelected = _selectedSlot == slotDef.id;
+                    final slotName = () {
+                      switch (slotDef.id) {
+                        case 'breakfast': return l10n?.slotBreakfast ?? slotDef.name;
+                        case 'lunch': return l10n?.slotLunch ?? slotDef.name;
+                        case 'dinner': return l10n?.slotDinner ?? slotDef.name;
+                        case 'snack': return l10n?.slotSnack ?? slotDef.name;
+                        default: return slotDef.name;
+                      }
+                    }();
                     return GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       onTap: () => setState(() => _selectedSlot = slotDef.id),
@@ -269,7 +280,7 @@ class _AddMealSheetState extends ConsumerState<AddMealSheet> {
                             ),
                             const SizedBox(width: 8),
                             Text(
-                              slotDef.name,
+                              slotName,
                               style: TextStyle(
                                 fontSize: 13,
                                 fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
@@ -287,7 +298,7 @@ class _AddMealSheetState extends ConsumerState<AddMealSheet> {
 
                 // Mode A or Mode B content
                 if (_mode == 'recipe') ...[
-                  _buildSectionLabel('ВЫБЕРИТЕ РЕЦЕПТ'),
+                  _buildSectionLabel(l10n?.mealsSectionChooseRecipe ?? 'ВЫБЕРИТЕ РЕЦЕПТ'),
                   const SizedBox(height: 8),
                   if (recipes.isEmpty)
                     Container(
@@ -387,7 +398,7 @@ class _AddMealSheetState extends ConsumerState<AddMealSheet> {
                       ),
                     ),
                 ] else ...[
-                  _buildSectionLabel('НАЗВАНИЕ БЛЮДА'),
+                  _buildSectionLabel(l10n?.mealsSectionDishName ?? 'НАЗВАНИЕ БЛЮДА'),
                   const SizedBox(height: 8),
                   Container(
                     height: 48,
@@ -402,7 +413,7 @@ class _AddMealSheetState extends ConsumerState<AddMealSheet> {
                       controller: _manualTitleController,
                       style: TextStyle(fontSize: 15, color: AppColors.textPrimary),
                       decoration: InputDecoration(
-                        hintText: 'Название блюда, например: Борщ',
+                        hintText: l10n?.mealsDishPlaceholder ?? 'Название блюда, например: Борщ',
                         hintStyle: TextStyle(fontSize: 14, color: AppColors.textMuted),
                         filled: false,
                         fillColor: Colors.transparent,
@@ -421,7 +432,7 @@ class _AddMealSheetState extends ConsumerState<AddMealSheet> {
 
                 // Who is cooking?
                 if (familyMembers.isNotEmpty) ...[
-                  _buildSectionLabel('КТО ГОТОВИТ?'),
+                  _buildSectionLabel(l10n?.mealsSectionCook ?? 'КТО ГОТОВИТ?'),
                   const SizedBox(height: 8),
                   Wrap(
                     spacing: 8,
@@ -480,7 +491,7 @@ class _AddMealSheetState extends ConsumerState<AddMealSheet> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildSectionLabel('ВРЕМЯ (МИН)'),
+                          _buildSectionLabel(l10n?.mealsSectionTime ?? 'ВРЕМЯ (МИН)'),
                           const SizedBox(height: 6),
                           Container(
                             height: 46,
@@ -517,7 +528,7 @@ class _AddMealSheetState extends ConsumerState<AddMealSheet> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildSectionLabel('ПОРЦИИ'),
+                          _buildSectionLabel(l10n?.mealsSectionServings ?? 'ПОРЦИИ'),
                           const SizedBox(height: 6),
                           Container(
                             height: 46,
@@ -578,12 +589,12 @@ class _AddMealSheetState extends ConsumerState<AddMealSheet> {
                         )
                       : Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Icon(Icons.add_task_rounded, size: 20),
-                            SizedBox(width: 8),
+                          children: [
+                            const Icon(Icons.add_task_rounded, size: 20),
+                            const SizedBox(width: 8),
                             Text(
-                              'Добавить в меню',
-                              style: TextStyle(
+                              l10n?.mealsAddToMenu ?? 'Добавить в меню',
+                              style: const TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w700,
                               ),

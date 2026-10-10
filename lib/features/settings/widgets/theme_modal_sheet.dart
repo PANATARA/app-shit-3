@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../chores/utils/color_helper.dart';
 
 class ThemeOption {
@@ -14,6 +15,46 @@ class ThemeOption {
     required this.description,
     required this.colors,
   });
+
+  String getLocalizedName(AppLocalizations? l10n) {
+    switch (id) {
+      case 'soft':
+        return l10n?.themeSoftName ?? name;
+      case 'night':
+        return l10n?.themeNightName ?? name;
+      case 'royal':
+        return l10n?.themeRoyalName ?? name;
+      case 'sage':
+        return l10n?.themeSageName ?? name;
+      case 'midnight':
+        return l10n?.themeMidnightName ?? name;
+      case 'amber':
+        return l10n?.themeAmberName ?? name;
+      case 'warm':
+      default:
+        return l10n?.themeWarmName ?? name;
+    }
+  }
+
+  String getLocalizedDescription(AppLocalizations? l10n) {
+    switch (id) {
+      case 'soft':
+        return l10n?.themeSoftDesc ?? description;
+      case 'night':
+        return l10n?.themeNightDesc ?? description;
+      case 'royal':
+        return l10n?.themeRoyalDesc ?? description;
+      case 'sage':
+        return l10n?.themeSageDesc ?? description;
+      case 'midnight':
+        return l10n?.themeMidnightDesc ?? description;
+      case 'amber':
+        return l10n?.themeAmberDesc ?? description;
+      case 'warm':
+      default:
+        return l10n?.themeWarmDesc ?? description;
+    }
+  }
 }
 
 const List<ThemeOption> allThemes = [
@@ -131,7 +172,7 @@ class _ThemeModalSheetState extends State<ThemeModalSheet> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Выбор темы оформления',
+                AppLocalizations.of(context)?.settingsThemeSelectTitle ?? 'Выбор темы оформления',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
@@ -206,7 +247,7 @@ class _ThemeModalSheetState extends State<ThemeModalSheet> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                item.name,
+                                item.getLocalizedName(AppLocalizations.of(context)),
                                 style: TextStyle(
                                   fontSize: 14.5,
                                   fontWeight: FontWeight.w600,
@@ -215,7 +256,7 @@ class _ThemeModalSheetState extends State<ThemeModalSheet> {
                               ),
                               const SizedBox(height: 2),
                               Text(
-                                item.description,
+                                item.getLocalizedDescription(AppLocalizations.of(context)),
                                 style: TextStyle(
                                   fontSize: 12,
                                   color: AppColors.textMuted,

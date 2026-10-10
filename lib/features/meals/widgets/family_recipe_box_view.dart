@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/theme_provider.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../chores/utils/color_helper.dart';
 import '../models/recipe_model.dart';
 import '../providers/meals_provider.dart';
@@ -33,6 +34,18 @@ class _FamilyRecipeBoxViewState extends ConsumerState<FamilyRecipeBoxView> {
     {'id': 'dinner', 'label': 'Ужин', 'icon': Icons.dinner_dining_rounded},
     {'id': 'desserts', 'label': 'Десерты', 'icon': Icons.cake_rounded},
   ];
+
+  String _getFilterLabel(String id, AppLocalizations? l10n) {
+    switch (id) {
+      case 'all': return l10n?.mealsFilterAll ?? 'Все блюда';
+      case 'quick': return l10n?.mealsFilterQuick ?? 'Быстрые';
+      case 'favorites': return l10n?.mealsFilterFavorites ?? 'Избранное';
+      case 'kids': return l10n?.mealsFilterKids ?? 'Детям';
+      case 'dinner': return l10n?.mealsFilterDinner ?? 'Ужин';
+      case 'desserts': return l10n?.mealsFilterDesserts ?? 'Десерты';
+      default: return id;
+    }
+  }
 
   @override
   void dispose() {
@@ -110,7 +123,7 @@ class _FamilyRecipeBoxViewState extends ConsumerState<FamilyRecipeBoxView> {
                         controller: _searchController,
                         style: TextStyle(fontSize: 13, color: AppColors.textPrimary),
                         decoration: InputDecoration(
-                          hintText: 'Поиск блюда или ингредиента...',
+                          hintText: AppLocalizations.of(context)?.mealsSearchPlaceholder ?? 'Поиск блюда или ингредиента...',
                           hintStyle: TextStyle(fontSize: 13, color: AppColors.textMuted),
                           filled: false,
                           fillColor: Colors.transparent,
@@ -155,12 +168,12 @@ class _FamilyRecipeBoxViewState extends ConsumerState<FamilyRecipeBoxView> {
                   ],
                 ),
                 child: Row(
-                  children: const [
-                    Icon(Icons.add_rounded, size: 18, color: Colors.white),
-                    SizedBox(width: 4),
+                  children: [
+                    const Icon(Icons.add_rounded, size: 18, color: Colors.white),
+                    const SizedBox(width: 4),
                     Text(
-                      'Свой рецепт',
-                      style: TextStyle(
+                      AppLocalizations.of(context)?.mealsAddRecipe ?? 'Свой рецепт',
+                      style: const TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w700,
                         color: Colors.white,
@@ -180,6 +193,7 @@ class _FamilyRecipeBoxViewState extends ConsumerState<FamilyRecipeBoxView> {
           child: Row(
             children: _filters.map((f) {
               final isSelected = _activeFilter == f['id'];
+              final label = _getFilterLabel(f['id'] as String, AppLocalizations.of(context));
               return Padding(
                 padding: const EdgeInsets.only(right: 6),
                 child: InkWell(
@@ -212,7 +226,7 @@ class _FamilyRecipeBoxViewState extends ConsumerState<FamilyRecipeBoxView> {
                         ),
                         const SizedBox(width: 6),
                         Text(
-                          f['label'] as String,
+                          label,
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
@@ -258,6 +272,7 @@ class _FamilyRecipeBoxViewState extends ConsumerState<FamilyRecipeBoxView> {
   }
 
   Widget _buildEmptyBookState() {
+    final l10n = AppLocalizations.of(context);
     return Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
@@ -266,7 +281,7 @@ class _FamilyRecipeBoxViewState extends ConsumerState<FamilyRecipeBoxView> {
             const Text('📖', style: TextStyle(fontSize: 44)),
             const SizedBox(height: 10),
             Text(
-              'Книга рецептов пуста',
+              l10n?.mealsRecipeBookEmpty ?? 'Книга рецептов пуста',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
@@ -275,7 +290,7 @@ class _FamilyRecipeBoxViewState extends ConsumerState<FamilyRecipeBoxView> {
             ),
             const SizedBox(height: 6),
             Text(
-              'Добавьте любимые семейные блюда, чтобы планировать меню в один клик',
+              l10n?.mealsRecipeBookEmptyDesc ?? 'Добавьте любимые семейные блюда, чтобы планировать меню в один клик',
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 13, color: AppColors.textMuted, height: 1.4),
             ),
@@ -283,7 +298,7 @@ class _FamilyRecipeBoxViewState extends ConsumerState<FamilyRecipeBoxView> {
             ElevatedButton.icon(
               onPressed: _openAddCustomRecipe,
               icon: const Icon(Icons.add_rounded, size: 20),
-              label: const Text('Добавить первый рецепт'),
+              label: Text(l10n?.mealsAddFirstRecipe ?? 'Добавить первый рецепт'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,
@@ -298,24 +313,25 @@ class _FamilyRecipeBoxViewState extends ConsumerState<FamilyRecipeBoxView> {
   }
 
   Widget _buildNotFoundState() {
+    final l10n = AppLocalizations.of(context);
     return Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
         child: Column(
           children: [
-            Text('🍳', style: TextStyle(fontSize: 44)),
-            SizedBox(height: 10),
+            const Text('🍳', style: TextStyle(fontSize: 44)),
+            const SizedBox(height: 10),
             Text(
-              'Ничего не найдено',
+              l10n?.choreNothingFound ?? 'Ничего не найдено',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
                 color: AppColors.textPrimary,
               ),
             ),
-            SizedBox(height: 6),
+            const SizedBox(height: 6),
             Text(
-              'Попробуйте изменить запрос или сбросить фильтры',
+              l10n?.mealsTryChangeSearch ?? 'Попробуйте изменить запрос или сбросить фильтры',
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 13, color: AppColors.textMuted),
             ),
@@ -411,12 +427,12 @@ class _FamilyRecipeBoxViewState extends ConsumerState<FamilyRecipeBoxView> {
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
-                          children: const [
-                            Icon(Icons.calendar_month_rounded, size: 12, color: Colors.white),
-                            SizedBox(width: 4),
+                          children: [
+                            const Icon(Icons.calendar_month_rounded, size: 12, color: Colors.white),
+                            const SizedBox(width: 4),
                             Text(
-                              'В меню',
-                              style: TextStyle(
+                              AppLocalizations.of(context)?.mealsInMenu ?? 'В меню',
+                              style: const TextStyle(
                                 fontSize: 10,
                                 fontWeight: FontWeight.w700,
                                 color: Colors.white,
@@ -458,7 +474,7 @@ class _FamilyRecipeBoxViewState extends ConsumerState<FamilyRecipeBoxView> {
                             Icon(Icons.timer_outlined, size: 13, color: AppColors.textMuted),
                             const SizedBox(width: 3),
                             Text(
-                              '${recipe.prepTimeMinutes + recipe.cookTimeMinutes} мин',
+                              AppLocalizations.of(context)?.mealsPrepTime(recipe.prepTimeMinutes + recipe.cookTimeMinutes) ?? '${recipe.prepTimeMinutes + recipe.cookTimeMinutes} мин',
                               style: TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.w600,
@@ -472,7 +488,7 @@ class _FamilyRecipeBoxViewState extends ConsumerState<FamilyRecipeBoxView> {
                             Icon(Icons.group_rounded, size: 13, color: AppColors.textMuted),
                             const SizedBox(width: 3),
                             Text(
-                              '${recipe.baseServings}',
+                              AppLocalizations.of(context)?.mealsServings(recipe.baseServings) ?? '${recipe.baseServings}',
                               style: TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.w600,

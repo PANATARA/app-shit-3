@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/swr/swr.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/theme_provider.dart';
+import '../../../l10n/app_localizations.dart';
 import '../providers/meals_provider.dart';
 import '../widgets/family_recipe_box_view.dart';
 import '../widgets/grocery_list_sheet.dart';
@@ -55,6 +56,8 @@ class _MealsScreenState extends ConsumerState<MealsScreen>
   @override
   Widget build(BuildContext context) {
     ref.watch(appThemeProvider);
+    final l10n = AppLocalizations.of(context);
+    final isEn = l10n?.localeName == 'en';
     final groceryCount = ref.watch(unboughtGroceriesCountProvider);
 
     return Scaffold(
@@ -81,7 +84,7 @@ class _MealsScreenState extends ConsumerState<MealsScreen>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'План питания',
+                            l10n?.mealsTitle ?? 'План питания',
                             style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.w800,
@@ -90,9 +93,9 @@ class _MealsScreenState extends ConsumerState<MealsScreen>
                               height: 1.1,
                             ),
                           ),
-                          SizedBox(height: 3),
+                          const SizedBox(height: 3),
                           Text(
-                            'Меню и список покупок',
+                            l10n?.mealsSubtitle ?? 'Меню и список покупок',
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w500,
@@ -172,14 +175,14 @@ class _MealsScreenState extends ConsumerState<MealsScreen>
                         Expanded(
                           child: _buildSegmentButton(
                             index: 0,
-                            label: 'Недельный план',
+                            label: isEn ? 'Weekly Plan' : 'Недельный план',
                             icon: Icons.calendar_today_rounded,
                           ),
                         ),
                         Expanded(
                           child: _buildSegmentButton(
                             index: 1,
-                            label: 'Книга рецептов',
+                            label: l10n?.mealsTabRecipes ?? 'Книга рецептов',
                             icon: Icons.menu_book_rounded,
                           ),
                         ),

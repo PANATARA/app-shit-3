@@ -1,5 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/storage/token_storage.dart';
+import '../../../core/swr/swr.dart';
+import '../../chores/providers/board_provider.dart';
+import '../../meals/providers/meals_provider.dart';
+import '../../settings/providers/settings_provider.dart';
+import '../../stats/providers/stats_provider.dart';
 import '../models/user_model.dart';
 import '../repositories/auth_repository.dart';
 
@@ -147,12 +152,16 @@ class AuthNotifier extends Notifier<AuthState> {
     } catch (_) {}
   }
 
-  void setUser(UserModel user) {
-    state = state.copyWith(user: user);
-  }
-
   Future<void> logout() async {
-    await _authRepository.logout();
+    try {
+      await _authRepository.logout();
+    } catch (_) {}
+    await _tokenStorage.clearTokens();
+    await Swr.clearAll();
+    ref.invalidate(boardNotifierProvider);
+    ref.invalidate(mealPlannerNotifierProvider);
+    ref.invalidate(homeNotifierProvider);
+    ref.invalidate(settingsNotifierProvider);
     state = const AuthState(status: AuthStatus.unauthenticated);
   }
 }

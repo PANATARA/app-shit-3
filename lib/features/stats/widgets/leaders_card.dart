@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../chores/widgets/user_avatar_widget.dart';
 import '../models/family_leader_model.dart';
 import 'ui_card.dart';
@@ -17,13 +18,13 @@ class LeadersCard extends StatelessWidget {
     this.isLoading = false,
   });
 
-  String _getCurrentWeekRange() {
+  String _getCurrentWeekRange(String lang) {
     final now = DateTime.now();
     final monday = now.subtract(Duration(days: now.weekday - 1));
     final sunday = monday.add(const Duration(days: 6));
 
-    final monStr = DateFormat('d MMM', 'ru').format(monday).replaceAll('.', '');
-    final sunStr = DateFormat('d MMM', 'ru').format(sunday).replaceAll('.', '');
+    final monStr = DateFormat('d MMM', lang).format(monday).replaceAll('.', '');
+    final sunStr = DateFormat('d MMM', lang).format(sunday).replaceAll('.', '');
     return '$monStr — $sunStr';
   }
 
@@ -38,11 +39,13 @@ class LeadersCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final lang = Localizations.localeOf(context).languageCode;
     final displayLeaders = leaders.take(5).toList();
 
     return RepaintBoundary(
       child: UiCard(
-        title: 'ЛИДЕРЫ НЕДЕЛИ',
+        title: l10n?.statsWeeklyLeaders ?? 'ЛИДЕРЫ НЕДЕЛИ',
         action: Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
           decoration: BoxDecoration(
@@ -51,7 +54,7 @@ class LeadersCard extends StatelessWidget {
             border: Border.all(color: AppColors.borderSubtle, width: 0.5),
           ),
           child: Text(
-            _getCurrentWeekRange(),
+            _getCurrentWeekRange(lang),
             style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w600,
@@ -248,7 +251,9 @@ class _LeaderRow extends StatelessWidget {
               ),
               const SizedBox(width: 4),
               Text(
-                LeadersCard.pluralTasks(leader.choreCompletionCount),
+                Localizations.localeOf(context).languageCode == 'en'
+                    ? (leader.choreCompletionCount == 1 ? 'task' : 'tasks')
+                    : LeadersCard.pluralTasks(leader.choreCompletionCount),
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,

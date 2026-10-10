@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import '../../../core/swr/swr.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/theme_provider.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../auth/providers/auth_provider.dart';
 import '../../meals/providers/meals_provider.dart';
 import '../providers/stats_provider.dart';
@@ -123,12 +124,13 @@ class _GreetingHeader extends StatelessWidget {
 
   const _GreetingHeader({this.userName, required this.isRevalidating});
 
-  String _getGreeting() {
+  String _getGreeting(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final hour = DateTime.now().hour;
-    if (hour >= 5 && hour < 12) return 'Доброе утро';
-    if (hour >= 12 && hour < 17) return 'Добрый день';
-    if (hour >= 17 && hour < 22) return 'Добрый вечер';
-    return 'Доброй ночи';
+    if (hour >= 5 && hour < 12) return l10n?.statsGreetingMorning ?? 'Доброе утро';
+    if (hour >= 12 && hour < 17) return l10n?.statsGreetingDay ?? 'Добрый день';
+    if (hour >= 17 && hour < 22) return l10n?.statsGreetingEvening ?? 'Добрый вечер';
+    return l10n?.statsGreetingNight ?? 'Доброй ночи';
   }
 
   String? _extractFirstName(String? fullName) {
@@ -138,7 +140,7 @@ class _GreetingHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final greeting = _getGreeting();
+    final greeting = _getGreeting(context);
     final firstName = _extractFirstName(userName);
     final fullGreeting = firstName != null && firstName.isNotEmpty
         ? '$greeting, $firstName'

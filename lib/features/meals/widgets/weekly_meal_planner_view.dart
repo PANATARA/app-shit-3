@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/theme_provider.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../chores/utils/color_helper.dart';
 import '../../chores/widgets/week_calendar.dart';
 import '../models/planned_meal_model.dart';
@@ -23,6 +24,8 @@ class WeeklyMealPlannerView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.watch(appThemeProvider);
+    final l10n = AppLocalizations.of(context);
+    final locale = Localizations.localeOf(context).languageCode;
     final selectedDate = ref.watch(selectedMealDateProvider);
     final selectedDateKey = ref.watch(selectedMealDateKeyProvider);
 
@@ -35,7 +38,7 @@ class WeeklyMealPlannerView extends ConsumerWidget {
     final plannedMeals = plannerState.optimisticMeals ?? fetchedMeals;
     final isLoading = dailySwr.isLoading && plannedMeals.isEmpty;
 
-    final dayFormatter = DateFormat('EEEE, d MMMM', 'ru');
+    final dayFormatter = DateFormat('EEEE, d MMMM', locale);
     final formattedDayName = dayFormatter.format(selectedDate);
     final capitalizedDayName = formattedDayName.isNotEmpty
         ? formattedDayName[0].toUpperCase() + formattedDayName.substring(1)
@@ -88,8 +91,8 @@ class WeeklyMealPlannerView extends ConsumerWidget {
                   const SizedBox(height: 2),
                   Text(
                     plannedMeals.isEmpty
-                        ? 'Меню не запланировано'
-                        : 'Запланировано блюд: ${plannedMeals.length}',
+                        ? (l10n?.mealsNoMealsPlanned ?? 'Меню не запланировано')
+                        : (l10n?.mealsPlannedCount(plannedMeals.length) ?? 'Запланировано блюд: ${plannedMeals.length}'),
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
@@ -109,7 +112,7 @@ class WeeklyMealPlannerView extends ConsumerWidget {
                     defaultSlot: 'dinner',
                   );
                   if (meal != null && context.mounted) {
-                    onToast?.call('Блюдо добавлено в меню');
+                    onToast?.call(l10n?.mealsDishAddedToast ?? 'Блюдо добавлено в меню');
                   }
                 },
                 child: Container(
@@ -123,7 +126,7 @@ class WeeklyMealPlannerView extends ConsumerWidget {
                       Icon(Icons.add_rounded, size: 18, color: AppColors.primary),
                       SizedBox(width: 4),
                       Text(
-                        'Блюдо',
+                        l10n?.mealsAddDish ?? 'Блюдо',
                         style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w700,
@@ -200,7 +203,7 @@ class WeeklyMealPlannerView extends ConsumerWidget {
                     Icon(slotDef.icon, size: 16, color: slotDef.color),
                     const SizedBox(width: 6),
                     Text(
-                      slotDef.name,
+                      slotDef.getLocalizedName(AppLocalizations.of(context)),
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
@@ -222,7 +225,7 @@ class WeeklyMealPlannerView extends ConsumerWidget {
                     defaultSlot: slotDef.id,
                   );
                   if (meal != null && context.mounted) {
-                    onToast?.call('Блюдо добавлено в меню');
+                    onToast?.call(AppLocalizations.of(context)?.mealsDishAddedToast ?? 'Блюдо добавлено в меню');
                   }
                 },
                 child: Container(
@@ -263,7 +266,7 @@ class WeeklyMealPlannerView extends ConsumerWidget {
                   defaultSlot: slotDef.id,
                 );
                 if (meal != null && context.mounted) {
-                  onToast?.call('Блюдо добавлено в меню');
+                  onToast?.call(AppLocalizations.of(context)?.mealsDishAddedToast ?? 'Блюдо добавлено в меню');
                 }
               },
               child: Container(
@@ -283,7 +286,8 @@ class WeeklyMealPlannerView extends ConsumerWidget {
                     Icon(Icons.add_circle_outline_rounded, size: 18, color: AppColors.textMuted),
                     const SizedBox(width: 8),
                     Text(
-                      'Нажмите, чтобы запланировать ${slotDef.name.toLowerCase()}',
+                      AppLocalizations.of(context)?.mealsTapToPlan(slotDef.getLocalizedName(AppLocalizations.of(context)).toLowerCase()) ??
+                          'Нажмите, чтобы запланировать ${slotDef.getLocalizedName(AppLocalizations.of(context)).toLowerCase()}',
                       style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w500,
@@ -395,7 +399,7 @@ class WeeklyMealPlannerView extends ConsumerWidget {
                               Icon(Icons.menu_book_rounded, size: 12, color: AppColors.primary),
                               SizedBox(width: 3),
                               Text(
-                                'Рецепт',
+                                AppLocalizations.of(context)?.mealsRecipeBadge ?? 'Рецепт',
                                 style: TextStyle(
                                   fontSize: 10,
                                   fontWeight: FontWeight.w700,
@@ -418,7 +422,7 @@ class WeeklyMealPlannerView extends ConsumerWidget {
                             Icon(Icons.timer_outlined, size: 14, color: AppColors.textMuted),
                             const SizedBox(width: 3),
                             Text(
-                              '${meal.prepTimeMinutes} мин',
+                              AppLocalizations.of(context)?.mealsPrepTime(meal.prepTimeMinutes) ?? '${meal.prepTimeMinutes} мин',
                               style: TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.w600,

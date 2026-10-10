@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../l10n/app_localizations.dart';
 import '../models/chore_item_model.dart';
 import '../repositories/chores_repository.dart';
 import '../widgets/chore_icon_widget.dart';
@@ -68,30 +69,35 @@ class _CreateChoreStepOneScreenState extends ConsumerState<CreateChoreStepOneScr
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: Column(
           children: [
-            ChoreScreenHeader(onBack: () => Navigator.of(context).pop(), title: 'Запланировать задачу'),
+            ChoreScreenHeader(
+              onBack: () => Navigator.of(context).pop(),
+              title: l10n?.chorePlanTitle ?? 'Запланировать задачу',
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: _SearchBox(
                 controller: _searchController,
+                hintText: l10n?.commonSearch ?? 'Поиск задач...',
                 onChanged: (v) => setState(() => _searchQuery = v),
               ),
             ),
-            Expanded(child: _buildBody()),
+            Expanded(child: _buildBody(l10n)),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildBody() {
+  Widget _buildBody(AppLocalizations? l10n) {
     if (_loading) return const _SkeletonList();
     if (_error != null) {
-      return Center(child: Text('Ошибка загрузки', style: TextStyle(color: AppColors.error)));
+      return Center(child: Text(l10n?.commonError ?? 'Ошибка загрузки', style: const TextStyle(color: AppColors.error)));
     }
 
     return ListView(
@@ -102,9 +108,12 @@ class _CreateChoreStepOneScreenState extends ConsumerState<CreateChoreStepOneScr
         if (_searchQuery.trim().isEmpty) ...[
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
-            child: _QuickTaskItem(onTap: () => _goToStepTwo(isQuick: true)),
+            child: _QuickTaskItem(
+              title: l10n?.choreQuickTask ?? 'Быстрая задача',
+              onTap: () => _goToStepTwo(isQuick: true),
+            ),
           ),
-          _SectionDivider(label: 'или выберите из шаблонов'),
+          _SectionDivider(label: l10n?.choreOrFromTemplates ?? 'или выберите из шаблонов'),
         ],
 
         // "Create <name>" button
@@ -113,6 +122,7 @@ class _CreateChoreStepOneScreenState extends ConsumerState<CreateChoreStepOneScr
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 14),
             child: _CreateNewItem(
               name: _searchQuery.trim(),
+              label: l10n?.choreCreateCustom(_searchQuery.trim()) ?? 'Создать «${_searchQuery.trim()}»',
               onTap: () => _goToStepTwo(customName: _searchQuery.trim()),
             ),
           ),
@@ -131,8 +141,11 @@ class _CreateChoreStepOneScreenState extends ConsumerState<CreateChoreStepOneScr
         else if (!_showCreateNew)
           Center(
             child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 40),
-              child: Text('Ничего не найдено', style: TextStyle(fontSize: 14, color: AppColors.textMuted)),
+              padding: const EdgeInsets.symmetric(vertical: 40),
+              child: Text(
+                l10n?.choreNothingFound ?? 'Ничего не найдено',
+                style: TextStyle(fontSize: 14, color: AppColors.textMuted),
+              ),
             ),
           ),
       ],
@@ -144,9 +157,14 @@ class _CreateChoreStepOneScreenState extends ConsumerState<CreateChoreStepOneScr
 
 class _SearchBox extends StatelessWidget {
   final TextEditingController controller;
+  final String hintText;
   final ValueChanged<String> onChanged;
 
-  const _SearchBox({required this.controller, required this.onChanged});
+  const _SearchBox({
+    required this.controller,
+    required this.hintText,
+    required this.onChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -161,7 +179,7 @@ class _SearchBox extends StatelessWidget {
       child: Row(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Icon(Icons.search_rounded, size: 20, color: AppColors.textMuted),
           ),
           Expanded(
@@ -170,7 +188,7 @@ class _SearchBox extends StatelessWidget {
               onChanged: onChanged,
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: AppColors.textPrimary),
               decoration: InputDecoration(
-                hintText: 'Поиск задач...',
+                hintText: hintText,
                 hintStyle: TextStyle(color: AppColors.textMuted, fontSize: 15),
                 filled: false,
                 fillColor: Colors.transparent,
@@ -200,9 +218,10 @@ class _SearchBox extends StatelessWidget {
 // ─── Quick Task Item ─────────────────────────────────────────────────────────
 
 class _QuickTaskItem extends StatelessWidget {
+  final String title;
   final VoidCallback onTap;
 
-  const _QuickTaskItem({required this.onTap});
+  const _QuickTaskItem({required this.title, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -231,9 +250,14 @@ class _QuickTaskItem extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Быстрая задача', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
-                    SizedBox(height: 2),
-                    Text('Создать разовую задачу без шаблона', style: TextStyle(fontSize: 12.5, color: AppColors.textMuted)),
+                    Text(title, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
+                    const SizedBox(height: 2),
+                    Text(
+                      Localizations.localeOf(context).languageCode == 'en'
+                          ? 'Create a one-off chore without a template'
+                          : 'Создать разовую задачу без шаблона',
+                      style: TextStyle(fontSize: 12.5, color: AppColors.textMuted),
+                    ),
                   ],
                 ),
               ),
@@ -275,9 +299,10 @@ class _SectionDivider extends StatelessWidget {
 
 class _CreateNewItem extends StatelessWidget {
   final String name;
+  final String label;
   final VoidCallback onTap;
 
-  const _CreateNewItem({required this.name, required this.onTap});
+  const _CreateNewItem({required this.name, required this.label, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -314,7 +339,7 @@ class _CreateNewItem extends StatelessWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    'Создать «$name»',
+                    label,
                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: AppColors.primary),
                   ),
                 ),

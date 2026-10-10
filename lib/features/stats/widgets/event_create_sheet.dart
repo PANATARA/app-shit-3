@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../l10n/app_localizations.dart';
 import '../providers/stats_provider.dart';
 
 class EventCreateSheet extends ConsumerStatefulWidget {
@@ -52,9 +53,10 @@ class _EventCreateSheetState extends ConsumerState<EventCreateSheet> {
   }
 
   Future<void> _submit() async {
+    final l10n = AppLocalizations.of(context);
     final name = _nameCtrl.text.trim();
     if (name.isEmpty) {
-      setState(() => _error = 'Введите название события');
+      setState(() => _error = l10n?.eventsEnterNameError ?? 'Введите название события');
       return;
     }
 
@@ -72,7 +74,7 @@ class _EventCreateSheetState extends ConsumerState<EventCreateSheet> {
           );
       if (mounted) Navigator.of(context).pop();
     } catch (e) {
-      if (mounted) setState(() => _error = 'Не удалось создать событие: $e');
+      if (mounted) setState(() => _error = l10n?.eventsCreateError(e.toString()) ?? 'Не удалось создать событие: $e');
     } finally {
       if (mounted) setState(() => _submitting = false);
     }
@@ -80,6 +82,8 @@ class _EventCreateSheetState extends ConsumerState<EventCreateSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final locale = Localizations.localeOf(context).languageCode;
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
     final safeBottom = MediaQuery.of(context).padding.bottom;
 
@@ -106,7 +110,7 @@ class _EventCreateSheetState extends ConsumerState<EventCreateSheet> {
             ),
             const SizedBox(height: 12),
             Text(
-              'Новое событие',
+              l10n?.eventsCreateTitle ?? 'Новое событие',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.textPrimary),
               textAlign: TextAlign.center,
             ),
@@ -140,7 +144,7 @@ class _EventCreateSheetState extends ConsumerState<EventCreateSheet> {
             const SizedBox(height: 16),
 
             // Name
-            Text('НАЗВАНИЕ', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: AppColors.textMuted, letterSpacing: 0.8)),
+            Text(l10n?.eventsNameLabel ?? 'НАЗВАНИЕ', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: AppColors.textMuted, letterSpacing: 0.8)),
             const SizedBox(height: 6),
             Container(
               decoration: BoxDecoration(color: AppColors.surfaceAlt, borderRadius: BorderRadius.circular(12)),
@@ -148,7 +152,7 @@ class _EventCreateSheetState extends ConsumerState<EventCreateSheet> {
                 controller: _nameCtrl,
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: AppColors.textPrimary),
                 decoration: InputDecoration(
-                  hintText: 'Поездка, день рождения, праздник...',
+                  hintText: l10n?.eventsNamePlaceholder ?? 'Поездка, день рождения, праздник...',
                   hintStyle: TextStyle(color: AppColors.textMuted, fontWeight: FontWeight.w400, fontSize: 14),
                   filled: false,
                   fillColor: Colors.transparent,
@@ -163,7 +167,7 @@ class _EventCreateSheetState extends ConsumerState<EventCreateSheet> {
             const SizedBox(height: 12),
 
             // Date
-            Text('ДАТА', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: AppColors.textMuted, letterSpacing: 0.8)),
+            Text(l10n?.eventsDateLabel ?? 'ДАТА', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: AppColors.textMuted, letterSpacing: 0.8)),
             const SizedBox(height: 6),
             InkWell(
               onTap: _pickDate,
@@ -176,7 +180,7 @@ class _EventCreateSheetState extends ConsumerState<EventCreateSheet> {
                     Icon(Icons.calendar_today_rounded, size: 18, color: AppColors.textMuted),
                     const SizedBox(width: 10),
                     Text(
-                      DateFormat('d MMMM yyyy', 'ru').format(_date),
+                      DateFormat('d MMMM yyyy', locale).format(_date),
                       style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: AppColors.textPrimary),
                     ),
                     const Spacer(),
@@ -189,7 +193,7 @@ class _EventCreateSheetState extends ConsumerState<EventCreateSheet> {
             const SizedBox(height: 12),
 
             // Description
-            Text('ОПИСАНИЕ (НЕОБЯЗАТЕЛЬНО)', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: AppColors.textMuted, letterSpacing: 0.8)),
+            Text(l10n?.eventsDescriptionOptional ?? 'ОПИСАНИЕ (НЕОБЯЗАТЕЛЬНО)', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: AppColors.textMuted, letterSpacing: 0.8)),
             const SizedBox(height: 6),
             Container(
               decoration: BoxDecoration(color: AppColors.surfaceAlt, borderRadius: BorderRadius.circular(12)),
@@ -198,7 +202,7 @@ class _EventCreateSheetState extends ConsumerState<EventCreateSheet> {
                 maxLines: 3,
                 style: TextStyle(fontSize: 14, color: AppColors.textPrimary),
                 decoration: InputDecoration(
-                  hintText: 'Дополнительные детали или заметки...',
+                  hintText: l10n?.eventsDescPlaceholder ?? 'Дополнительные детали или заметки...',
                   hintStyle: TextStyle(color: AppColors.textMuted, fontSize: 13),
                   filled: false,
                   fillColor: Colors.transparent,
@@ -230,7 +234,7 @@ class _EventCreateSheetState extends ConsumerState<EventCreateSheet> {
                 onPressed: _submitting ? null : _submit,
                 child: _submitting
                     ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                    : const Text('Создать событие', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+                    : Text(l10n?.commonCreate ?? 'Создать событие', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
               ),
             ),
           ],

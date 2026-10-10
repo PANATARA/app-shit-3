@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../chores/widgets/chore_icon_widget.dart';
 import '../models/family_event_model.dart';
 import 'event_create_sheet.dart';
@@ -20,11 +21,12 @@ class EventsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final displayEvents = events.take(4).toList();
     final remainingCount = events.length - displayEvents.length;
 
     return UiCard(
-      title: 'БЛИЖАЙШИЕ СОБЫТИЯ',
+      title: l10n?.statsUpcomingEvents ?? 'БЛИЖАЙШИЕ СОБЫТИЯ',
       action: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -48,7 +50,7 @@ class EventsCard extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'Все',
+                    l10n?.statsAllEvents ?? 'Все',
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
@@ -88,7 +90,7 @@ class EventsCard extends StatelessWidget {
                   Icon(Icons.add_rounded, size: 13, color: AppColors.primary),
                   const SizedBox(width: 3),
                   Text(
-                    'Добавить',
+                    l10n?.statsAddEvent ?? 'Добавить',
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
@@ -118,12 +120,12 @@ class EventsCard extends StatelessWidget {
               ),
             )
           : events.isEmpty
-              ? _buildEmptyState(context)
-              : _buildEventsList(context, displayEvents, remainingCount),
+              ? _buildEmptyState(context, l10n)
+              : _buildEventsList(context, l10n, displayEvents, remainingCount),
     );
   }
 
-  Widget _buildEmptyState(BuildContext context) {
+  Widget _buildEmptyState(BuildContext context, AppLocalizations? l10n) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
       alignment: Alignment.center,
@@ -145,7 +147,7 @@ class EventsCard extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Text(
-            'Событий пока нет',
+            l10n?.statsNoEvents ?? 'Событий пока нет',
             style: TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.w700,
@@ -155,7 +157,7 @@ class EventsCard extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            'Нажмите «Добавить», чтобы запланировать праздник или поездку',
+            l10n?.statsNoEventsHint ?? 'Нажмите «Добавить», чтобы запланировать праздник или поездку',
             style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w500,
@@ -173,9 +175,9 @@ class EventsCard extends StatelessWidget {
                   EventCreateSheet.show(context);
                 },
                 icon: const Icon(Icons.add_rounded, size: 16),
-                label: const Text(
-                  'Добавить',
-                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+                label: Text(
+                  l10n?.statsAddEvent ?? 'Добавить',
+                  style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
@@ -194,9 +196,9 @@ class EventsCard extends StatelessWidget {
                   EventsListSheet.show(context);
                 },
                 icon: const Icon(Icons.format_list_bulleted_rounded, size: 16),
-                label: const Text(
-                  'Все события',
-                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                label: Text(
+                  l10n?.statsAllEvents ?? 'Все события',
+                  style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
                 ),
                 style: OutlinedButton.styleFrom(
                   foregroundColor: AppColors.textPrimary,
@@ -216,6 +218,7 @@ class EventsCard extends StatelessWidget {
 
   Widget _buildEventsList(
     BuildContext context,
+    AppLocalizations? l10n,
     List<FamilyEventModel> displayEvents,
     int remainingCount,
   ) {
@@ -256,8 +259,9 @@ class EventsCard extends StatelessWidget {
               children: [
                 Text(
                   remainingCount > 0
-                      ? 'И ещё $remainingCount ${remainingCount == 1 ? "событие" : (remainingCount < 5 ? "события" : "событий")}'
-                      : 'Все события',
+                      ? (l10n?.statsMoreEvents(remainingCount) ??
+                          'И ещё $remainingCount ${remainingCount == 1 ? "событие" : (remainingCount < 5 ? "события" : "событий")}')
+                      : (l10n?.statsAllEvents ?? 'Все события'),
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
@@ -287,7 +291,8 @@ class _EventRowItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final meta = event.getDateMeta();
+    final lang = Localizations.localeOf(context).languageCode;
+    final meta = event.getDateMeta(lang);
 
     Color badgeBg;
     Color badgeColor;

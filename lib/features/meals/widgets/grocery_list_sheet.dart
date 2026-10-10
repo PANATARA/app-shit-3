@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../l10n/app_localizations.dart';
 import '../models/grocery_item_model.dart';
 import '../providers/meals_provider.dart';
 
@@ -52,6 +53,7 @@ class _GroceryListSheetState extends ConsumerState<GroceryListSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final groceriesState = ref.watch(familyGroceriesSwr);
     final items = groceriesState.data ?? [];
     final unboughtCount = items.where((i) => !i.checked).length;
@@ -90,7 +92,7 @@ class _GroceryListSheetState extends ConsumerState<GroceryListSheet> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Список покупок',
+                  l10n?.mealsTabGroceries ?? 'Список покупок',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w800,
@@ -126,7 +128,7 @@ class _GroceryListSheetState extends ConsumerState<GroceryListSheet> {
                       controller: _textController,
                       style: TextStyle(fontSize: 14, color: AppColors.textPrimary),
                       decoration: InputDecoration(
-                        hintText: 'Что нужно купить?...',
+                        hintText: l10n?.groceryPlaceholder ?? 'Что нужно купить?...',
                         hintStyle: TextStyle(fontSize: 14, color: AppColors.textMuted),
                         filled: false,
                         fillColor: Colors.transparent,
@@ -190,7 +192,7 @@ class _GroceryListSheetState extends ConsumerState<GroceryListSheet> {
                   text: TextSpan(
                     style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
                     children: [
-                      const TextSpan(text: 'Осталось купить: '),
+                      TextSpan(text: l10n?.groceryRemainingToBuy ?? 'Осталось купить: '),
                       TextSpan(
                         text: '$unboughtCount',
                         style: TextStyle(
@@ -219,7 +221,7 @@ class _GroceryListSheetState extends ConsumerState<GroceryListSheet> {
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            'Очистить ($completedCount)',
+                            '${l10n?.mealsClearBought ?? "Очистить"} ($completedCount)',
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,

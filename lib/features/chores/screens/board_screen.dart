@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/swr/swr.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/theme_provider.dart';
+import '../../../l10n/app_localizations.dart';
 import '../providers/board_provider.dart';
 import '../widgets/card_planned_chore.dart';
 import '../widgets/card_planned_chore_skeleton.dart';
@@ -72,6 +73,8 @@ class _BoardScreenState extends ConsumerState<BoardScreen>
   @override
   Widget build(BuildContext context) {
     ref.watch(appThemeProvider);
+    final l10n = AppLocalizations.of(context);
+    final isEn = l10n?.localeName == 'en';
     final selectedDate = ref.watch(selectedDateProvider);
     final boardState = ref.watch(boardNotifierProvider);
     final boardNotifier = ref.read(boardNotifierProvider.notifier);
@@ -101,15 +104,15 @@ class _BoardScreenState extends ConsumerState<BoardScreen>
                       // Absolute Zero Empty State
                       _buildEmptyCard(
                         iconEmoji: '🏕️',
-                        title: 'Планы отсутствуют',
+                        title: l10n?.boardNoChores ?? 'Планы отсутствуют',
                         description:
-                            'На этот день пока не запланировано никаких домашних дел. Добавьте задачу с помощью кнопки ниже!',
+                            l10n?.boardNoChoresHint ?? 'На этот день пока не запланировано никаких домашних дел. Добавьте задачу с помощью кнопки ниже!',
                         isLarge: true,
                       ),
                     ] else ...[
                       // Active Chores Section
                       _buildSectionHeader(
-                        title: 'АКТИВНЫЕ',
+                        title: isEn ? 'ACTIVE' : 'АКТИВНЫЕ',
                         count: boardState.activeChores.length,
                         isCompleted: false,
                       ),
@@ -119,9 +122,9 @@ class _BoardScreenState extends ConsumerState<BoardScreen>
                         // All Done Empty State
                         _buildEmptyCard(
                           iconEmoji: '🎉',
-                          title: 'Все дела сделаны!',
+                          title: isEn ? 'All tasks done!' : 'Все дела сделаны!',
                           description:
-                              'Отличная работа! Все запланированные задачи на сегодня успешно завершены.',
+                              isEn ? 'Great job! All planned tasks for today have been completed.' : 'Отличная работа! Все запланированные задачи на сегодня успешно завершены.',
                           isLarge: false,
                         ),
                       ] else ...[
@@ -153,7 +156,7 @@ class _BoardScreenState extends ConsumerState<BoardScreen>
                       if (boardState.completedChores.isNotEmpty) ...[
                         const SizedBox(height: 16),
                         _buildSectionHeader(
-                          title: 'ВЫПОЛНЕНО',
+                          title: isEn ? 'COMPLETED' : 'ВЫПОЛНЕНО',
                           count: boardState.completedChores.length,
                           isCompleted: true,
                         ),
@@ -242,7 +245,7 @@ class _BoardScreenState extends ConsumerState<BoardScreen>
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         Text(
-                                          'Доска',
+                                          l10n?.boardTitle ?? 'Доска',
                                           style: TextStyle(
                                             fontSize: 28,
                                             fontWeight: FontWeight.w800,
@@ -255,7 +258,7 @@ class _BoardScreenState extends ConsumerState<BoardScreen>
                                         Row(
                                           children: [
                                             Text(
-                                              'Расписание и задачи семьи',
+                                              l10n?.boardSubtitle ?? 'Расписание и задачи семьи',
                                               style: TextStyle(
                                                 fontSize: 13,
                                                 fontWeight: FontWeight.w500,
@@ -467,11 +470,11 @@ class _BoardScreenState extends ConsumerState<BoardScreen>
                       curve: Curves.easeOutCubic,
                       child: isCollapsed
                           ? const SizedBox.shrink()
-                          : const Padding(
-                              padding: EdgeInsets.only(right: 20),
+                          : Padding(
+                              padding: const EdgeInsets.only(right: 20),
                               child: Text(
-                                'Запланировать',
-                                style: TextStyle(
+                                AppLocalizations.of(context)?.boardPlanChore ?? 'Запланировать',
+                                style: const TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w600,
                                   letterSpacing: -0.2,

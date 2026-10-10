@@ -58,13 +58,19 @@ class _WeekCalendarState extends State<WeekCalendar> {
     super.dispose();
   }
 
-  String _getWeekdayName(DateTime date) {
+  String _getWeekdayName(DateTime date, [String? locale]) {
+    if (locale == 'en') {
+      const weekdaysEn = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+      return weekdaysEn[date.weekday - 1];
+    }
     const weekdaysRu = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
     return weekdaysRu[date.weekday - 1];
   }
 
   @override
   Widget build(BuildContext context) {
+    final locale = Localizations.localeOf(context).languageCode;
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -90,7 +96,7 @@ class _WeekCalendarState extends State<WeekCalendar> {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 2.5),
                         child: _DayButton(
-                          weekday: _getWeekdayName(day),
+                          weekday: _getWeekdayName(day, locale),
                           dayNumber: day.day.toString(),
                           isSelected: isSelected,
                           isToday: isToday,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../auth/providers/auth_provider.dart';
 import '../models/chore_item_model.dart';
 import '../models/repeat_config_model.dart';
@@ -193,7 +194,10 @@ class _State extends ConsumerState<CreateChoreStepTwoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final title = widget.isQuickTask ? 'Быстрая задача' : (widget.selectedChore?.name ?? '');
+    final l10n = AppLocalizations.of(context);
+    final title = widget.isQuickTask
+        ? (l10n?.choreQuickTask ?? 'Быстрая задача')
+        : (widget.selectedChore?.name ?? '');
     final safeBottom = MediaQuery.of(context).padding.bottom;
 
     return Scaffold(
@@ -217,25 +221,39 @@ class _State extends ConsumerState<CreateChoreStepTwoScreen> {
                     _buildIconSection(),
                     const SizedBox(height: 8),
                     if (widget.isQuickTask) ...[
-                      _card('НАЗВАНИЕ', _textField(_nameCtrl, 'Что нужно сделать?', autofocus: false)),
+                      _card(
+                        l10n?.choreSectionName ?? 'НАЗВАНИЕ',
+                        _textField(
+                          _nameCtrl,
+                          l10n?.choreNamePlaceholder ?? 'Что нужно сделать?',
+                          autofocus: false,
+                        ),
+                      ),
                       const SizedBox(height: 8),
                     ],
-                    _card('КОМУ НАЗНАЧИТЬ', _membersPicker()),
+                    _card(l10n?.choreSectionAssignee ?? 'КОМУ НАЗНАЧИТЬ', _membersPicker()),
                     const SizedBox(height: 8),
-                    _card('ДЕТАЛИ', Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        _textField(_msgCtrl, 'Добавить заметку или чек-лист...', maxLines: 4),
-                        const SizedBox(height: 12),
-                        Divider(color: AppColors.border, height: 1),
-                        const SizedBox(height: 12),
-                        _dateRow(),
-                      ],
-                    )),
+                    _card(
+                      l10n?.choreSectionDetails ?? 'ДЕТАЛИ',
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          _textField(
+                            _msgCtrl,
+                            l10n?.choreNotePlaceholder ?? 'Добавить заметку или чек-лист...',
+                            maxLines: 4,
+                          ),
+                          const SizedBox(height: 12),
+                          Divider(color: AppColors.border, height: 1),
+                          const SizedBox(height: 12),
+                          _dateRow(),
+                        ],
+                      ),
+                    ),
                     if (!widget.isQuickTask) ...[
                       const SizedBox(height: 8),
                       _card(
-                        'ПОВТОРЕНИЕ',
+                        l10n?.choreSectionRepeat ?? 'ПОВТОРЕНИЕ',
                         RepeatSelectorWidget(
                           value: _repeat,
                           onChanged: (val) => setState(() => _repeat = val),
@@ -280,7 +298,7 @@ class _State extends ConsumerState<CreateChoreStepTwoScreen> {
                       onPressed: _submitting ? null : _submit,
                       child: _submitting
                           ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                          : const Text('Добавить', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+                          : Text(l10n?.commonCreate ?? 'Добавить', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
                     ),
                   ),
                 ],

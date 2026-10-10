@@ -10,6 +10,8 @@ import '../../chores/screens/chore_list_screen.dart';
 import '../../chores/widgets/user_avatar_widget.dart';
 import '../../stats/widgets/ui_card.dart';
 import '../../../core/theme/theme_provider.dart';
+import '../../../core/localization/locale_provider.dart';
+import '../../../l10n/app_localizations.dart';
 import '../providers/settings_provider.dart';
 import '../widgets/invite_modal_sheet.dart';
 import '../widgets/lang_modal_sheet.dart';
@@ -30,9 +32,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   String _editIcon = '';
   String _editIconColor = '#ffffff';
   String _editBg = '';
-
-  // Local settings
-  String _currentLang = 'ru';
 
   final String _appVersion = '1.0.0';
 
@@ -71,20 +70,21 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   }
 
   Future<void> _handleLeaveFamily() async {
+    final l10n = AppLocalizations.of(context);
     final confirm = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Покинуть семью?'),
-        content: const Text('Вы действительно хотите покинуть текущую семью?'),
+        title: Text(l10n?.settingsLeaveFamily ?? 'Покинуть семью?'),
+        content: Text(l10n?.settingsConfirmLeaveFamily ?? 'Вы действительно хотите покинуть текущую семью?'),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Отмена')),
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(l10n?.commonCancel ?? 'Отмена')),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.error,
               foregroundColor: Colors.white,
             ),
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Покинуть'),
+            child: Text(l10n?.commonConfirm ?? 'Покинуть'),
           ),
         ],
       ),
@@ -108,20 +108,21 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   }
 
   Future<void> _handleLogout() async {
+    final l10n = AppLocalizations.of(context);
     final confirm = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Выйти из аккаунта?'),
-        content: const Text('Вы уверены, что хотите выйти из приложения?'),
+        title: Text(l10n?.settingsLogout ?? 'Выйти из аккаунта?'),
+        content: Text(l10n?.settingsConfirmLogout ?? 'Вы уверены, что хотите выйти из приложения?'),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Отмена')),
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(l10n?.commonCancel ?? 'Отмена')),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.error,
               foregroundColor: Colors.white,
             ),
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Выйти'),
+            child: Text(l10n?.commonConfirm ?? 'Выйти'),
           ),
         ],
       ),
@@ -181,8 +182,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           )
         : null;
 
+    final l10n = AppLocalizations.of(context);
     final activeTheme = ref.watch(appThemeProvider);
-    final themeTitle = _getThemeTitle(activeTheme);
+    final themeTitle = _getThemeTitle(activeTheme, l10n);
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -211,17 +213,17 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               const SizedBox(height: 16),
 
               // ─── Family Members ──────────────────────────────────────
-              _sectionLabel('УЧАСТНИКИ СЕМЬИ'),
+              _sectionLabel(l10n?.settingsFamilyMembers.toUpperCase() ?? 'УЧАСТНИКИ СЕМЬИ'),
               _buildFamilyMembersBlock(settingsState, user?.id),
               const SizedBox(height: 16),
 
               // ─── Family Chores ───────────────────────────────────────
-              _sectionLabel('ОБЯЗАННОСТИ'),
+              _sectionLabel(l10n?.settingsChoresSection ?? 'ОБЯЗАННОСТИ'),
               _SettingsBlock(
                 children: [
                   _SettingsRow(
                     icon: Icons.format_list_bulleted_rounded,
-                    title: 'Управление обязанностями',
+                    title: l10n?.settingsManageChores ?? 'Управление обязанностями',
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
@@ -235,23 +237,24 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               const SizedBox(height: 16),
 
               // ─── Language & Theme ────────────────────────────────────
-              _sectionLabel('ЯЗЫК И ТЕМА'),
+              _sectionLabel(l10n?.settingsAppearanceSection ?? 'ЯЗЫК И ТЕМА'),
               _SettingsBlock(
                 children: [
                   _SettingsRow(
                     icon: Icons.language_rounded,
-                    title: 'Язык',
-                    value: _currentLang == 'ru' ? 'Русский' : 'English',
+                    title: l10n?.settingsLanguage ?? 'Язык',
+                    value: ref.watch(appLocaleProvider).languageCode == 'ru' ? 'Русский' : 'English',
                     onTap: () async {
-                      final code = await LangModalSheet.show(context, currentCode: _currentLang);
+                      final currentCode = ref.read(appLocaleProvider).languageCode;
+                      final code = await LangModalSheet.show(context, currentCode: currentCode);
                       if (code != null && mounted) {
-                        setState(() => _currentLang = code);
+                        await ref.read(appLocaleProvider.notifier).setLocale(code);
                       }
                     },
                   ),
                   _SettingsRow(
                     icon: Icons.palette_rounded,
-                    title: 'Тема',
+                    title: l10n?.settingsTheme ?? 'Тема',
                     value: themeTitle,
                     onTap: () async {
                       final themeId = await ThemeModalSheet.show(context, currentThemeId: activeTheme);
@@ -262,13 +265,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   ),
                   _SettingsRow(
                     icon: Icons.info_rounded,
-                    title: 'Версия',
+                    title: l10n?.settingsVersion ?? 'Версия',
                     value: _appVersion,
                     showArrow: false,
                   ),
                   _SettingsRow(
                     icon: Icons.dns_rounded,
-                    title: 'Сервер бэкенда',
+                    title: l10n?.settingsServerUrl ?? 'Сервер бэкенда',
                     value: baseUrl,
                     onTap: _showChangeServerDialog,
                     isLast: true,
@@ -283,7 +286,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               const SizedBox(height: 16),
 
               // ─── Account ─────────────────────────────────────────────
-              _sectionLabel('АККАУНТ'),
+              _sectionLabel(l10n?.settingsProfileSection ?? 'АККАУНТ'),
               _SettingsBlock(
                 padding: const EdgeInsets.all(12),
                 children: [
@@ -300,9 +303,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                             side: BorderSide(color: AppColors.error.withValues(alpha: 0.35)),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                           ),
-                          child: const Text(
-                            'Покинуть семью',
-                            style: TextStyle(fontSize: 14.5, fontWeight: FontWeight.w600),
+                          child: Text(
+                            l10n?.settingsLeaveFamily ?? 'Покинуть семью',
+                            style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w600),
                           ),
                         ),
                       ),
@@ -318,9 +321,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                             side: BorderSide(color: AppColors.error.withValues(alpha: 0.35)),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                           ),
-                          child: const Text(
-                            'Выйти из аккаунта',
-                            style: TextStyle(fontSize: 14.5, fontWeight: FontWeight.w600),
+                          child: Text(
+                            l10n?.settingsLogout ?? 'Выйти из аккаунта',
+                            style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w600),
                           ),
                         ),
                       ),
@@ -338,11 +341,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   // ─── Header ──────────────────────────────────────────────────────────────────
 
   Widget _buildHeader() {
+    final l10n = AppLocalizations.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Профиль',
+          l10n?.settingsTitle ?? 'Профиль',
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.w800,
@@ -350,9 +354,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             color: AppColors.textPrimary,
           ),
         ),
-        SizedBox(height: 2),
+        const SizedBox(height: 2),
         Text(
-          'Семья, профиль и настройки',
+          l10n?.settingsSubtitle ?? 'Семья, профиль и настройки',
           style: TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.w500,
@@ -451,6 +455,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   // ─── Profile Card: Edit Mode ─────────────────────────────────────────────────
 
   Widget _buildEditProfileCard() {
+    final l10n = AppLocalizations.of(context);
     return UiCard(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -544,9 +549,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
                       elevation: 0,
                     ),
-                    child: const Text(
-                      'Сохранить',
-                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+                    child: Text(
+                      l10n?.commonSave ?? 'Сохранить',
+                      style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
                     ),
                   ),
                 ),
@@ -561,6 +566,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   // ─── Family Members Block ────────────────────────────────────────────────────
 
   Widget _buildFamilyMembersBlock(SettingsState settingsState, String? currentUserId) {
+    final l10n = AppLocalizations.of(context);
     if (settingsState.loadingMembers && settingsState.familyMembers.isEmpty) {
       return _SettingsBlock(
         padding: EdgeInsets.symmetric(vertical: 24),
@@ -606,7 +612,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(
-                      'ты',
+                      l10n?.commonYou ?? 'ты',
                       style: TextStyle(fontSize: 11, color: AppColors.textMuted, fontWeight: FontWeight.w500),
                     ),
                   ),
@@ -639,7 +645,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               ),
             ),
           ),
-          title: 'Пригласить участника',
+          title: l10n?.settingsInviteTitle ?? 'Пригласить участника',
           titleColor: AppColors.primary,
           arrowColor: AppColors.primary,
           isLast: true,
@@ -764,23 +770,23 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     );
   }
 
-  String _getThemeTitle(String id) {
+  String _getThemeTitle(String id, [AppLocalizations? l10n]) {
     switch (id) {
       case 'soft':
-        return 'Нежность';
+        return l10n?.themeSoftTitle ?? 'Нежность';
       case 'night':
-        return 'Вечер';
+        return l10n?.themeNightTitle ?? 'Вечер';
       case 'royal':
-        return 'Свежесть';
+        return l10n?.themeRoyalTitle ?? 'Свежесть';
       case 'sage':
-        return 'Лесной';
+        return l10n?.themeSageTitle ?? 'Лесной';
       case 'midnight':
-        return 'Северный';
+        return l10n?.themeMidnightTitle ?? 'Северный';
       case 'amber':
-        return 'Медовый';
+        return l10n?.themeAmberTitle ?? 'Медовый';
       case 'warm':
       default:
-        return 'Тёплая';
+        return l10n?.themeWarmTitle ?? 'Тёплая';
     }
   }
 }

@@ -1,0 +1,390 @@
+{
+  "@@locale": "en",
+  "appTitle": "Household",
+
+  "commonBack": "Back",
+  "commonCancel": "Cancel",
+  "commonSave": "Save",
+  "commonEdit": "Edit",
+  "commonCreate": "Create",
+  "commonDelete": "Delete",
+  "commonLoading": "Loading...",
+  "commonConfirm": "Confirm",
+  "commonDone": "Done",
+  "commonClose": "Close",
+  "commonSearch": "Search...",
+  "commonApply": "Apply",
+  "commonRetry": "Retry",
+  "commonEmpty": "Nothing here",
+  "commonError": "An error occurred",
+  "commonYou": "(You)",
+  "commonNone": "None",
+  "commonXp": "XP",
+
+  "dateToday": "Today",
+  "dateTomorrow": "Tomorrow",
+  "dateDayAfterTomorrow": "In 2 days",
+  "dateYesterday": "Yesterday",
+  "dateInDays": "in {count} d.",
+  "@dateInDays": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "dateDaysAgo": "{count} d. ago",
+  "@dateDaysAgo": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+
+  "navHome": "Home",
+  "navBoard": "Board",
+  "navMeals": "Meals",
+  "navProfile": "Profile",
+
+  "authLoginTitle": "Sign In",
+  "authLoginSubtitle": "Enter username and password to sign in",
+  "authRegisterTitle": "Create Account",
+  "authRegisterSubtitle": "Create an account to get started",
+  "authUsernameLabel": "Username",
+  "authUsernamePlaceholder": "Enter your username",
+  "authPasswordLabel": "Password",
+  "authPasswordPlaceholder": "Enter password (min 6 characters)",
+  "authNameLabel": "Your Name",
+  "authNamePlaceholder": "What is your name? (e.g. Anna)",
+  "authSignInBtn": "Sign In",
+  "authSignUpBtn": "Create Account",
+  "authNoAccount": "Don't have an account? Sign Up",
+  "authHaveAccount": "Already have an account? Sign In",
+  "authFillRequired": "Please enter username and password",
+  "authPasswordTooShort": "Password must be at least 6 characters",
+  "authServerSettings": "Server URL",
+  "authServerPrompt": "Specify backend URL:",
+  "authTestConnection": "Test Connection",
+  "authConnectionSuccess": "Connected successfully",
+  "authConnectionFail": "Connection failed",
+
+  "onboardingFamilyCircle": "Family Circle",
+  "onboardingChooseTitle": "How shall we begin?",
+  "onboardingChooseSubtitle": "Create a new family space or join an existing circle.",
+  "onboardingNewFamily": "New Family",
+  "onboardingCreateFamily": "Create Family",
+  "onboardingCreateFamilyDesc": "Create a space for your family and invite your loved ones.",
+  "onboardingStartCreating": "Start Creating",
+  "onboardingAlreadyHaveFamily": "Already have a family?",
+  "onboardingJoinFamily": "Join Family",
+  "onboardingJoinFamilyDesc": "Join using an invite code from your family administrator.",
+  "onboardingEnterCode": "Enter Code",
+  "onboardingStep1Of2": "Step 1 of 2",
+  "onboardingStep2Of2": "Step 2 of 2",
+  "onboardingStep1Title": "Family Name",
+  "onboardingStep1Subtitle": "Choose a name for your family circle",
+  "onboardingFamilyNameLabel": "Family Name",
+  "onboardingFamilyPlaceholder": "e.g. The Smith Family",
+  "onboardingFamilyNameRequired": "Please enter family name",
+  "onboardingSuggestions": "Suggestions:",
+  "onboardingChooseAvatar": "Family Icon & Style",
+  "onboardingCreateFamilyBtn": "Create Family Circle",
+  "onboardingCreatingFamily": "Creating family...",
+  "onboardingFamilyCreatedTitle": "Family Created!",
+  "onboardingAddInitialChoresTitle": "Add First Tasks",
+  "onboardingAddInitialChoresSubtitle": "Choose template chores to get started right away",
+  "onboardingSelectedCount": "Selected: {selected} of {total}",
+  "@onboardingSelectedCount": {
+    "placeholders": {
+      "selected": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "onboardingSelectAll": "Select All",
+  "onboardingDeselectAll": "Deselect All",
+  "onboardingAddSelectedChores": "Add Chores ({count}) and Enter",
+  "@onboardingAddSelectedChores": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "onboardingSkipChores": "Skip and Enter",
+  "onboardingJoinTitle": "Join Family",
+  "onboardingJoinSubtitle": "Enter the 6-digit family invite code",
+  "onboardingCodePlaceholder": "ABC-123",
+  "onboardingPasteCode": "Paste",
+  "onboardingJoinBtn": "Join",
+  "onboardingJoining": "Checking code...",
+  "onboardingEnterFullCodeError": "Enter the full 6-digit code (e.g. ABC-123)",
+  "onboardingFamilyNotFoundError": "Family with this code was not found",
+  "onboardingJoinSuccessTitle": "Successfully joined the family!",
+  "onboardingEnterFamily": "Enter Family Circle",
+  "onboardingLogout": "Log Out",
+
+  "statsGreetingMorning": "Good morning",
+  "statsGreetingDay": "Good afternoon",
+  "statsGreetingEvening": "Good evening",
+  "statsGreetingNight": "Good night",
+  "statsTotalCompleted": "Total Completed",
+  "statsThisWeek": "This Week",
+  "statsTodayMeals": "TODAY'S MEAL PLAN",
+  "statsAllMenu": "Full Menu",
+  "statsTodayGrocery": "GROCERY LIST",
+  "statsGroceryAdd": "Add",
+  "statsGroceryEmpty": "Grocery list is empty",
+  "statsGroceryEmptyHint": "Tap 'Add' to build your grocery list",
+  "statsMoreGroceries": "And {count} more {count, plural, one{item} other{items}}",
+  "@statsMoreGroceries": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "statsUpcomingEvents": "UPCOMING EVENTS",
+  "statsAllEvents": "All Events",
+  "statsAddEvent": "Add",
+  "statsNoEvents": "No events yet",
+  "statsNoEventsHint": "Tap 'Add' to schedule a trip or celebration",
+  "statsMoreEvents": "And {count} more {count, plural, one{event} other{events}}",
+  "@statsMoreEvents": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "statsWeeklyLeaders": "WEEKLY LEADERS",
+  "statsTasksCount": "{count, plural, one{{count} task} other{{count} tasks}}",
+  "@statsTasksCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+
+  "eventsAllTitle": "All Events",
+  "eventsCreateTitle": "New Event",
+  "eventsDeleteTitle": "Delete Event?",
+  "eventsDeleteConfirm": "Are you sure you want to delete this event?",
+  "eventsDeleteConfirmDesc": "This action cannot be undone.",
+  "eventsWhen": "When",
+  "eventsDescription": "Description",
+  "eventsDescriptionOptional": "DESCRIPTION (OPTIONAL)",
+  "eventsRescheduleDate": "Reschedule date",
+  "eventsNewDate": "New date",
+  "eventsNameLabel": "NAME",
+  "eventsDateLabel": "DATE",
+  "eventsNamePlaceholder": "Trip, birthday, celebration...",
+  "eventsDescPlaceholder": "Additional details or notes...",
+  "eventsEnterNameError": "Enter event name",
+  "eventsCreateError": "Failed to create event: {error}",
+  "@eventsCreateError": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "eventsDeleteBtn": "Delete event",
+
+  "slotBreakfast": "Breakfast",
+  "slotLunch": "Lunch",
+  "slotDinner": "Dinner",
+  "slotSnack": "Snack",
+
+  "boardTitle": "Board",
+  "boardSubtitle": "Schedule and family chores",
+  "boardPlanChore": "Schedule",
+  "boardNoChores": "No tasks for this day",
+  "boardNoChoresHint": "Tap the button below to schedule a task",
+  "boardFilterAll": "All",
+  "boardFilterMine": "Mine",
+  "boardFilterDone": "Completed",
+  "boardFilterPending": "In progress",
+
+  "chorePlanTitle": "Schedule Task",
+  "choreQuickTask": "Quick Task",
+  "choreOrFromTemplates": "or choose from templates",
+  "choreCreateCustom": "Create \"{name}\"",
+  "@choreCreateCustom": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "choreNothingFound": "Nothing found",
+  "choreSectionName": "NAME",
+  "choreSectionAssignee": "ASSIGN TO",
+  "choreSectionDetails": "DETAILS",
+  "choreSectionRepeat": "REPEAT",
+  "choreNamePlaceholder": "What needs to be done?",
+  "choreNotePlaceholder": "Add note or checklist...",
+  "choreDateLabel": "Date",
+  "choreAssignedLabel": "Assigned to",
+  "choreCompletedLabel": "Completed by",
+  "choreNotDoneYet": "Not yet",
+  "choreUnassigned": "No one",
+  "choreSubtasksNotes": "Subtasks and Notes",
+  "choreSubtasksHint": "Checklist: - [ ] item\nNote: plain text",
+  "choreSubtasksEmpty": "No notes. Tap 'Edit' to add a checklist or comment.",
+  "choreMarkCompleted": "Mark as Completed",
+  "choreCancelCompleted": "Undo Completion",
+  "choreRescheduleTo": "Reschedule to {date}",
+  "@choreRescheduleTo": {
+    "placeholders": {
+      "date": { "type": "String" }
+    }
+  },
+  "choreDeleteTask": "Delete Task",
+  "choreConfirmDeleteTitle": "Delete task?",
+  "choreConfirmDeleteDesc": "This action cannot be undone.",
+
+  "mealsTitle": "Meal Plan",
+  "mealsSubtitle": "Plan weekly menu and groceries for the entire family",
+  "mealsTabPlanner": "Planner",
+  "mealsTabRecipes": "Recipe Book",
+  "mealsTabGroceries": "Grocery List",
+  "mealsAddDish": "Add Dish",
+  "mealsAddRecipe": "Custom Recipe",
+  "mealsSearchRecipes": "Search recipes...",
+  "mealsPrepTime": "{minutes} min",
+  "@mealsPrepTime": {
+    "placeholders": {
+      "minutes": { "type": "int" }
+    }
+  },
+  "mealsServings": "{servings, plural, one{{servings} serving} other{{servings} servings}}",
+  "@mealsServings": {
+    "placeholders": {
+      "servings": { "type": "int" }
+    }
+  },
+  "mealsClearBought": "Clear Bought",
+  "mealsAddProduct": "Add Item",
+  "groceryRemainingToBuy": "Remaining: ",
+  "groceryPlaceholder": "What to buy?...",
+  "mealsSectionTime": "TIME (MIN)",
+  "mealsSectionServings": "SERVINGS",
+  "mealsSectionCook": "WHO IS COOKING?",
+  "mealsSectionDishName": "DISH NAME",
+  "mealsSectionChooseRecipe": "CHOOSE RECIPE",
+  "mealsSectionMealSlot": "MEAL TIME",
+  "mealsTabRecipe": "From recipes",
+  "mealsTabManual": "Quick entry",
+  "mealsAddToMenu": "Add to menu",
+  "mealsDishPlaceholder": "Dish name, e.g.: Soup",
+  "mealsCookTimeFormat": "Cooking time: {minutes} min",
+  "@mealsCookTimeFormat": {
+    "placeholders": {
+      "minutes": { "type": "int" }
+    }
+  },
+  "mealsNoMealsPlanned": "No meals planned",
+  "mealsPlannedCount": "Planned meals: {count}",
+  "@mealsPlannedCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "mealsRecipeBookEmpty": "Recipe book is empty",
+  "mealsRecipeBookEmptyDesc": "Add favorite family meals to plan menus in one click",
+  "mealsAddFirstRecipe": "Add first recipe",
+  "mealsFilterAll": "All meals",
+  "mealsFilterQuick": "Quick",
+  "mealsFilterFavorites": "Favorites",
+  "mealsFilterKids": "Kids",
+  "mealsFilterDinner": "Dinner",
+  "mealsFilterDesserts": "Desserts",
+  "mealsInMenu": "In menu",
+  "mealsSearchPlaceholder": "Search meal or ingredient...",
+  "mealsTryChangeSearch": "Try changing the search or resetting filters",
+  "mealsScheduleWeekly": "Schedule for weekly menu",
+  "mealsDayOfWeek": "DAY OF WEEK",
+  "mealsServingsTitle": "Servings",
+  "mealsIngredientsTitle": "Ingredients",
+  "mealsToList": "To list",
+  "mealsAddMissingToGroceries": "Add missing to grocery list",
+  "mealsInstructionsTitle": "Instructions",
+  "mealsTapToPlan": "Tap to plan {slot}",
+  "@mealsTapToPlan": {
+    "placeholders": {
+      "slot": { "type": "String" }
+    }
+  },
+  "mealsRecipeBadge": "Recipe",
+  "mealsDishAddedToast": "Dish added to menu",
+
+  "settingsTitle": "Profile & Family",
+  "settingsProfileSection": "MY ACCOUNT",
+  "settingsEditProfile": "Edit Profile",
+  "settingsFamilySection": "FAMILY CIRCLE",
+  "settingsFamilyMembers": "Family Members",
+  "settingsInviteCode": "Invite Code",
+  "settingsCopyCode": "Copy",
+  "settingsCodeCopied": "Code copied to clipboard",
+  "settingsAdminBadge": "Admin",
+  "settingsChangeAdmin": "Make Admin",
+  "settingsKickMember": "Remove from Family",
+  "settingsLeaveFamily": "Leave Family",
+  "settingsConfirmLeaveFamily": "Are you sure you want to leave the family?",
+  "settingsAppearanceSection": "APPEARANCE & INTERFACE",
+  "settingsTheme": "App Theme",
+  "settingsThemeLight": "Light",
+  "settingsThemeDark": "Dark",
+  "settingsThemeSystem": "System",
+  "settingsLanguage": "App Language",
+  "settingsLanguageRu": "Русский",
+  "settingsLanguageEn": "English",
+  "settingsServerSection": "CONNECTION",
+  "settingsServerUrl": "Server URL",
+  "settingsLogout": "Log Out",
+  "settingsConfirmLogout": "Are you sure you want to log out?",
+  "settingsInviteTitle": "Invite Member",
+  "settingsInviteDesc": "Send this code to the person you want to invite to your family circle. The code expires in limited time.",
+  "settingsInviteTapToCopy": "Tap to copy",
+  "settingsInviteCopied": "✓ Code copied",
+  "settingsInviteExpiresIn": "Code expires in {time}",
+  "@settingsInviteExpiresIn": {
+    "placeholders": {
+      "time": { "type": "String" }
+    }
+  },
+  "settingsKickConfirmTitle": "Remove from family?",
+  "settingsKickConfirmContent": "Are you sure you want to remove {name} from the family circle?",
+  "@settingsKickConfirmContent": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "settingsTransferAdminTitle": "Transfer Admin Rights?",
+  "settingsTransferAdminContent": "Make {name} the administrator of this family?",
+  "@settingsTransferAdminContent": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "settingsThemeSelectTitle": "Select Theme",
+  "settingsLangSelectTitle": "Select Language",
+  "settingsLangSelectSubtitle": "Choose a convenient language for using the app",
+  "settingsTransferAdminBtn": "Make Administrator",
+  "settingsKickMemberBtn": "Remove from Family",
+  "settingsTransferAdminAction": "Transfer",
+  "settingsKickAction": "Remove",
+  "settingsFailedToGetCode": "Failed to get invite code",
+  "settingsChoresSection": "RESPONSIBILITIES",
+  "settingsManageChores": "Manage Responsibilities",
+  "settingsSubtitle": "Family, profile & settings",
+  "commonYou": "you",
+  "themeWarmTitle": "Warm",
+  "themeWarmName": "Warm Family Comfort",
+  "themeWarmDesc": "Light, warm, and cozy home atmosphere",
+  "themeSoftTitle": "Soft",
+  "themeSoftName": "Tenderness & Care",
+  "themeSoftDesc": "Pastel powdery shades and harmony",
+  "themeNightTitle": "Evening",
+  "themeNightName": "Cozy Evening at Home",
+  "themeNightDesc": "Soft dark theme for evening comfort",
+  "themeRoyalTitle": "Fresh",
+  "themeRoyalName": "Freshness & Harmony",
+  "themeRoyalDesc": "Clean and cool azure palette",
+  "themeSageTitle": "Sage",
+  "themeSageName": "Forest Oasis",
+  "themeSageDesc": "Soothing sage and herbal tones",
+  "themeMidnightTitle": "Midnight",
+  "themeMidnightName": "Northern Lights",
+  "themeMidnightDesc": "Deep night palette with indigo accent",
+  "themeAmberTitle": "Amber",
+  "themeAmberName": "Honey Noon",
+  "themeAmberDesc": "Sunny golden amber palette and warmth",
+  "settingsVersion": "Version"
+}

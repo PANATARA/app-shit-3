@@ -5,6 +5,7 @@ import '../../features/auth/providers/auth_provider.dart';
 import '../../features/auth/screens/auth_screen.dart';
 import '../../features/chores/screens/board_screen.dart';
 import '../../features/meals/screens/meals_screen.dart';
+import '../../features/onboarding/screens/onboarding_screen.dart';
 import '../../features/settings/screens/settings_screen.dart';
 import '../../features/stats/screens/stats_screen.dart';
 import '../../widgets/app_scaffold.dart';
@@ -26,6 +27,7 @@ class RouterNotifier extends ChangeNotifier {
     final authState = _ref.read(authProvider);
     final isAuth = authState.isAuthenticated;
     final isGoingToAuth = state.matchedLocation == '/auth';
+    final isGoingToOnboarding = state.matchedLocation == '/onboarding';
 
     if (authState.status == AuthStatus.initial || authState.status == AuthStatus.loading) {
       return null;
@@ -35,8 +37,17 @@ class RouterNotifier extends ChangeNotifier {
       return '/auth';
     }
 
-    if (isAuth && isGoingToAuth) {
-      return '/';
+    if (isAuth) {
+      final user = authState.user;
+      final isInFamily = user != null && user.isInFamily;
+
+      if (!isInFamily && !isGoingToOnboarding) {
+        return '/onboarding';
+      }
+
+      if (isInFamily && (isGoingToAuth || isGoingToOnboarding)) {
+        return '/';
+      }
     }
 
     return null;
@@ -58,6 +69,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/auth',
         builder: (context, state) => const AuthScreen(),
+      ),
+      GoRoute(
+        path: '/onboarding',
+        builder: (context, state) => const OnboardingScreen(),
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
