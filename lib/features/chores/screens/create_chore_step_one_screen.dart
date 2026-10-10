@@ -172,7 +172,11 @@ class _SearchBox extends StatelessWidget {
               decoration: InputDecoration(
                 hintText: 'Поиск задач...',
                 hintStyle: TextStyle(color: AppColors.textMuted, fontSize: 15),
+                filled: false,
+                fillColor: Colors.transparent,
                 border: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
                 isDense: true,
                 contentPadding: EdgeInsets.zero,
               ),

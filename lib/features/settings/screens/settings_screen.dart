@@ -494,7 +494,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
               decoration: const InputDecoration(
                 contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                filled: false,
+                fillColor: Colors.transparent,
                 border: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
                 counterText: '',
                 hintText: 'Ваше имя',
               ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/theme_provider.dart';
 import '../../chores/utils/color_helper.dart';
 import '../models/recipe_model.dart';
 import '../providers/meals_provider.dart';
@@ -49,6 +50,7 @@ class _FamilyRecipeBoxViewState extends ConsumerState<FamilyRecipeBoxView> {
 
   @override
   Widget build(BuildContext context) {
+    ref.watch(appThemeProvider);
     final recipesState = ref.watch(familyRecipesSwr);
     final allRecipes = recipesState.data ?? [];
     final isLoading = recipesState.isLoading && allRecipes.isEmpty;
@@ -110,7 +112,11 @@ class _FamilyRecipeBoxViewState extends ConsumerState<FamilyRecipeBoxView> {
                         decoration: InputDecoration(
                           hintText: 'Поиск блюда или ингредиента...',
                           hintStyle: TextStyle(fontSize: 13, color: AppColors.textMuted),
+                          filled: false,
+                          fillColor: Colors.transparent,
                           border: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
                           isDense: true,
                         ),
                         onChanged: (_) => setState(() {}),

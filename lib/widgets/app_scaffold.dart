@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../core/swr/swr.dart';
 import '../core/theme/app_colors.dart';
+import '../core/theme/theme_provider.dart';
 
-class AppScaffold extends StatefulWidget {
+class AppScaffold extends ConsumerStatefulWidget {
   final StatefulNavigationShell navigationShell;
 
   const AppScaffold({
@@ -13,10 +15,10 @@ class AppScaffold extends StatefulWidget {
   });
 
   @override
-  State<AppScaffold> createState() => _AppScaffoldState();
+  ConsumerState<AppScaffold> createState() => _AppScaffoldState();
 }
 
-class _AppScaffoldState extends State<AppScaffold> {
+class _AppScaffoldState extends ConsumerState<AppScaffold> {
   int _lastIndex = -1;
 
   @override
@@ -51,6 +53,8 @@ class _AppScaffoldState extends State<AppScaffold> {
 
   @override
   Widget build(BuildContext context) {
+    ref.watch(appThemeProvider);
+
     return Scaffold(
       extendBody: true,
       body: RepaintBoundary(

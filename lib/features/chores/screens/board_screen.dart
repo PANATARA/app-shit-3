@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/swr/swr.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/theme_provider.dart';
 import '../providers/board_provider.dart';
 import '../widgets/card_planned_chore.dart';
 import '../widgets/card_planned_chore_skeleton.dart';
@@ -70,6 +71,7 @@ class _BoardScreenState extends ConsumerState<BoardScreen>
 
   @override
   Widget build(BuildContext context) {
+    ref.watch(appThemeProvider);
     final selectedDate = ref.watch(selectedDateProvider);
     final boardState = ref.watch(boardNotifierProvider);
     final boardNotifier = ref.read(boardNotifierProvider.notifier);

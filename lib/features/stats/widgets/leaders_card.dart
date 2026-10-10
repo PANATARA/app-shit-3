@@ -27,8 +27,19 @@ class LeadersCard extends StatelessWidget {
     return '$monStr — $sunStr';
   }
 
+  static String pluralTasks(int count) {
+    final rem10 = count % 10;
+    final rem100 = count % 100;
+    if (rem100 >= 11 && rem100 <= 19) return 'задач';
+    if (rem10 == 1) return 'задача';
+    if (rem10 >= 2 && rem10 <= 4) return 'задачи';
+    return 'задач';
+  }
+
   @override
   Widget build(BuildContext context) {
+    final displayLeaders = leaders.take(5).toList();
+
     return RepaintBoundary(
       child: UiCard(
         title: 'ЛИДЕРЫ НЕДЕЛИ',
@@ -41,7 +52,11 @@ class LeadersCard extends StatelessWidget {
           ),
           child: Text(
             _getCurrentWeekRange(),
-            style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.textMuted),
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+              color: AppColors.textMuted,
+            ),
           ),
         ),
         child: isLoading
@@ -51,10 +66,10 @@ class LeadersCard extends StatelessWidget {
                   (i) => Padding(
                     padding: const EdgeInsets.only(bottom: 8),
                     child: Container(
-                      height: 56,
+                      height: 52,
                       decoration: BoxDecoration(
                         color: AppColors.surfaceAlt,
-                        borderRadius: BorderRadius.circular(18),
+                        borderRadius: BorderRadius.circular(16),
                       ),
                     ),
                   ),
@@ -62,46 +77,78 @@ class LeadersCard extends StatelessWidget {
               )
             : leaders.isEmpty
                 ? _buildEmptyState()
-                : _buildLeadersList(),
+                : _buildLeadersList(displayLeaders),
       ),
     );
   }
 
   Widget _buildEmptyState() {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+      alignment: Alignment.center,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Text('🏆', style: TextStyle(fontSize: 36)),
-          SizedBox(height: 8),
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              color: AppColors.surfaceAlt,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.emoji_events_outlined,
+              size: 22,
+              color: AppColors.textMuted,
+            ),
+          ),
+          const SizedBox(height: 10),
           Text(
             'Пока никто не выполнил задачи',
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.textPrimary),
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w700,
+              color: AppColors.textPrimary,
+              letterSpacing: -0.2,
+            ),
           ),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           Text(
-            'Будь первым на этой неделе',
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: AppColors.textMuted),
+            'Выполняйте дела по дому, чтобы стать лидером недели',
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+              color: AppColors.textMuted,
+            ),
+            textAlign: TextAlign.center,
           ),
         ],
       ),
     );
   }
 
-  Widget _buildLeadersList() {
+  Widget _buildLeadersList(List<FamilyLeaderModel> displayLeaders) {
     return Column(
-      children: leaders.asMap().entries.map((entry) {
+      children: displayLeaders.asMap().entries.map((entry) {
         final index = entry.key;
         final leader = entry.value;
         final isMe = currentUserId != null && leader.member.id == currentUserId;
+        final isLast = index == displayLeaders.length - 1;
 
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 8),
-          child: _LeaderRow(
-            rank: index + 1,
-            leader: leader,
-            isMe: isMe,
-          ),
+        return Column(
+          children: [
+            _LeaderRow(
+              rank: index + 1,
+              leader: leader,
+              isMe: isMe,
+            ),
+            if (!isLast)
+              Divider(
+                height: 1,
+                thickness: 0.5,
+                color: AppColors.borderSubtle,
+              ),
+          ],
         );
       }).toList(),
     );
@@ -121,108 +168,28 @@ class _LeaderRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BoxDecoration rowDecor;
-    if (rank == 1) {
-      rowDecor = BoxDecoration(
-        color: AppColors.primarySoft,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: AppColors.primary.withValues(alpha: 0.22), width: 0.5),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.primary.withValues(alpha: 0.07),
-            blurRadius: 10,
-            spreadRadius: -2,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      );
-    } else if (isMe) {
-      rowDecor = BoxDecoration(
-        color: AppColors.primarySoft,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: AppColors.primary.withValues(alpha: 0.25), width: 0.5),
-      );
-    } else {
-      rowDecor = BoxDecoration(
-        color: AppColors.surfaceAlt,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: AppColors.currentPalette.isDark
-              ? Colors.white.withValues(alpha: 0.08)
-              : Colors.black.withValues(alpha: 0.04),
-          width: 0.5,
-        ),
-      );
-    }
-
-    // Rank medal decoration
-    BoxDecoration rankDecor;
-    Color rankTextColor;
-    if (rank == 1) {
-      rankDecor = const BoxDecoration(
-        shape: BoxShape.circle,
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Color(0xFFFFD76A), Color(0xFFFFB52E)],
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Color(0x59FFBE32),
-            blurRadius: 6,
-            offset: Offset(0, 3),
-          ),
-        ],
-      );
-      rankTextColor = const Color(0xFF6B4300);
-    } else if (rank == 2) {
-      rankDecor = BoxDecoration(
-        shape: BoxShape.circle,
-        color: Colors.grey.withValues(alpha: 0.2),
-        border: Border.all(color: AppColors.borderSubtle, width: 0.5),
-      );
-      rankTextColor = AppColors.textPrimary;
-    } else if (rank == 3) {
-      rankDecor = BoxDecoration(
-        shape: BoxShape.circle,
-        color: const Color(0xFFCD8246).withValues(alpha: 0.2),
-        border: Border.all(color: const Color(0xFFCD8246).withValues(alpha: 0.3), width: 0.5),
-      );
-      rankTextColor = const Color(0xFFD88C50);
-    } else {
-      rankDecor = BoxDecoration(
-        shape: BoxShape.circle,
-        color: AppColors.surface,
-        border: Border.all(color: AppColors.borderSubtle, width: 0.5),
-      );
-      rankTextColor = AppColors.textMuted;
-    }
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      decoration: rowDecor,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 10),
       child: Row(
         children: [
           // Rank Medal
-          Container(
-            width: 28,
-            height: 28,
-            decoration: rankDecor,
-            alignment: Alignment.center,
-            child: Text(
-              '$rank',
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w800,
-                color: rankTextColor,
-                height: 1.0,
-              ),
-            ),
-          ),
-          const SizedBox(width: 10),
+          _RankBadge(rank: rank),
+          const SizedBox(width: 12),
 
           // Avatar
-          UserAvatarWidget(user: leader.member, size: 40),
+          Container(
+            padding: const EdgeInsets.all(2),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: rank == 1
+                  ? const Color(0xFFFFB52E).withValues(alpha: 0.25)
+                  : Colors.transparent,
+            ),
+            child: UserAvatarWidget(
+              user: leader.member,
+              size: 38,
+            ),
+          ),
           const SizedBox(width: 12),
 
           // Name + "Ты" badge
@@ -234,7 +201,8 @@ class _LeaderRow extends StatelessWidget {
                     leader.member.name,
                     style: TextStyle(
                       fontSize: 15,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: isMe ? FontWeight.w800 : FontWeight.w700,
+                      letterSpacing: -0.2,
                       color: AppColors.textPrimary,
                     ),
                     maxLines: 1,
@@ -244,16 +212,16 @@ class _LeaderRow extends StatelessWidget {
                 if (isMe) ...[
                   const SizedBox(width: 6),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                     decoration: BoxDecoration(
-                      color: AppColors.primary.withValues(alpha: 0.18),
+                      color: AppColors.primarySoft,
                       borderRadius: BorderRadius.circular(999),
                     ),
                     child: Text(
                       'Ты',
                       style: TextStyle(
                         fontSize: 10,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w800,
                         color: AppColors.primary,
                       ),
                     ),
@@ -262,34 +230,147 @@ class _LeaderRow extends StatelessWidget {
               ],
             ),
           ),
+          const SizedBox(width: 8),
 
-          // Score
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisSize: MainAxisSize.min,
+          // Score counter
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
             children: [
               Text(
                 '${leader.choreCompletionCount}',
                 style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w900,
-                  color: rank == 1 ? AppColors.primary : AppColors.textPrimary,
-                  height: 1.0,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: -0.3,
+                  color: AppColors.textPrimary,
                 ),
               ),
-              const SizedBox(height: 3),
+              const SizedBox(width: 4),
               Text(
-                'задач',
+                LeadersCard.pluralTasks(leader.choreCompletionCount),
                 style: TextStyle(
-                  fontSize: 10,
+                  fontSize: 12,
                   fontWeight: FontWeight.w600,
                   color: AppColors.textMuted,
-                  height: 1.0,
                 ),
               ),
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _RankBadge extends StatelessWidget {
+  final int rank;
+
+  const _RankBadge({required this.rank});
+
+  @override
+  Widget build(BuildContext context) {
+    if (rank == 1) {
+      return Container(
+        width: 28,
+        height: 28,
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFFFFD76A), Color(0xFFFFB52E)],
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Color(0x40FFBE32),
+              blurRadius: 4,
+              offset: Offset(0, 2),
+            ),
+          ],
+        ),
+        alignment: Alignment.center,
+        child: const Text(
+          '1',
+          style: TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w900,
+            color: Colors.white,
+            height: 1.0,
+          ),
+        ),
+      );
+    }
+
+    if (rank == 2) {
+      return Container(
+        width: 28,
+        height: 28,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFFE2E8F0), Color(0xFFCBD5E1)],
+          ),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.6), width: 0.5),
+        ),
+        alignment: Alignment.center,
+        child: const Text(
+          '2',
+          style: TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w800,
+            color: Color(0xFF334155),
+            height: 1.0,
+          ),
+        ),
+      );
+    }
+
+    if (rank == 3) {
+      return Container(
+        width: 28,
+        height: 28,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFFFED7AA), Color(0xFFFDBA74)],
+          ),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.6), width: 0.5),
+        ),
+        alignment: Alignment.center,
+        child: const Text(
+          '3',
+          style: TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w800,
+            color: Color(0xFF7C2D12),
+            height: 1.0,
+          ),
+        ),
+      );
+    }
+
+    return Container(
+      width: 28,
+      height: 28,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: AppColors.surfaceAlt,
+        border: Border.all(color: AppColors.borderSubtle, width: 0.5),
+      ),
+      alignment: Alignment.center,
+      child: Text(
+        '$rank',
+        style: TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w700,
+          color: AppColors.textMuted,
+          height: 1.0,
+        ),
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/swr/swr.dart';
 import '../../chores/models/user_short_model.dart';
 import '../repositories/settings_repository.dart';
 
@@ -35,25 +36,34 @@ class SettingsState {
   }
 }
 
+final familyMembersSwr = createSwrProvider<List<UserShort>>(
+  key: 'family-members',
+  fetcher: (ref) => ref.read(settingsRepositoryProvider).getFamilyMembers(),
+  decoder: (json) => (json as List)
+      .map((e) => UserShort.fromJson(e as Map<String, dynamic>))
+      .toList(),
+  encoder: (data) => data.map((e) => e.toJson()).toList(),
+);
+
 final settingsNotifierProvider = NotifierProvider<SettingsNotifier, SettingsState>(SettingsNotifier.new);
 
 class SettingsNotifier extends Notifier<SettingsState> {
   @override
   SettingsState build() {
-    Future.microtask(() => loadFamilyMembers());
-    return const SettingsState();
+    final swr = ref.watch(familyMembersSwr);
+    final members = swr.data ?? const [];
+    final loading = swr.isLoading && members.isEmpty;
+    return SettingsState(
+      familyMembers: members,
+      loadingMembers: loading,
+      error: swr.error?.toString(),
+    );
   }
 
   SettingsRepository get _repo => ref.read(settingsRepositoryProvider);
 
   Future<void> loadFamilyMembers() async {
-    state = state.copyWith(loadingMembers: true);
-    try {
-      final members = await _repo.getFamilyMembers();
-      state = state.copyWith(familyMembers: members, loadingMembers: false);
-    } catch (e) {
-      state = state.copyWith(loadingMembers: false, error: e.toString());
-    }
+    await ref.read(familyMembersSwr.notifier).revalidate();
   }
 
   Future<void> sendTestNotification() async {

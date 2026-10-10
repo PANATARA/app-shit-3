@@ -113,7 +113,11 @@ class _ChoreListScreenState extends ConsumerState<ChoreListScreen> {
                                     },
                                   )
                                 : null,
+                            filled: false,
+                            fillColor: Colors.transparent,
                             border: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            focusedBorder: InputBorder.none,
                             contentPadding: const EdgeInsets.symmetric(
                               horizontal: 16,
                               vertical: 12,

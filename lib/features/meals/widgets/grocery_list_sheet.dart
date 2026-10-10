@@ -128,7 +128,11 @@ class _GroceryListSheetState extends ConsumerState<GroceryListSheet> {
                       decoration: InputDecoration(
                         hintText: 'Что нужно купить?...',
                         hintStyle: TextStyle(fontSize: 14, color: AppColors.textMuted),
+                        filled: false,
+                        fillColor: Colors.transparent,
                         border: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
                         isDense: true,
                         contentPadding: EdgeInsets.zero,
                       ),

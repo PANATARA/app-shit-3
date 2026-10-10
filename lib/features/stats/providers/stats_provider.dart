@@ -96,10 +96,13 @@ class HomeNotifier extends Notifier<HomeState> {
         (leadersSwr.isLoading && leadersSwr.data == null) ||
         (eventsSwr.isLoading && eventsSwr.data == null);
 
-    final isRevalidating =
-        profileSwr.isRevalidating || leadersSwr.isRevalidating || eventsSwr.isRevalidating;
+    final isRevalidating = profileSwr.isRevalidating ||
+        leadersSwr.isRevalidating ||
+        eventsSwr.isRevalidating;
 
-    final error = profileSwr.error ?? leadersSwr.error ?? eventsSwr.error;
+    final error = profileSwr.error ??
+        leadersSwr.error ??
+        eventsSwr.error;
 
     return HomeState(
       isLoading: isLoading,

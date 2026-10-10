@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/swr/swr.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/theme_provider.dart';
 import '../providers/meals_provider.dart';
 import '../widgets/family_recipe_box_view.dart';
 import '../widgets/grocery_list_sheet.dart';
@@ -53,6 +54,7 @@ class _MealsScreenState extends ConsumerState<MealsScreen>
 
   @override
   Widget build(BuildContext context) {
+    ref.watch(appThemeProvider);
     final groceryCount = ref.watch(unboughtGroceriesCountProvider);
 
     return Scaffold(

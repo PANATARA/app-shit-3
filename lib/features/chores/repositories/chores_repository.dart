@@ -113,8 +113,8 @@ class ChoresRepository {
 
   Future<void> reschedulePlannedChore(String id, String newDueDate) async {
     await dio.patch(
-      '${ApiEndpoints.plannedChores}/$id',
-      data: {'due_date': newDueDate},
+      '${ApiEndpoints.plannedChores}/$id/reschedule',
+      data: {'reschedule_due_date': newDueDate},
     );
   }
 
@@ -145,9 +145,8 @@ class ChoresRepository {
     String? message,
   }) async {
     await dio.post(
-      ApiEndpoints.plannedChores,
+      '${ApiEndpoints.chores}/$choreId/planned',
       data: {
-        'chore_id': choreId,
         'due_date': dueDate,
         'assigned_to_id': ?assignedToId,
         if (message != null && message.trim().isNotEmpty) 'message': message.trim(),

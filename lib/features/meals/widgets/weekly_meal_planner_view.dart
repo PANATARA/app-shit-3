@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/theme_provider.dart';
 import '../../chores/utils/color_helper.dart';
 import '../../chores/widgets/week_calendar.dart';
 import '../models/planned_meal_model.dart';
@@ -21,6 +22,7 @@ class WeeklyMealPlannerView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(appThemeProvider);
     final selectedDate = ref.watch(selectedMealDateProvider);
     final selectedDateKey = ref.watch(selectedMealDateKeyProvider);
 

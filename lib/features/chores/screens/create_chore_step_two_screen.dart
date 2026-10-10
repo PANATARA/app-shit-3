@@ -200,6 +200,7 @@ class _State extends ConsumerState<CreateChoreStepTwoScreen> {
       backgroundColor: AppColors.background,
       // No bottomNavigationBar — everything in body Column
       body: SafeArea(
+        bottom: false,
         child: Column(
           children: [
             // ─── Header ────────────────────────────────────────
@@ -216,7 +217,7 @@ class _State extends ConsumerState<CreateChoreStepTwoScreen> {
                     _buildIconSection(),
                     const SizedBox(height: 8),
                     if (widget.isQuickTask) ...[
-                      _card('НАЗВАНИЕ', _textField(_nameCtrl, 'Что нужно сделать?', autofocus: true)),
+                      _card('НАЗВАНИЕ', _textField(_nameCtrl, 'Что нужно сделать?', autofocus: false)),
                       const SizedBox(height: 8),
                     ],
                     _card('КОМУ НАЗНАЧИТЬ', _membersPicker()),
@@ -248,7 +249,7 @@ class _State extends ConsumerState<CreateChoreStepTwoScreen> {
 
             // ─── Fixed bottom button ───────────────────────────
             Container(
-              padding: EdgeInsets.fromLTRB(12, 12, 12, safeBottom + 12),
+              padding: EdgeInsets.fromLTRB(16, 12, 16, safeBottom + 12),
               decoration: BoxDecoration(
                 color: AppColors.background,
                 border: Border(top: BorderSide(color: AppColors.divider, width: 0.5)),
@@ -379,7 +380,11 @@ class _State extends ConsumerState<CreateChoreStepTwoScreen> {
         decoration: InputDecoration(
           hintText: hint,
           hintStyle: TextStyle(color: AppColors.textMuted, fontWeight: FontWeight.w400, fontSize: 14),
+          filled: false,
+          fillColor: Colors.transparent,
           border: InputBorder.none,
+          enabledBorder: InputBorder.none,
+          focusedBorder: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         ),
       ),

@@ -326,7 +326,11 @@ class _AddCustomRecipeSheetState extends ConsumerState<AddCustomRecipeSheet> {
                     decoration: InputDecoration(
                       hintText: 'Например: Домашняя паста с томатами',
                       hintStyle: TextStyle(fontSize: 13, color: AppColors.textMuted),
+                      filled: false,
+                      fillColor: Colors.transparent,
                       border: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
                       isDense: true,
                     ),
                   ),
@@ -349,7 +353,11 @@ class _AddCustomRecipeSheetState extends ConsumerState<AddCustomRecipeSheet> {
                     decoration: InputDecoration(
                       hintText: 'Коротко о вкусе, подаче или секретах...',
                       hintStyle: TextStyle(fontSize: 13, color: AppColors.textMuted),
+                      filled: false,
+                      fillColor: Colors.transparent,
                       border: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
                       isDense: true,
                     ),
                   ),
@@ -447,7 +455,13 @@ class _AddCustomRecipeSheetState extends ConsumerState<AddCustomRecipeSheet> {
                                     keyboardType: TextInputType.number,
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(fontWeight: FontWeight.w700),
-                                    decoration: const InputDecoration(border: InputBorder.none),
+                                    decoration: const InputDecoration(
+                                      filled: false,
+                                      fillColor: Colors.transparent,
+                                      border: InputBorder.none,
+                                      enabledBorder: InputBorder.none,
+                                      focusedBorder: InputBorder.none,
+                                    ),
                                   ),
                                 ),
                                 Text('мин', style: TextStyle(fontSize: 12, color: AppColors.textMuted)),
@@ -481,7 +495,13 @@ class _AddCustomRecipeSheetState extends ConsumerState<AddCustomRecipeSheet> {
                                     keyboardType: TextInputType.number,
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(fontWeight: FontWeight.w700),
-                                    decoration: const InputDecoration(border: InputBorder.none),
+                                    decoration: const InputDecoration(
+                                      filled: false,
+                                      fillColor: Colors.transparent,
+                                      border: InputBorder.none,
+                                      enabledBorder: InputBorder.none,
+                                      focusedBorder: InputBorder.none,
+                                    ),
                                   ),
                                 ),
                                 Text('мин', style: TextStyle(fontSize: 12, color: AppColors.textMuted)),
@@ -554,7 +574,11 @@ class _AddCustomRecipeSheetState extends ConsumerState<AddCustomRecipeSheet> {
                                 decoration: InputDecoration(
                                   hintText: 'Ингредиент',
                                   hintStyle: TextStyle(fontSize: 12, color: AppColors.textMuted),
+                                  filled: false,
+                                  fillColor: Colors.transparent,
                                   border: InputBorder.none,
+                                  enabledBorder: InputBorder.none,
+                                  focusedBorder: InputBorder.none,
                                   isDense: true,
                                 ),
                               ),
@@ -580,7 +604,11 @@ class _AddCustomRecipeSheetState extends ConsumerState<AddCustomRecipeSheet> {
                                 decoration: InputDecoration(
                                   hintText: 'Кол-во',
                                   hintStyle: TextStyle(fontSize: 11, color: AppColors.textMuted),
+                                  filled: false,
+                                  fillColor: Colors.transparent,
                                   border: InputBorder.none,
+                                  enabledBorder: InputBorder.none,
+                                  focusedBorder: InputBorder.none,
                                   isDense: true,
                                 ),
                               ),
@@ -605,7 +633,11 @@ class _AddCustomRecipeSheetState extends ConsumerState<AddCustomRecipeSheet> {
                                 decoration: InputDecoration(
                                   hintText: 'Ед.',
                                   hintStyle: TextStyle(fontSize: 11, color: AppColors.textMuted),
+                                  filled: false,
+                                  fillColor: Colors.transparent,
                                   border: InputBorder.none,
+                                  enabledBorder: InputBorder.none,
+                                  focusedBorder: InputBorder.none,
                                   isDense: true,
                                 ),
                               ),
@@ -704,7 +736,11 @@ class _AddCustomRecipeSheetState extends ConsumerState<AddCustomRecipeSheet> {
                                 decoration: InputDecoration(
                                   hintText: 'Опишите шаг ${index + 1}...',
                                   hintStyle: TextStyle(fontSize: 12, color: AppColors.textMuted),
+                                  filled: false,
+                                  fillColor: Colors.transparent,
                                   border: InputBorder.none,
+                                  enabledBorder: InputBorder.none,
+                                  focusedBorder: InputBorder.none,
                                   isDense: true,
                                 ),
                               ),
@@ -888,7 +924,7 @@ class _AddCustomRecipeSheetState extends ConsumerState<AddCustomRecipeSheet> {
 
           // Emoji Grid
           SizedBox(
-            height: 90,
+            height: 220,
             child: SingleChildScrollView(
               child: Wrap(
                 spacing: 6,

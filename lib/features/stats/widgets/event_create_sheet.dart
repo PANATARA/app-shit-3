@@ -150,7 +150,11 @@ class _EventCreateSheetState extends ConsumerState<EventCreateSheet> {
                 decoration: InputDecoration(
                   hintText: 'Поездка, день рождения, праздник...',
                   hintStyle: TextStyle(color: AppColors.textMuted, fontWeight: FontWeight.w400, fontSize: 14),
+                  filled: false,
+                  fillColor: Colors.transparent,
                   border: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
                   contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                 ),
               ),
@@ -196,7 +200,11 @@ class _EventCreateSheetState extends ConsumerState<EventCreateSheet> {
                 decoration: InputDecoration(
                   hintText: 'Дополнительные детали или заметки...',
                   hintStyle: TextStyle(color: AppColors.textMuted, fontSize: 13),
+                  filled: false,
+                  fillColor: Colors.transparent,
                   border: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
                   contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                 ),
               ),
