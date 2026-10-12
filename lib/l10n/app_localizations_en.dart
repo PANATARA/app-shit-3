@@ -557,6 +557,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get choreConfirmDeleteDesc => 'This action cannot be undone.';
 
   @override
+  String get choreRepeatSettings => 'Repeat Settings';
+
+  @override
+  String get choreDeleteRecurringTitle => 'Delete recurring chore';
+
+  @override
+  String get choreDeleteRecurringDesc =>
+      'This chore repeats on schedule. What would you like to delete?';
+
+  @override
+  String get choreDeleteOnlyThis => 'Only this task';
+
+  @override
+  String get choreDeleteAllFuture => 'This and all future tasks';
+
+  @override
+  String get choreEditScheduleTitle => 'Edit schedule';
+
+  @override
+  String get choreScheduleUpdated => 'Schedule updated';
+
+  @override
+  String get choreScheduleDeleted => 'Schedule deleted';
+
+  @override
   String get mealsTitle => 'Meal Plan';
 
   @override

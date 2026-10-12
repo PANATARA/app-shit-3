@@ -6,6 +6,7 @@ import '../../../core/constants/api_endpoints.dart';
 import '../models/planned_chore_model.dart';
 import '../models/chore_item_model.dart';
 import '../models/family_members_model.dart';
+import '../models/repeat_config_model.dart';
 import '../models/user_short_model.dart';
 
 final choresRepositoryProvider = Provider<ChoresRepository>((ref) {
@@ -308,5 +309,43 @@ class ChoresRepository {
       'day_of_month': ?dayOfMonth,
     };
     await dio.post('${ApiEndpoints.chores}/$choreId/schedules', data: data);
+  }
+
+  Future<void> deleteChoreSchedule(String scheduleId) async {
+    await dio.delete('${ApiEndpoints.schedules}/$scheduleId');
+  }
+
+  Future<RepeatConfig?> getChoreSchedule(String scheduleId) async {
+    try {
+      final response = await dio.get('${ApiEndpoints.schedules}/$scheduleId');
+      if (response.data != null && response.data is Map<String, dynamic>) {
+        return RepeatConfig.fromJson(response.data as Map<String, dynamic>);
+      }
+    } catch (e) {
+      debugPrint('Failed to get chore schedule: $e');
+    }
+    return null;
+  }
+
+  Future<void> updateChoreSchedule({
+    required String scheduleId,
+    required String frequencyType,
+    required int interval,
+    int? daysOfWeek,
+    int? dayOfMonth,
+    String? startsAt,
+    String? endsAt,
+    String? assignedToId,
+  }) async {
+    final data = <String, dynamic>{
+      'frequency_type': frequencyType,
+      'interval': interval,
+      'days_of_week': ?daysOfWeek,
+      'day_of_month': ?dayOfMonth,
+      'starts_at': ?startsAt,
+      'ends_at': ?endsAt,
+      'assigned_to_id': ?assignedToId,
+    };
+    await dio.patch('${ApiEndpoints.schedules}/$scheduleId', data: data);
   }
 }

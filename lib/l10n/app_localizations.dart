@@ -1100,6 +1100,54 @@ abstract class AppLocalizations {
   /// **'Это действие нельзя отменить.'**
   String get choreConfirmDeleteDesc;
 
+  /// No description provided for @choreRepeatSettings.
+  ///
+  /// In ru, this message translates to:
+  /// **'Настройки повторения'**
+  String get choreRepeatSettings;
+
+  /// No description provided for @choreDeleteRecurringTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Удаление регулярной задачи'**
+  String get choreDeleteRecurringTitle;
+
+  /// No description provided for @choreDeleteRecurringDesc.
+  ///
+  /// In ru, this message translates to:
+  /// **'Эта задача повторяется по расписанию. Что вы хотите удалить?'**
+  String get choreDeleteRecurringDesc;
+
+  /// No description provided for @choreDeleteOnlyThis.
+  ///
+  /// In ru, this message translates to:
+  /// **'Только эту задачу'**
+  String get choreDeleteOnlyThis;
+
+  /// No description provided for @choreDeleteAllFuture.
+  ///
+  /// In ru, this message translates to:
+  /// **'Эту и все будущие задачи'**
+  String get choreDeleteAllFuture;
+
+  /// No description provided for @choreEditScheduleTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Редактировать расписание'**
+  String get choreEditScheduleTitle;
+
+  /// No description provided for @choreScheduleUpdated.
+  ///
+  /// In ru, this message translates to:
+  /// **'Расписание обновлено'**
+  String get choreScheduleUpdated;
+
+  /// No description provided for @choreScheduleDeleted.
+  ///
+  /// In ru, this message translates to:
+  /// **'Расписание удалено'**
+  String get choreScheduleDeleted;
+
   /// No description provided for @mealsTitle.
   ///
   /// In ru, this message translates to:

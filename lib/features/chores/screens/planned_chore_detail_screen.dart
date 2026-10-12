@@ -9,6 +9,7 @@ import '../providers/board_provider.dart';
 import '../repositories/chores_repository.dart';
 import '../widgets/chore_icon_widget.dart';
 import '../widgets/chore_screen_header.dart';
+import '../widgets/edit_schedule_sheet.dart';
 import '../widgets/planned_chore_subtasks_widget.dart';
 import '../widgets/user_avatar_widget.dart';
 
@@ -100,12 +101,109 @@ class _State extends ConsumerState<PlannedChoreDetailScreen> {
     }
   }
 
+  void _openRepeatSettings() {
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => EditScheduleSheet(
+        scheduleId: _chore.scheduleId!,
+        choreTitle: _chore.displayTitle,
+        onSaved: () {
+          ref.read(boardNotifierProvider.notifier).refresh();
+        },
+      ),
+    );
+  }
+
   Future<void> _delete() async {
+    final l10n = AppLocalizations.of(context);
+    final repo = ref.read(choresRepositoryProvider);
+
+    if (!_chore.isQuick && _chore.scheduleId != null) {
+      final action = await showDialog<String>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          backgroundColor: AppColors.surface,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          title: Text(
+            l10n?.choreDeleteRecurringTitle ?? 'Удаление регулярной задачи',
+            style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
+          ),
+          content: Text(
+            l10n?.choreDeleteRecurringDesc ??
+                'Эта задача повторяется по расписанию. Что вы хотите удалить?',
+            style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
+          ),
+          actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+          actions: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.error.withValues(alpha: 0.12),
+                    foregroundColor: AppColors.error,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  ),
+                  onPressed: () => Navigator.of(ctx).pop('single'),
+                  child: Text(
+                    l10n?.choreDeleteOnlyThis ?? 'Только эту задачу',
+                    style: const TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.error,
+                    foregroundColor: Colors.white,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  ),
+                  onPressed: () => Navigator.of(ctx).pop('all'),
+                  child: Text(
+                    l10n?.choreDeleteAllFuture ?? 'Эту и все будущие задачи',
+                    style: const TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                TextButton(
+                  onPressed: () => Navigator.of(ctx).pop(null),
+                  child: Text(
+                    l10n?.commonCancel ?? 'Отмена',
+                    style: TextStyle(color: AppColors.textMuted),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+
+      if (action == null || !mounted) return;
+
+      setState(() => _loading = true);
+      try {
+        if (action == 'single') {
+          await repo.deletePlannedChore(_chore.id);
+        } else if (action == 'all') {
+          await repo.deleteChoreSchedule(_chore.scheduleId!);
+        }
+        ref.read(boardNotifierProvider.notifier).refresh();
+        if (mounted) Navigator.of(context).pop();
+      } catch (e) {
+        if (mounted) _snack('Ошибка удаления: $e');
+      } finally {
+        if (mounted) setState(() => _loading = false);
+      }
+      return;
+    }
+
     final ok = await _confirm();
     if (!ok || !mounted) return;
     setState(() => _loading = true);
     try {
-      final repo = ref.read(choresRepositoryProvider);
       if (_chore.isQuick) {
         await repo.deleteQuickChore(_chore.id);
       } else {
@@ -255,6 +353,28 @@ class _State extends ConsumerState<PlannedChoreDetailScreen> {
                         label: Text(
                           l10n?.choreRescheduleTo(_fmt(_newDate, locale)) ?? 'Перенести на ${_fmt(_newDate, locale)}',
                           style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                    ),
+                  ],
+
+                  // Repeat settings
+                  if (!_chore.isQuick && _chore.scheduleId != null) ...[
+                    const SizedBox(height: 8),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: OutlinedButton.icon(
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: AppColors.primary,
+                          side: BorderSide(color: AppColors.primary.withValues(alpha: 0.5), width: 1.5),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                        ),
+                        onPressed: _loading ? null : _openRepeatSettings,
+                        icon: const Icon(Icons.repeat_rounded, size: 18),
+                        label: Text(
+                          l10n?.choreRepeatSettings ?? 'Настройки повторения',
+                          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
                         ),
                       ),
                     ),
@@ -438,6 +558,36 @@ class _State extends ConsumerState<PlannedChoreDetailScreen> {
           ),
 
           Divider(height: 1, color: AppColors.divider, indent: 16, endIndent: 16),
+
+          // Repeat row (if recurring)
+          if (!_chore.isQuick && _chore.scheduleId != null) ...[
+            InkWell(
+              onTap: _openRepeatSettings,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                child: Row(
+                  children: [
+                    _DetailIcon(icon: Icons.repeat_rounded, color: AppColors.primary),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(l10n?.choreSectionRepeat ?? 'ПОВТОРЕНИЕ', style: TextStyle(fontSize: 11, color: AppColors.textMuted, fontWeight: FontWeight.w500)),
+                          Text(
+                            l10n?.choreRepeatSettings ?? 'Настройки повторения',
+                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: AppColors.textPrimary),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Icon(Icons.edit_rounded, size: 14, color: AppColors.textMuted),
+                  ],
+                ),
+              ),
+            ),
+            Divider(height: 1, color: AppColors.divider, indent: 16, endIndent: 16),
+          ],
 
           // Assigned to
           Padding(

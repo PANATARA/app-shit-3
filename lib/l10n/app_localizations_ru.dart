@@ -565,6 +565,31 @@ class AppLocalizationsRu extends AppLocalizations {
   String get choreConfirmDeleteDesc => 'Это действие нельзя отменить.';
 
   @override
+  String get choreRepeatSettings => 'Настройки повторения';
+
+  @override
+  String get choreDeleteRecurringTitle => 'Удаление регулярной задачи';
+
+  @override
+  String get choreDeleteRecurringDesc =>
+      'Эта задача повторяется по расписанию. Что вы хотите удалить?';
+
+  @override
+  String get choreDeleteOnlyThis => 'Только эту задачу';
+
+  @override
+  String get choreDeleteAllFuture => 'Эту и все будущие задачи';
+
+  @override
+  String get choreEditScheduleTitle => 'Редактировать расписание';
+
+  @override
+  String get choreScheduleUpdated => 'Расписание обновлено';
+
+  @override
+  String get choreScheduleDeleted => 'Расписание удалено';
+
+  @override
   String get mealsTitle => 'План питания';
 
   @override

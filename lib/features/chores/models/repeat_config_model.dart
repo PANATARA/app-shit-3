@@ -48,6 +48,34 @@ class RepeatConfig {
     return mask;
   }
 
+  /// Converts backend bitmask (1=Mon..64=Sun) into UI day indices (0=Sun, 1=Mon..6=Sat)
+  static List<int> bitmaskToDaysOfWeek(int mask) {
+    final List<int> result = [];
+    for (int i = 0; i < 6; i++) {
+      if ((mask & (1 << i)) != 0) {
+        result.add(i + 1);
+      }
+    }
+    if ((mask & (1 << 6)) != 0) {
+      result.add(0);
+    }
+    return result;
+  }
+
+  factory RepeatConfig.fromJson(Map<String, dynamic> json) {
+    final freq = json['frequency_type']?.toString() ?? 'none';
+    final mask = json['days_of_week'] as int?;
+    final days = mask != null ? bitmaskToDaysOfWeek(mask) : <int>[];
+    return RepeatConfig(
+      frequencyType: freq,
+      interval: (json['interval'] as num?)?.toInt() ?? 1,
+      daysOfWeek: days,
+      dayOfMonth: (json['day_of_month'] as num?)?.toInt(),
+      startsAt: json['starts_at']?.toString() ?? '',
+      endsAt: json['ends_at']?.toString(),
+    );
+  }
+
   static String getPlural(int n, String one, String two, String five) {
     final absN = n.abs() % 100;
     final n1 = absN % 10;
