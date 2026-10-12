@@ -305,7 +305,7 @@ class _State extends ConsumerState<PlannedChoreDetailScreen> {
 
             // ─── Fixed action buttons at bottom ───────────────────
             Container(
-              padding: EdgeInsets.fromLTRB(14, 12, 14, safeBottom + 12),
+              padding: EdgeInsets.fromLTRB(14, 8, 14, safeBottom > 0 ? safeBottom + 2 : 10),
               decoration: BoxDecoration(
                 color: AppColors.background,
                 border: Border(top: BorderSide(color: AppColors.divider, width: 0.5)),
@@ -313,10 +313,33 @@ class _State extends ConsumerState<PlannedChoreDetailScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  // Reschedule — only when date changed
+                  if (_dateChanged && !_chore.isDone) ...[
+                    SizedBox(
+                      width: double.infinity,
+                      height: 42,
+                      child: ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primary.withValues(alpha: 0.12),
+                          foregroundColor: AppColors.primary,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          elevation: 0,
+                        ),
+                        onPressed: _loading ? null : _reschedule,
+                        icon: const Icon(Icons.calendar_month_rounded, size: 16),
+                        label: Text(
+                          l10n?.choreRescheduleTo(_fmt(_newDate, locale)) ?? 'Перенести на ${_fmt(_newDate, locale)}',
+                          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                  ],
+
                   // Toggle done
                   SizedBox(
                     width: double.infinity,
-                    height: 50,
+                    height: 46,
                     child: ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: _chore.isDone ? AppColors.warning : AppColors.success,
@@ -335,67 +358,57 @@ class _State extends ConsumerState<PlannedChoreDetailScreen> {
                     ),
                   ),
 
-                  // Reschedule — only when date changed
-                  if (_dateChanged && !_chore.isDone) ...[
-                    const SizedBox(height: 8),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary.withValues(alpha: 0.12),
-                          foregroundColor: AppColors.primary,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                          elevation: 0,
+                  const SizedBox(height: 6),
+
+                  // Bottom secondary buttons: Repeat settings + Delete in a Row
+                  Row(
+                    children: [
+                      if (!_chore.isQuick && _chore.scheduleId != null) ...[
+                        Expanded(
+                          child: SizedBox(
+                            height: 38,
+                            child: OutlinedButton.icon(
+                              style: OutlinedButton.styleFrom(
+                                foregroundColor: AppColors.primary,
+                                side: BorderSide(color: AppColors.primary.withValues(alpha: 0.35), width: 1.2),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                padding: const EdgeInsets.symmetric(horizontal: 8),
+                              ),
+                              onPressed: _loading ? null : _openRepeatSettings,
+                              icon: const Icon(Icons.repeat_rounded, size: 15),
+                              label: Text(
+                                l10n?.choreRepeatSettings ?? 'Повторение',
+                                style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ),
                         ),
-                        onPressed: _loading ? null : _reschedule,
-                        icon: const Icon(Icons.calendar_month_rounded, size: 18),
-                        label: Text(
-                          l10n?.choreRescheduleTo(_fmt(_newDate, locale)) ?? 'Перенести на ${_fmt(_newDate, locale)}',
-                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                        const SizedBox(width: 8),
+                      ],
+                      Expanded(
+                        child: SizedBox(
+                          height: 38,
+                          child: OutlinedButton.icon(
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: AppColors.error,
+                              side: BorderSide(color: AppColors.error.withValues(alpha: 0.5), width: 1.2),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                              padding: const EdgeInsets.symmetric(horizontal: 8),
+                            ),
+                            onPressed: _loading ? null : _delete,
+                            icon: const Icon(Icons.delete_outline_rounded, size: 15),
+                            label: Text(
+                              l10n?.choreDeleteTask ?? 'Удалить задачу',
+                              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-
-                  // Repeat settings
-                  if (!_chore.isQuick && _chore.scheduleId != null) ...[
-                    const SizedBox(height: 8),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: OutlinedButton.icon(
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: AppColors.primary,
-                          side: BorderSide(color: AppColors.primary.withValues(alpha: 0.5), width: 1.5),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                        ),
-                        onPressed: _loading ? null : _openRepeatSettings,
-                        icon: const Icon(Icons.repeat_rounded, size: 18),
-                        label: Text(
-                          l10n?.choreRepeatSettings ?? 'Настройки повторения',
-                          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
-                        ),
-                      ),
-                    ),
-                  ],
-
-                  const SizedBox(height: 8),
-
-                  // Delete
-                  SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: OutlinedButton.icon(
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: AppColors.error,
-                        side: const BorderSide(color: AppColors.error, width: 1.5),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                      ),
-                      onPressed: _loading ? null : _delete,
-                      icon: const Icon(Icons.delete_outline_rounded, size: 18),
-                      label: Text(l10n?.choreDeleteTask ?? 'Удалить задачу', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
-                    ),
+                    ],
                   ),
                 ],
               ),
@@ -410,22 +423,22 @@ class _State extends ConsumerState<PlannedChoreDetailScreen> {
 
   Widget _buildIcon() {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 4),
       child: Center(
         child: Container(
-          width: 96,
-          height: 96,
+          width: 72,
+          height: 72,
           decoration: BoxDecoration(
             color: AppColors.surface,
-            borderRadius: BorderRadius.circular(30),
-            boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.09), blurRadius: 28, offset: const Offset(0, 10))],
+            borderRadius: BorderRadius.circular(22),
+            boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.07), blurRadius: 18, offset: const Offset(0, 6))],
           ),
           alignment: Alignment.center,
           child: ChoreIconWidget(
             icon: _chore.displayIcon,
             iconBg: _chore.displayIconBg,
             iconColor: _chore.displayIconColor,
-            size: 64,
+            size: 48,
             isQuick: _chore.isQuick,
           ),
         ),

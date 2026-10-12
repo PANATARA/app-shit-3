@@ -27,81 +27,38 @@ class EventsCard extends StatelessWidget {
 
     return UiCard(
       title: l10n?.statsUpcomingEvents ?? 'БЛИЖАЙШИЕ СОБЫТИЯ',
-      action: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          InkWell(
-            onTap: () {
-              HapticFeedback.lightImpact();
-              EventsListSheet.show(context);
-            },
+      action: InkWell(
+        onTap: () {
+          HapticFeedback.lightImpact();
+          EventCreateSheet.show(context);
+        },
+        borderRadius: BorderRadius.circular(999),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          decoration: BoxDecoration(
+            color: AppColors.primarySoft,
             borderRadius: BorderRadius.circular(999),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              decoration: BoxDecoration(
-                color: AppColors.surfaceAlt,
-                borderRadius: BorderRadius.circular(999),
-                border: Border.all(
-                  color: AppColors.borderSubtle,
-                  width: 0.5,
-                ),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    l10n?.statsAllEvents ?? 'Все',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.textSecondary,
-                    ),
-                  ),
-                  const SizedBox(width: 3),
-                  Icon(
-                    Icons.arrow_forward_ios_rounded,
-                    size: 10,
-                    color: AppColors.textSecondary,
-                  ),
-                ],
-              ),
+            border: Border.all(
+              color: AppColors.primary.withValues(alpha: 0.15),
+              width: 0.5,
             ),
           ),
-          const SizedBox(width: 6),
-          InkWell(
-            onTap: () {
-              HapticFeedback.lightImpact();
-              EventCreateSheet.show(context);
-            },
-            borderRadius: BorderRadius.circular(999),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              decoration: BoxDecoration(
-                color: AppColors.primarySoft,
-                borderRadius: BorderRadius.circular(999),
-                border: Border.all(
-                  color: AppColors.primary.withValues(alpha: 0.15),
-                  width: 0.5,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.add_rounded, size: 13, color: AppColors.primary),
+              const SizedBox(width: 3),
+              Text(
+                l10n?.statsAddEvent ?? 'Добавить',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.primary,
                 ),
               ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.add_rounded, size: 13, color: AppColors.primary),
-                  const SizedBox(width: 3),
-                  Text(
-                    l10n?.statsAddEvent ?? 'Добавить',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.primary,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
       child: isLoading
           ? Column(
