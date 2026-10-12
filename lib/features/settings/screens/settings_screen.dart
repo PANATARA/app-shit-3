@@ -200,7 +200,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           },
           child: ListView(
             padding: const EdgeInsets.fromLTRB(14, 12, 14, 100),
-            physics: const ClampingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+            physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             children: [
               // ─── Header ──────────────────────────────────────────────
               _buildHeader(),

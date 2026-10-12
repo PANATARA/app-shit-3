@@ -211,7 +211,7 @@ class _EditScheduleSheetState extends ConsumerState<EditScheduleSheet> {
           else ...[
             Flexible(
               child: SingleChildScrollView(
-                physics: const ClampingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [

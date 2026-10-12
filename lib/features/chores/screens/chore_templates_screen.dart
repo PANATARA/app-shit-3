@@ -117,7 +117,7 @@ class _ChoreTemplatesScreenState extends ConsumerState<ChoreTemplatesScreen> {
                   await ref.read(defaultChoresSwr.notifier).revalidate();
                 },
                 child: ListView(
-                  physics: const AlwaysScrollableScrollPhysics(),
+                  physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                   padding: const EdgeInsets.only(bottom: 32),
                   children: [
                     // Create Custom Chore Button

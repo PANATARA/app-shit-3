@@ -780,7 +780,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           // Scrollable avatar constructor
           Expanded(
             child: SingleChildScrollView(
-              physics: const ClampingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -986,7 +986,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             child: _loadingDefaultChores
                 ? const Center(child: CircularProgressIndicator())
                 : ListView.builder(
-                    physics: const ClampingScrollPhysics(),
+                    physics: const BouncingScrollPhysics(),
                     itemCount: _defaultChores.length,
                     itemBuilder: (context, index) {
                       final chore = _defaultChores[index];

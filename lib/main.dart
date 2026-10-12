@@ -31,6 +31,17 @@ void main() async {
   );
 }
 
+class AppScrollBehavior extends MaterialScrollBehavior {
+  const AppScrollBehavior();
+
+  @override
+  ScrollPhysics getScrollPhysics(BuildContext context) {
+    return const BouncingScrollPhysics(
+      parent: AlwaysScrollableScrollPhysics(),
+    );
+  }
+}
+
 class HouseholdApp extends ConsumerWidget {
   const HouseholdApp({super.key});
 
@@ -44,6 +55,7 @@ class HouseholdApp extends ConsumerWidget {
       title: 'HOUSEHOLD',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.getTheme(currentTheme),
+      scrollBehavior: const AppScrollBehavior(),
       routerConfig: router,
       locale: currentLocale,
       localizationsDelegates: const [

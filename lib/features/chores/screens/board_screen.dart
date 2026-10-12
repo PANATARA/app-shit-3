@@ -93,7 +93,7 @@ class _BoardScreenState extends ConsumerState<BoardScreen>
                 onRefresh: () => boardNotifier.refresh(),
                 child: ListView(
                   controller: _scrollController,
-                  physics: const ClampingScrollPhysics(
+                  physics: const BouncingScrollPhysics(
                     parent: AlwaysScrollableScrollPhysics(),
                   ),
                   padding: const EdgeInsets.fromLTRB(16, 210, 16, 200),
