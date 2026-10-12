@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/localization/locale_provider.dart';
 import '../../../core/swr/swr.dart';
 import '../../../core/theme/app_colors.dart';
 import '../models/chore_item_model.dart';
@@ -23,9 +24,10 @@ class _ChoreTemplatesScreenState extends ConsumerState<ChoreTemplatesScreen> {
     setState(() => _addingIds.add(def.id));
 
     try {
+      final currentLang = ref.read(appLocaleProvider).languageCode;
       await ref.read(choresRepositoryProvider).addChoresFromDefault(
         defaultChoreIds: [def.id],
-        language: 'ru',
+        language: currentLang,
       );
       // Revalidate family chores and default chores
       await Future.wait([

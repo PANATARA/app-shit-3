@@ -5,6 +5,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'core/localization/locale_provider.dart';
 import 'core/routing/app_router.dart';
+import 'core/services/timezone_service.dart';
 import 'core/swr/swr.dart';
 import 'core/theme/app_colors.dart';
 import 'core/theme/app_theme.dart';
@@ -15,9 +16,12 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting('ru', null);
   await initializeDateFormatting('en', null);
+  await TimezoneService.init();
   await Swr.init();
   final prefs = await SharedPreferences.getInstance();
   final savedTheme = prefs.getString('app_theme') ?? 'warm';
+  final savedLang = prefs.getString('app_language') ?? 'ru';
+  AppLocaleNotifier.init(savedLang);
   AppColors.applyTheme(savedTheme);
 
   runApp(

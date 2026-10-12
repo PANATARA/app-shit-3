@@ -333,6 +333,8 @@
   "settingsLanguage": "App Language",
   "settingsLanguageRu": "Русский",
   "settingsLanguageEn": "English",
+  "settingsTimezone": "Timezone",
+  "settingsTimezoneAuto": "Detected automatically",
   "settingsServerSection": "CONNECTION",
   "settingsServerUrl": "Server URL",
   "settingsLogout": "Log Out",

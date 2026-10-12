@@ -1568,6 +1568,18 @@ abstract class AppLocalizations {
   /// **'English'**
   String get settingsLanguageEn;
 
+  /// No description provided for @settingsTimezone.
+  ///
+  /// In ru, this message translates to:
+  /// **'Часовой пояс'**
+  String get settingsTimezone;
+
+  /// No description provided for @settingsTimezoneAuto.
+  ///
+  /// In ru, this message translates to:
+  /// **'Определен автоматически'**
+  String get settingsTimezoneAuto;
+
   /// No description provided for @settingsServerSection.
   ///
   /// In ru, this message translates to:

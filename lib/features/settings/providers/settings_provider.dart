@@ -1,6 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/localization/locale_provider.dart';
+import '../../../core/services/timezone_service.dart';
 import '../../../core/swr/swr.dart';
 import '../../chores/models/user_short_model.dart';
+import '../models/user_settings_model.dart';
 import '../repositories/settings_repository.dart';
 
 class SettingsState {
@@ -9,6 +13,8 @@ class SettingsState {
   final bool isSendingPush;
   final ({bool success, String message})? pushResult;
   final String? error;
+  final UserSettingsModel? userSettings;
+  final bool loadingSettings;
 
   const SettingsState({
     this.familyMembers = const [],
@@ -16,6 +22,8 @@ class SettingsState {
     this.isSendingPush = false,
     this.pushResult,
     this.error,
+    this.userSettings,
+    this.loadingSettings = false,
   });
 
   SettingsState copyWith({
@@ -25,6 +33,8 @@ class SettingsState {
     ({bool success, String message})? pushResult,
     bool clearPushResult = false,
     String? error,
+    UserSettingsModel? userSettings,
+    bool? loadingSettings,
   }) {
     return SettingsState(
       familyMembers: familyMembers ?? this.familyMembers,
@@ -32,6 +42,8 @@ class SettingsState {
       isSendingPush: isSendingPush ?? this.isSendingPush,
       pushResult: clearPushResult ? null : (pushResult ?? this.pushResult),
       error: error,
+      userSettings: userSettings ?? this.userSettings,
+      loadingSettings: loadingSettings ?? this.loadingSettings,
     );
   }
 }
@@ -53,6 +65,9 @@ class SettingsNotifier extends Notifier<SettingsState> {
     final swr = ref.watch(familyMembersSwr);
     final members = swr.data ?? const [];
     final loading = swr.isLoading && members.isEmpty;
+
+    Future.microtask(() => loadUserSettings());
+
     return SettingsState(
       familyMembers: members,
       loadingMembers: loading,
@@ -61,6 +76,36 @@ class SettingsNotifier extends Notifier<SettingsState> {
   }
 
   SettingsRepository get _repo => ref.read(settingsRepositoryProvider);
+
+  Future<void> loadUserSettings() async {
+    state = state.copyWith(loadingSettings: true);
+    try {
+      final settings = await _repo.getUserSettings();
+      state = state.copyWith(userSettings: settings, loadingSettings: false);
+
+      final localTz = TimezoneService.currentTimezone;
+      if (settings.timezone != localTz) {
+        debugPrint(
+          '[SettingsNotifier] Syncing device timezone $localTz (was ${settings.timezone})',
+        );
+        final updated = await _repo.updateUserSettings(timezone: localTz);
+        state = state.copyWith(userSettings: updated);
+      }
+
+      if (settings.language == 'ru' || settings.language == 'en') {
+        final currentAppLang = ref.read(appLocaleProvider).languageCode;
+        if (settings.language != currentAppLang) {
+          debugPrint(
+            '[SettingsNotifier] Syncing language from server: ${settings.language} (was $currentAppLang)',
+          );
+          ref.read(appLocaleProvider.notifier).setLocale(settings.language, syncBackend: false);
+        }
+      }
+    } catch (e) {
+      debugPrint('[SettingsNotifier] loadUserSettings error: $e');
+      state = state.copyWith(loadingSettings: false);
+    }
+  }
 
   Future<void> loadFamilyMembers() async {
     await ref.read(familyMembersSwr.notifier).revalidate();

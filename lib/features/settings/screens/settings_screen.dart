@@ -11,6 +11,7 @@ import '../../chores/widgets/user_avatar_widget.dart';
 import '../../stats/widgets/ui_card.dart';
 import '../../../core/theme/theme_provider.dart';
 import '../../../core/localization/locale_provider.dart';
+import '../../../core/services/timezone_service.dart';
 import '../../../l10n/app_localizations.dart';
 import '../providers/settings_provider.dart';
 import '../widgets/invite_modal_sheet.dart';
@@ -261,6 +262,23 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       if (themeId != null && mounted) {
                         await ref.read(appThemeProvider.notifier).setTheme(themeId);
                       }
+                    },
+                  ),
+                  _SettingsRow(
+                    icon: Icons.schedule_rounded,
+                    title: l10n?.settingsTimezone ?? 'Часовой пояс',
+                    value: TimezoneService.currentTimezone,
+                    showArrow: false,
+                    onTap: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            '${l10n?.settingsTimezone ?? "Часовой пояс"}: ${TimezoneService.currentTimezone} (${l10n?.settingsTimezoneAuto ?? "Определен автоматически"})',
+                          ),
+                          duration: const Duration(seconds: 2),
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
                     },
                   ),
                   _SettingsRow(

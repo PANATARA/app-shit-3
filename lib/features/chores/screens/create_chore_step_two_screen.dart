@@ -434,7 +434,8 @@ class _State extends ConsumerState<CreateChoreStepTwoScreen> {
   // ─── Date row ───────────────────────────────────────────────────────────────
 
   Widget _dateRow() {
-    final str = DateFormat('d MMMM yyyy', 'ru').format(_dueDate);
+    final locale = Localizations.localeOf(context).languageCode;
+    final str = DateFormat('d MMMM yyyy', locale).format(_dueDate);
     return GestureDetector(
       onTap: _pickDate,
       behavior: HitTestBehavior.opaque,

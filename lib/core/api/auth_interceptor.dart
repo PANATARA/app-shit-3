@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import '../constants/api_endpoints.dart';
+import '../localization/locale_provider.dart';
+import '../services/timezone_service.dart';
 import '../storage/token_storage.dart';
 
 class AuthInterceptor extends Interceptor {
@@ -18,6 +20,10 @@ class AuthInterceptor extends Interceptor {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
+    // Attach user device timezone and language to all outgoing requests
+    options.headers['X-Timezone'] = TimezoneService.currentTimezone;
+    options.headers['Accept-Language'] = AppLocaleNotifier.currentLanguage;
+
     // Skip auth header for login, register, and refresh endpoints
     final isAuthEndpoint = options.path.contains(ApiEndpoints.login) ||
         options.path.contains(ApiEndpoints.register) ||

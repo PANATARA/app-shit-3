@@ -821,6 +821,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get settingsLanguageEn => 'English';
 
   @override
+  String get settingsTimezone => 'Часовой пояс';
+
+  @override
+  String get settingsTimezoneAuto => 'Определен автоматически';
+
+  @override
   String get settingsServerSection => 'ПОДКЛЮЧЕНИЕ';
 
   @override

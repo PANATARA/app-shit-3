@@ -59,7 +59,7 @@ class FamilyEventModel {
 
   DateTime? get dateTime {
     try {
-      return DateTime.parse(date);
+      return DateTime.parse(date).toLocal();
     } catch (_) {
       return null;
     }

@@ -111,10 +111,11 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(WeekCalendar), findsOneWidget);
-      expect(find.text('Пн'), findsWidgets);
+      final mondayFinder = find.text('Пн').evaluate().isNotEmpty ? find.text('Пн') : find.text('Mon');
+      expect(mondayFinder, findsWidgets);
 
       // Verify tapping a day invokes callback
-      final dayFinder = find.text('Пн').first;
+      final dayFinder = mondayFinder.first;
       await tester.tap(dayFinder);
       await tester.pump();
 

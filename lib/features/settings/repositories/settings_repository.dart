@@ -5,6 +5,7 @@ import '../../../core/api/api_client.dart';
 import '../../../core/constants/api_endpoints.dart';
 import '../../auth/models/user_model.dart';
 import '../../chores/models/user_short_model.dart';
+import '../models/user_settings_model.dart';
 
 final settingsRepositoryProvider = Provider<SettingsRepository>((ref) {
   final dio = ref.watch(dioProvider);
@@ -100,4 +101,40 @@ class SettingsRepository {
       rethrow;
     }
   }
+
+  /// Получить настройки текущего пользователя
+  Future<UserSettingsModel> getUserSettings() async {
+    try {
+      final response = await dio.get(ApiEndpoints.settings);
+      final data = response.data as Map<String, dynamic>;
+      return UserSettingsModel.fromJson(data);
+    } on DioException catch (e) {
+      debugPrint('[SettingsRepo] getUserSettings error: ${e.message}');
+      return const UserSettingsModel();
+    }
+  }
+
+  /// Обновить настройки текущего пользователя
+  Future<UserSettingsModel> updateUserSettings({
+    String? appTheme,
+    String? language,
+    String? dateOfBirth,
+    String? timezone,
+  }) async {
+    final payload = <String, dynamic>{};
+    if (appTheme != null) payload['app_theme'] = appTheme;
+    if (language != null) payload['language'] = language;
+    if (dateOfBirth != null) payload['date_of_birth'] = dateOfBirth;
+    if (timezone != null) payload['timezone'] = timezone;
+
+    try {
+      final response = await dio.patch(ApiEndpoints.settings, data: payload);
+      final data = response.data as Map<String, dynamic>;
+      return UserSettingsModel.fromJson(data);
+    } on DioException catch (e) {
+      debugPrint('[SettingsRepo] updateUserSettings error: ${e.message}');
+      rethrow;
+    }
+  }
 }
+

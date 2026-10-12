@@ -812,6 +812,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsLanguageEn => 'English';
 
   @override
+  String get settingsTimezone => 'Timezone';
+
+  @override
+  String get settingsTimezoneAuto => 'Detected automatically';
+
+  @override
   String get settingsServerSection => 'CONNECTION';
 
   @override
