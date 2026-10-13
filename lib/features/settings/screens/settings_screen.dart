@@ -411,16 +411,16 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         child: Column(
           children: [
             // Avatar with edit button
-            Stack(
-              clipBehavior: Clip.none,
-              children: [
-                UserAvatarWidget(user: userShort, size: 100),
-                Positioned(
-                  bottom: -2,
-                  right: -2,
-                  child: GestureDetector(
-                    onTap: _openEdit,
-                    behavior: HitTestBehavior.opaque,
+            GestureDetector(
+              onTap: _openEdit,
+              behavior: HitTestBehavior.opaque,
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  UserAvatarWidget(user: userShort, size: 100),
+                  Positioned(
+                    bottom: -2,
+                    right: -2,
                     child: Container(
                       width: 32,
                       height: 32,
@@ -448,8 +448,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             const SizedBox(height: 12),
 

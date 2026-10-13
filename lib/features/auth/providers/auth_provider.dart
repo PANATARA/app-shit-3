@@ -131,13 +131,33 @@ class AuthNotifier extends Notifier<AuthState> {
     String? iconBg,
   }) async {
     try {
-      final user = await _authRepository.updateProfile(
+      final updated = await _authRepository.updateProfile(
         name: name,
         icon: icon,
         iconColor: iconColor,
         iconBg: iconBg,
       );
-      state = state.copyWith(user: user);
+
+      final current = state.user;
+      final merged = current != null
+          ? current.copyWith(
+              name: updated.name ?? current.name,
+              icon: updated.icon ?? current.icon,
+              iconColor: updated.iconColor ?? current.iconColor,
+              iconBg: updated.iconBg ?? current.iconBg,
+              isFamilyMember: updated.isFamilyMember || current.isFamilyMember,
+              familyId: updated.familyId ?? current.familyId,
+              isFamilyAdmin: updated.isFamilyAdmin || current.isFamilyAdmin,
+              level: updated.level > 1 ? updated.level : current.level,
+              experience: updated.experience > 0 ? updated.experience : current.experience,
+              totalCompleted: updated.totalCompleted > 0 ? updated.totalCompleted : current.totalCompleted,
+              weekCompleted: updated.weekCompleted > 0 ? updated.weekCompleted : current.weekCompleted,
+              monthCompleted: updated.monthCompleted > 0 ? updated.monthCompleted : current.monthCompleted,
+            )
+          : updated;
+
+      state = state.copyWith(user: merged);
+      refreshProfile();
       return true;
     } catch (e) {
       state = state.copyWith(errorMessage: e.toString());

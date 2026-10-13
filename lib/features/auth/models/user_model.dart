@@ -48,6 +48,48 @@ class UserModel {
 
   bool get isInFamily => isFamilyMember || (familyId != null && familyId!.isNotEmpty);
 
+  UserModel copyWith({
+    String? id,
+    String? username,
+    String? email,
+    String? name,
+    String? icon,
+    String? iconColor,
+    String? iconBg,
+    int? level,
+    int? expToNextTotal,
+    int? progressPercent,
+    int? experience,
+    int? totalCompleted,
+    int? weekCompleted,
+    int? monthCompleted,
+    bool? isMaxLevel,
+    bool? isFamilyMember,
+    bool? isFamilyAdmin,
+    String? familyId,
+  }) {
+    return UserModel(
+      id: id ?? this.id,
+      username: username ?? this.username,
+      email: email ?? this.email,
+      name: name ?? this.name,
+      icon: icon ?? this.icon,
+      iconColor: iconColor ?? this.iconColor,
+      iconBg: iconBg ?? this.iconBg,
+      level: level ?? this.level,
+      expToNextTotal: expToNextTotal ?? this.expToNextTotal,
+      progressPercent: progressPercent ?? this.progressPercent,
+      experience: experience ?? this.experience,
+      totalCompleted: totalCompleted ?? this.totalCompleted,
+      weekCompleted: weekCompleted ?? this.weekCompleted,
+      monthCompleted: monthCompleted ?? this.monthCompleted,
+      isMaxLevel: isMaxLevel ?? this.isMaxLevel,
+      isFamilyMember: isFamilyMember ?? this.isFamilyMember,
+      isFamilyAdmin: isFamilyAdmin ?? this.isFamilyAdmin,
+      familyId: familyId ?? this.familyId,
+    );
+  }
+
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       id: json['id']?.toString() ?? '',
