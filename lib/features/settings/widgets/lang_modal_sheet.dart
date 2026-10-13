@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/app_modal_sheet.dart';
 import '../../../l10n/app_localizations.dart';
 
 class LanguageOption {
@@ -42,7 +43,7 @@ class LangModalSheet extends StatefulWidget {
   });
 
   static Future<String?> show(BuildContext context, {String currentCode = 'ru'}) {
-    return showModalBottomSheet<String>(
+    return showAppModalBottomSheet<String>(
       context: context,
       useRootNavigator: true,
       isScrollControlled: true,

@@ -5,6 +5,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../chores/models/user_short_model.dart';
 import '../../chores/repositories/chores_repository.dart';
 import '../../chores/utils/color_helper.dart';
+import '../../../core/widgets/app_modal_sheet.dart';
 import '../models/planned_meal_model.dart';
 import '../models/recipe_model.dart';
 import '../providers/meals_provider.dart';
@@ -28,7 +29,7 @@ class AddMealSheet extends ConsumerStatefulWidget {
     required String targetDate,
     String defaultSlot = 'dinner',
   }) {
-    return showModalBottomSheet<PlannedMealModel>(
+    return showAppModalBottomSheet<PlannedMealModel>(
       context: context,
       useRootNavigator: true,
       isScrollControlled: true,

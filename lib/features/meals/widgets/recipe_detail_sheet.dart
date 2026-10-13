@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/app_modal_sheet.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../chores/models/user_short_model.dart';
 import '../../chores/utils/color_helper.dart';
@@ -28,7 +29,7 @@ class RecipeDetailSheet extends ConsumerStatefulWidget {
     ValueChanged<String>? onToast,
     void Function(String date, String slot, PlannedMealModel meal)? onScheduled,
   }) {
-    return showModalBottomSheet(
+    return showAppModalBottomSheet(
       context: context,
       useRootNavigator: true,
       isScrollControlled: true,

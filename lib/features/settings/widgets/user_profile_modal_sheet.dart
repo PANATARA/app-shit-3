@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/app_modal_sheet.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../auth/models/user_model.dart';
 import '../../auth/providers/auth_provider.dart';
@@ -14,7 +15,7 @@ class UserProfileModalSheet extends ConsumerStatefulWidget {
   const UserProfileModalSheet({super.key, required this.userId});
 
   static Future<void> show(BuildContext context, String userId) {
-    return showModalBottomSheet(
+    return showAppModalBottomSheet(
       context: context,
       useRootNavigator: true,
       isScrollControlled: true,

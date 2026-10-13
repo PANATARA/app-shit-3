@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/app_modal_sheet.dart';
 import '../../../l10n/app_localizations.dart';
 import '../models/grocery_item_model.dart';
 import '../providers/meals_provider.dart';
@@ -9,7 +10,7 @@ class GroceryListSheet extends ConsumerStatefulWidget {
   const GroceryListSheet({super.key});
 
   static Future<void> show(BuildContext context) {
-    return showModalBottomSheet(
+    return showAppModalBottomSheet(
       context: context,
       useRootNavigator: true,
       isScrollControlled: true,

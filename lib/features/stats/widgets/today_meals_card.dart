@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/app_modal_sheet.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../meals/models/planned_meal_model.dart';
 import '../../meals/models/recipe_model.dart';
@@ -226,7 +227,7 @@ class _SlotItem extends ConsumerWidget {
         RecipeDetailSheet.show(context, recipe: linkedRecipe);
       } else {
         // Show meal sheet or add another dish
-        await showModalBottomSheet(
+        await showAppModalBottomSheet(
           context: context,
           useRootNavigator: true,
           backgroundColor: Colors.transparent,

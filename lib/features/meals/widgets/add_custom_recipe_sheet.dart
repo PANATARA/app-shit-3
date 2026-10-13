@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/app_modal_sheet.dart';
 import '../models/recipe_model.dart';
 import '../providers/meals_provider.dart';
 
@@ -8,7 +9,7 @@ class AddCustomRecipeSheet extends ConsumerStatefulWidget {
   const AddCustomRecipeSheet({super.key});
 
   static Future<RecipeModel?> show(BuildContext context) {
-    return showModalBottomSheet<RecipeModel>(
+    return showAppModalBottomSheet<RecipeModel>(
       context: context,
       useRootNavigator: true,
       isScrollControlled: true,

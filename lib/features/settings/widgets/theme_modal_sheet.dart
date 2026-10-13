@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/app_modal_sheet.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../chores/utils/color_helper.dart';
 
@@ -113,7 +114,7 @@ class ThemeModalSheet extends StatefulWidget {
   });
 
   static Future<String?> show(BuildContext context, {String currentThemeId = 'warm'}) {
-    return showModalBottomSheet<String>(
+    return showAppModalBottomSheet<String>(
       context: context,
       useRootNavigator: true,
       isScrollControlled: true,

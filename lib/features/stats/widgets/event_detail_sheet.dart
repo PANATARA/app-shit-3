@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/app_modal_sheet.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../chores/widgets/chore_icon_widget.dart';
 import '../models/family_event_model.dart';
@@ -13,7 +14,7 @@ class EventDetailSheet extends ConsumerStatefulWidget {
   const EventDetailSheet({super.key, required this.event});
 
   static Future<void> show(BuildContext context, FamilyEventModel event) {
-    return showModalBottomSheet(
+    return showAppModalBottomSheet(
       context: context,
       useRootNavigator: true,
       isScrollControlled: true,
